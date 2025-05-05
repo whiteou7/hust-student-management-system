@@ -114,3 +114,8 @@ git commit -m "..."
 git push origin main
 ```
 4. Go to your repo on github and make a pull request
+
+## Resources
+- Slides from class
+- https://docs.google.com/document/d/1z4kSNJSZIf1RW-bD8KXOEY1H9KFlgj76gJ6-m-EUyeE/edit?usp=sharing
+- https://github.com/hung9988/HUST-STUDENT-MANAGER/tree/main
