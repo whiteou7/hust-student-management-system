@@ -1,7 +1,7 @@
 ## Overview
 Framework used: Nuxt, tailwind, drizzle, postgre
 
-### Use Cases:
+### Use Cases: (Tín sửa tại đây, phần này chỉ nháp)
 
 #### For Student:
 Login
@@ -21,7 +21,7 @@ Add/Edit Course
 
 Enter Grades
 
-### Entities
+### Entities (Nguyệt sửa tại đây, phần này chỉ nháp)
 Student
 
 - Attributes: Student_ID (PK), Name, Email, Phone, Date_of_Birth
