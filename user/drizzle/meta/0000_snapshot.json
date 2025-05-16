@@ -1,5 +1,5 @@
 {
-  "id": "8068743f-f3c3-4d68-b5e9-b70d57944ccc",
+  "id": "2e9dddfd-79be-4e76-b64c-7d67f67adf39",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -22,7 +22,7 @@
         },
         "course_id": {
           "name": "course_id",
-          "type": "integer",
+          "type": "varchar(6)",
           "primaryKey": false,
           "notNull": true
         },
@@ -30,7 +30,8 @@
           "name": "capacity",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": 0
         },
         "semester": {
           "name": "semester",
@@ -54,7 +55,8 @@
         },
         "day_of_week": {
           "name": "day_of_week",
-          "type": "varchar",
+          "type": "day_of_week",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -106,7 +108,7 @@
       "columns": {
         "course_id": {
           "name": "course_id",
-          "type": "serial",
+          "type": "varchar(6)",
           "primaryKey": true,
           "notNull": true
         },
@@ -152,7 +154,15 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "courses_course_id_unique": {
+          "name": "courses_course_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "course_id"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -177,19 +187,22 @@
           "name": "mid_term",
           "type": "numeric(3, 2)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "'0.00'"
         },
         "final_term": {
           "name": "final_term",
           "type": "numeric(3, 2)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "'0.00'"
         },
         "pass": {
           "name": "pass",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": false
         }
       },
       "indexes": {},
@@ -222,7 +235,16 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "unique_student_class": {
+          "name": "unique_student_class",
+          "nullsNotDistinct": false,
+          "columns": [
+            "student_id",
+            "class_id"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -342,38 +364,43 @@
           "name": "enrolled_year",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "warning_level": {
           "name": "warning_level",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": 0
         },
         "accumulated_credit": {
           "name": "accumulated_credit",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": 0
         },
         "graduated": {
           "name": "graduated",
           "type": "graduation_status",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "'enrolled'"
         },
         "debt": {
           "name": "debt",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": 0
         },
         "cpa": {
           "name": "cpa",
           "type": "numeric(3, 2)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "'0.00'"
         }
       },
       "indexes": {},
@@ -501,17 +528,17 @@
           "name": "email",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "password": {
           "name": "password",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "role": {
           "name": "role",
-          "type": "roles",
+          "type": "role",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
@@ -540,20 +567,32 @@
       "schema": "public",
       "values": [
         "open",
-        "closes"
+        "closed"
+      ]
+    },
+    "public.day_of_week": {
+      "name": "day_of_week",
+      "schema": "public",
+      "values": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
       ]
     },
     "public.graduation_status": {
       "name": "graduation_status",
       "schema": "public",
       "values": [
-        "true",
-        "false",
+        "graduated",
+        "enrolled",
         "expelled"
       ]
     },
-    "public.roles": {
-      "name": "roles",
+    "public.role": {
+      "name": "role",
       "schema": "public",
       "values": [
         "student",

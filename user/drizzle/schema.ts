@@ -17,19 +17,28 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 
-export const roles = pgEnum('roles', ['student', 'teacher']);
+export const role = pgEnum('role', ['student', 'teacher']);
 
-export const graduation_status = pgEnum('graduation_status', ['true', 'false', 'expelled']);
+export const graduation_status = pgEnum('graduation_status', ['graduated', 'enrolled', 'expelled']);
 
-export const class_status = pgEnum('class_status', ['open', 'closes']);
+export const class_status = pgEnum('class_status', ['open', 'closed']);
+
+export const day_of_week = pgEnum('day_of_week', [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday'
+]);
 
 export const users = pgTable("users", {
   user_id: serial().primaryKey().notNull(),
   first_name: varchar().notNull(),
   last_name: varchar().notNull(),
-  email: varchar().notNull().unique(),
-  password: varchar().notNull(),
-  role: roles().notNull()
+  email: varchar().unique(),
+  password: varchar(),
+  role: role().notNull()
 });
 
 export const programs = pgTable("programs", {
@@ -44,7 +53,7 @@ export const schools = pgTable("schools", {
 });
 
 export const students = pgTable("students", {
-  student_id: integer().primaryKey().notNull().references(() => users.user_id, {
+  student_id: integer().primaryKey().references(() => users.user_id, {
     onDelete: "cascade",
     onUpdate: "cascade"
   }),
@@ -52,19 +61,19 @@ export const students = pgTable("students", {
     onDelete: "cascade",
     onUpdate: "cascade"
   }),
-  enrolled_year: integer(),
-  warning_level: integer(),
-  accumulated_credit: integer(),
-  graduated: graduation_status(),
-  debt: integer(),
+  enrolled_year: integer().notNull(),
+  warning_level: integer().default(0),
+  accumulated_credit: integer().default(0),
+  graduated: graduation_status().default("enrolled"),
+  debt: integer().default(0),
   cpa: numeric({
     precision: 3,
     scale: 2
-  })
+  }).default('0.00')
 });
 
 export const teachers = pgTable("teachers", {
-  teacher_id: integer().primaryKey().notNull().references(() => users.user_id, {
+  teacher_id: integer().primaryKey().references(() => users.user_id, {
     onDelete: "cascade",
     onUpdate: "cascade"
   }),
@@ -77,7 +86,7 @@ export const teachers = pgTable("teachers", {
 });
 
 export const courses = pgTable("courses", {
-  course_id: serial().primaryKey().notNull(),
+  course_id: varchar("course_id", { length: 6 }).primaryKey().unique(),
   course_name: varchar().notNull(),
   credit: integer().notNull(),
   tuition_per_credit: integer().notNull(),
@@ -88,20 +97,20 @@ export const courses = pgTable("courses", {
 });
 
 export const classes = pgTable("classes", {
-  class_id: serial().primaryKey().notNull(),
+  class_id: serial().primaryKey(),
   teacher_id: integer().notNull().references(() => teachers.teacher_id, {
     onDelete: "cascade",
     onUpdate: "cascade"
   }),
-  course_id: integer().notNull().references(() => courses.course_id, {
+  course_id: varchar("course_id", { length: 6 }).notNull().references(() => courses.course_id, {
     onDelete: "cascade",
     onUpdate: "cascade"
   }),
-  capacity: integer().notNull(),
+  capacity: integer().notNull().default(0),
   semester: varchar().notNull(),
   enrolled_count: integer().notNull().default(0),
   status: class_status().notNull(),
-  day_of_week: varchar().notNull(),
+  day_of_week: day_of_week().notNull(),
   location: text().notNull()
 });
 
@@ -125,10 +134,18 @@ export const enrollments = pgTable("enrollments", {
   mid_term: numeric({
     precision: 3,
     scale: 2
-  }),
+  }).default("0.00"),
   final_term: numeric({
     precision: 3,
     scale: 2
-  }),
-  pass: boolean()
-});
+  }).default("0.00"),
+  pass: boolean().default(false),
+}, (table) => ({
+  // Composite primary key or unique constraint on student_id + class_id
+  unique_student_class: unique("unique_student_class").on(table.student_id, table.class_id),
+
+  // Check constraints for scores between 0.00 and 10.00 (adjust as needed)
+  check_mid_term: sql`CHECK (${table.mid_term} >= 0.00 AND ${table.mid_term} <= 10.00)`,
+  check_final_term: sql`CHECK (${table.final_term} >= 0.00 AND ${table.final_term} <= 10.00)`,
+}));
+

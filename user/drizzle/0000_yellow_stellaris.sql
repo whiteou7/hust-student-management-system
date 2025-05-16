@@ -1,32 +1,35 @@
-CREATE TYPE "public"."class_status" AS ENUM('open', 'closes');--> statement-breakpoint
-CREATE TYPE "public"."graduation_status" AS ENUM('true', 'false', 'expelled');--> statement-breakpoint
-CREATE TYPE "public"."roles" AS ENUM('student', 'teacher');--> statement-breakpoint
+CREATE TYPE "public"."class_status" AS ENUM('open', 'closed');--> statement-breakpoint
+CREATE TYPE "public"."day_of_week" AS ENUM('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');--> statement-breakpoint
+CREATE TYPE "public"."graduation_status" AS ENUM('graduated', 'enrolled', 'expelled');--> statement-breakpoint
+CREATE TYPE "public"."role" AS ENUM('student', 'teacher');--> statement-breakpoint
 CREATE TABLE "classes" (
 	"class_id" serial PRIMARY KEY NOT NULL,
 	"teacher_id" integer NOT NULL,
-	"course_id" integer NOT NULL,
-	"capacity" integer NOT NULL,
+	"course_id" varchar(6) NOT NULL,
+	"capacity" integer DEFAULT 0 NOT NULL,
 	"semester" varchar NOT NULL,
 	"enrolled_count" integer DEFAULT 0 NOT NULL,
 	"status" "class_status" NOT NULL,
-	"day_of_week" varchar NOT NULL,
+	"day_of_week" "day_of_week" NOT NULL,
 	"location" text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "courses" (
-	"course_id" serial PRIMARY KEY NOT NULL,
+	"course_id" varchar(6) PRIMARY KEY NOT NULL,
 	"course_name" varchar NOT NULL,
 	"credit" integer NOT NULL,
 	"tuition_per_credit" integer NOT NULL,
-	"school_id" integer NOT NULL
+	"school_id" integer NOT NULL,
+	CONSTRAINT "courses_course_id_unique" UNIQUE("course_id")
 );
 --> statement-breakpoint
 CREATE TABLE "enrollments" (
 	"student_id" integer NOT NULL,
 	"class_id" integer NOT NULL,
-	"mid_term" numeric(3, 2),
-	"final_term" numeric(3, 2),
-	"pass" boolean
+	"mid_term" numeric(3, 2) DEFAULT '0.00',
+	"final_term" numeric(3, 2) DEFAULT '0.00',
+	"pass" boolean DEFAULT false,
+	CONSTRAINT "unique_student_class" UNIQUE("student_id","class_id")
 );
 --> statement-breakpoint
 CREATE TABLE "programs" (
@@ -48,12 +51,12 @@ CREATE TABLE "sessions" (
 CREATE TABLE "students" (
 	"student_id" integer PRIMARY KEY NOT NULL,
 	"program_id" integer NOT NULL,
-	"enrolled_year" integer,
-	"warning_level" integer,
-	"accumulated_credit" integer,
-	"graduated" "graduation_status",
-	"debt" integer,
-	"cpa" numeric(3, 2)
+	"enrolled_year" integer NOT NULL,
+	"warning_level" integer DEFAULT 0,
+	"accumulated_credit" integer DEFAULT 0,
+	"graduated" "graduation_status" DEFAULT 'enrolled',
+	"debt" integer DEFAULT 0,
+	"cpa" numeric(3, 2) DEFAULT '0.00'
 );
 --> statement-breakpoint
 CREATE TABLE "teachers" (
@@ -67,9 +70,9 @@ CREATE TABLE "users" (
 	"user_id" serial PRIMARY KEY NOT NULL,
 	"first_name" varchar NOT NULL,
 	"last_name" varchar NOT NULL,
-	"email" varchar NOT NULL,
-	"password" varchar NOT NULL,
-	"role" "roles" NOT NULL,
+	"email" varchar,
+	"password" varchar,
+	"role" "role" NOT NULL,
 	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
