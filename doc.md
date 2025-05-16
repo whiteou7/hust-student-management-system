@@ -1,94 +1,21 @@
 ## Overview
 Framework used: Nuxt, tailwind, drizzle, postgre
 
-### Use Cases: (Tín sửa tại đây, phần này chỉ nháp)
-
-#### For Student:
-Login
-
-View Profile
-
-View Courses
-
-View Grades
-
-#### For Admin:
-Login
-
-Add/Edit Student
-
-Add/Edit Course
-
-Enter Grades
-
-### Entities (Nguyệt sửa tại đây, phần này chỉ nháp)
-Student
-
-- Attributes: Student_ID (PK), Name, Email, Phone, Date_of_Birth
-
-Course
-
-- Attributes: Course_ID (PK), Course_Name, Credits, Teacher_ID (FK)
-
-Teacher
-
-- Attributes: Teacher_ID (PK), Name, Email, Department
-
-Enrollment
-
-- Attributes: Enrollment_ID (PK), Student_ID (FK), Course_ID (FK), Date_Enrolled, Status
-
-Grade
-
-- Attributes: Grade_ID (PK), Student_ID (FK), Course_ID (FK), Grade
-
-### Relationships
-
-Student - Enrollment (One to Many)
-
-- One student can enroll in multiple courses.
-
-- Student_ID in Enrollment references Student_ID in Student.
-
-Course - Enrollment (One to Many)
-
-- One course can have multiple students enrolled.
-
-- Course_ID in Enrollment references Course_ID in Course.
-
-Student - Grade (One to Many)
-
-- One student can receive multiple grades for different courses.
-
-- Student_ID in Grade references Student_ID in Student.
-
-Course - Grade (One to Many)
-
-- One course can have multiple grades for different students.
-
-- Course_ID in Grade references Course_ID in Course.
-
-Course - Teacher (Many to One)
-
-- A course is taught by a single teacher.
-
-- Teacher_ID in Course references Teacher_ID in Teacher.
-
 ## Roles
 
 Tùng: manager/code review/backend/frontend
 
 Vũ: 
 
-- 
+- Design Relational Schema
 
 Tín: 
 
-- Design use case diagram
+- Design Use Case Diagram ✔
 
 Nguyệt: 
 
-- Design ER diagram
+- Design ER Diagram ✔
 
 ## Setup
 
