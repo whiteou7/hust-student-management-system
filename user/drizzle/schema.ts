@@ -15,6 +15,8 @@ import {
   date,
   primaryKey,
   uuid,
+  uniqueIndex,
+  check
 } from "drizzle-orm/pg-core";
 
 export const role = pgEnum('role', ['student', 'teacher']);
@@ -122,30 +124,33 @@ export const sessions = pgTable("sessions", {
   }),
 });
 
-export const enrollments = pgTable("enrollments", {
-  student_id: integer().notNull().references(() => students.student_id, {
-    onDelete: "cascade",
-    onUpdate: "cascade"
-  }),
-  class_id: integer().notNull().references(() => classes.class_id, {
-    onDelete: "cascade",
-    onUpdate: "cascade"
-  }),
-  mid_term: numeric({
-    precision: 3,
-    scale: 2
-  }).default("0.00"),
-  final_term: numeric({
-    precision: 3,
-    scale: 2
-  }).default("0.00"),
-  pass: boolean().default(false),
-}, (table) => ({
-  // Composite primary key or unique constraint on student_id + class_id
-  unique_student_class: unique("unique_student_class").on(table.student_id, table.class_id),
-
-  // Check constraints for scores between 0.00 and 10.00 (adjust as needed)
-  check_mid_term: sql`CHECK (${table.mid_term} >= 0.00 AND ${table.mid_term} <= 10.00)`,
-  check_final_term: sql`CHECK (${table.final_term} >= 0.00 AND ${table.final_term} <= 10.00)`,
-}));
+export const enrollments = pgTable(
+  "enrollments",
+  {
+    student_id: integer("student_id")
+      .notNull()
+      .references(() => students.student_id, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
+    class_id: integer("class_id")
+      .notNull()
+      .references(() => classes.class_id, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
+    mid_term: numeric("mid_term", { precision: 3, scale: 2 })
+      .default("0.00")
+      .notNull(),
+    final_term: numeric("final_term", { precision: 3, scale: 2 })
+      .default("0.00")
+      .notNull(),
+    pass: boolean("pass").default(false).notNull(),
+  },
+  (table) => [
+    unique("unique_student_class").on(table.student_id, table.class_id),
+    check("check_mid_term", sql`${table.mid_term} >= 0.00 AND ${table.mid_term} <= 10.00`),
+    check("check_final_term", sql`${table.final_term} >= 0.00 AND ${table.final_term} <= 10.00`),
+  ]
+);
 

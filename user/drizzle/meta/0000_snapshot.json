@@ -1,5 +1,5 @@
 {
-  "id": "2e9dddfd-79be-4e76-b64c-7d67f67adf39",
+  "id": "e8efffa7-f77e-4779-a260-245685b258a1",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -187,21 +187,21 @@
           "name": "mid_term",
           "type": "numeric(3, 2)",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "'0.00'"
         },
         "final_term": {
           "name": "final_term",
           "type": "numeric(3, 2)",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "'0.00'"
         },
         "pass": {
           "name": "pass",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": false
         }
       },
@@ -246,7 +246,16 @@
         }
       },
       "policies": {},
-      "checkConstraints": {},
+      "checkConstraints": {
+        "check_mid_term": {
+          "name": "check_mid_term",
+          "value": "\"enrollments\".\"mid_term\" >= 0.00 AND \"enrollments\".\"mid_term\" <= 10.00"
+        },
+        "check_final_term": {
+          "name": "check_final_term",
+          "value": "\"enrollments\".\"final_term\" >= 0.00 AND \"enrollments\".\"final_term\" <= 10.00"
+        }
+      },
       "isRLSEnabled": false
     },
     "public.programs": {

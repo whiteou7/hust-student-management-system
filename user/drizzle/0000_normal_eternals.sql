@@ -26,10 +26,12 @@ CREATE TABLE "courses" (
 CREATE TABLE "enrollments" (
 	"student_id" integer NOT NULL,
 	"class_id" integer NOT NULL,
-	"mid_term" numeric(3, 2) DEFAULT '0.00',
-	"final_term" numeric(3, 2) DEFAULT '0.00',
-	"pass" boolean DEFAULT false,
-	CONSTRAINT "unique_student_class" UNIQUE("student_id","class_id")
+	"mid_term" numeric(3, 2) DEFAULT '0.00' NOT NULL,
+	"final_term" numeric(3, 2) DEFAULT '0.00' NOT NULL,
+	"pass" boolean DEFAULT false NOT NULL,
+	CONSTRAINT "unique_student_class" UNIQUE("student_id","class_id"),
+	CONSTRAINT "check_mid_term" CHECK ("enrollments"."mid_term" >= 0.00 AND "enrollments"."mid_term" <= 10.00),
+	CONSTRAINT "check_final_term" CHECK ("enrollments"."final_term" >= 0.00 AND "enrollments"."final_term" <= 10.00)
 );
 --> statement-breakpoint
 CREATE TABLE "programs" (
