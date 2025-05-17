@@ -32,8 +32,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       }
     });
 
-  if (res.data.value?.success) {
-    Cookies.set('sessionId', res.data.value?.sessionId, { expires: 7, path: '/' });
+  if (res.data.value && res.data.value.success) {
+    Cookies.set('sessionId', res.data.value.sessionId, { expires: 7, path: '/' });
+    localStorage.setItem('userId', res.data.value?.userId);
     
     if (res.data.value?.role === 'student') {
       router.push('/studentDashBoard')

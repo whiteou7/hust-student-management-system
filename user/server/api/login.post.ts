@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
         sql.raw(`INSERT INTO sessions (user_id) VALUES (${user.user_id}) RETURNING session_id;`)
     );
     console.log("api called successfully");
-    return { success: true, sessionId: session.session_id, error: "None", role: user.role};
+    return { success: true, sessionId: session.session_id, error: "None", role: user.role, userId: user.user_id};
   }
 
   return { success: false, sessionId: '0', error: "Wrong email or password.", role: null};
