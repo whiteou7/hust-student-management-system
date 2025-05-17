@@ -6,29 +6,20 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const errorMsg = ref('')
+const success = ref('')
 
-interface FormState {
-  email: string
-  password: string
-  confirmPassword: string
-  fullName: string
-  role: 'student'
-}
-
-const state = reactive<FormState>({
+const state = reactive({
   email: '',
   password: '',
   confirmPassword: '',
-  fullName: '',
-  role: 'student'
+  user_id: '',
 })
 
 const schema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
   confirmPassword: z.string().min(6),
-  fullName: z.string().min(2),
-  role: z.literal('student')
+  user_id: z.string()
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"]
@@ -38,8 +29,28 @@ type Schema = z.output<typeof schema>;
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   const data = event.data;
-  // Here you would implement the actual registration logic
-  router.push('/login')
+  console.log(data.email + ' submitted.');
+  
+  const res = await useFetch('/api/register', {
+      method: 'POST',
+      body: {
+        email: data.email,
+        password: data.password,
+        user_id: data.user_id
+      }
+    });
+
+  if (res.data.value && res.data.value.success) {
+    console.log(res.data.value.success);
+
+    success.value = "Registration completed. Redirecting to login...";
+    
+    setTimeout(() => {
+        router.push('/login');
+    }, 3000);
+  } else {
+    errorMsg.value = res.data.value?.error ?? 'Registration failed. Please try again.';
+  }
 }
 </script>
 
@@ -57,12 +68,11 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
       <div class="bg-white dark:bg-gray-800 py-8 px-4 shadow sm:rounded-lg sm:px-10">
         <UForm :schema="schema" :state="state" class="space-y-6" @submit="onSubmit">
-          <UFormField label="Full Name" name="fullName">
+          <UFormField label="User ID" name="user_id">
             <UInput 
-              v-model="state.fullName" 
+              v-model="state.user_id" 
               type="text"
-              autocomplete="name"
-              placeholder="Enter your full name"
+              placeholder="Enter your user ID"
               class="block w-full dark:bg-gray-700 dark:text-white dark:border-gray-600"
             />
           </UFormField>
@@ -99,6 +109,10 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
           <div v-if="errorMsg" class="text-red-500 text-center">
             {{ errorMsg }}
+          </div>
+
+          <div v-if="success" class="text-green-500 text-center">
+            {{ success }}
           </div>
 
           <div>
