@@ -26,6 +26,8 @@
 
       <!-- Classes Table -->
       <UTable
+        sticky
+        :columns="columns"
         :data="classData"
       />
     </UCard>
@@ -62,6 +64,29 @@
 
 <script setup lang = "js">
 import { ref, computed, onMounted } from "vue"
+
+const columns = [
+  {
+    accessorKey: "class_id",
+    header: "#"
+  },
+  {
+    accessorKey: "course_name",
+    header: "Course Name"
+  },
+  {
+    accessorKey: "day_of_week",
+    header: "Day of Week"
+  },
+  {
+    accessorKey: "mid_term",
+    header: "Midterm Score"
+  },
+  {
+    accessorKey: "final_term",
+    header: "Final Score"
+  }
+]
 
 const classData = ref([])
 const classCount = ref(0)
