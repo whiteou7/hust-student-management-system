@@ -26,7 +26,7 @@
 
       <!-- Classes Table -->
       <UTable
-        :data="data"
+        :data="classData"
       />
     </UCard>
 
@@ -48,45 +48,41 @@
 
       <UCard>
         <div class="text-center">
-          <div class="text-2xl font-bold">5</div>
+          <div class="text-2xl font-bold"> {{ classCount }}</div>
           <div class="text-sm text-gray-500">Enrolled Classes</div>
         </div>
       </UCard>
     </div>
+
+    <div v-if="errorMsg" class="text-red-500 text-center">
+      {{ errorMsg }}
+    </div>
   </div>
 </template>
 
-<script setup lang = "ts">
+<script setup lang = "js">
 import { ref, computed, onMounted } from "vue"
 
-const data = ref([])
+const classData = ref([])
+const classCount = ref(0)
 const currentSemester = ref(localStorage.getItem("currentSemester") || "")
 const errorMsg = ref("")
 
-onMounted(async () => {
-  await fetchClasses()
+const userId = localStorage.getItem("userId")
+
+const res = await useFetch("/api/student-classes", {
+  method: "POST",
+  body: {
+    userId: parseInt(userId ?? "0"),
+    semester: currentSemester.value
+  }
 })
 
-async function fetchClasses() {
-    const userId = localStorage.getItem("userId")
-    const currentSemester = localStorage.getItem("currentSemester")
-
-    const res = await useFetch("/api/student-classes", {
-      method: "POST",
-      body: {
-        userId: parseInt(userId ?? "0"),
-        semester: currentSemester
-      }
-    })
-
-    
-
-    if (res.data.value && res.data.value.success) {
-      data.value = res.data.value?.classes
-    } else {
-
-    }
+if (res.data.value && res.data.value.success) {
+  classData.value = res.data.value.classes
+  classCount.value = classData.value.length
+} else if (res.data.value && !res.data.value.success) {
+  errorMsg.value = res.data.value.err
 }
-
 
 </script>

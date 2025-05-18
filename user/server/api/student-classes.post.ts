@@ -3,12 +3,10 @@ import { db_user as db } from "../../drizzle/db"
 export default defineEventHandler (async (event) => {
   const body = await readBody(event)
 
-  // console.log(body)
-
   if (body.userId === "0") {
     return {
       success: false,
-      err: "Invalid userId.",
+      err: "Invalid userId. Try signing in again.",
       classes: null
     }
   }
@@ -32,8 +30,6 @@ export default defineEventHandler (async (event) => {
         AND c.semester = '${body.semester}';  
     `)
   )
-
-  console.log(classArr)
 
   return {
     success: true,
