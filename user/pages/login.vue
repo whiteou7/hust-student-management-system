@@ -25,16 +25,22 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   console.log(data.email + ' submitted.');
 
   const res = await useFetch('/api/login', {
-      method: 'POST',
-      body: {
-        email: data.email,
-        password: data.password
-      }
-    });
+    method: 'POST',
+    body: {
+      email: data.email,
+      password: data.password
+    }
+  });
 
   if (res.data.value && res.data.value.success) {
     Cookies.set('sessionId', res.data.value.sessionId, { expires: 7, path: '/' });
     localStorage.setItem('userId', res.data.value?.userId);
+    
+    // Fetch current semester
+    const semesterRes = await useFetch('/api/semester');
+    if (semesterRes.data.value?.currentSemester) {
+      localStorage.setItem('currentSemester', semesterRes.data.value.currentSemester);
+    }
     
     if (res.data.value?.role === 'student') {
       router.push('/studentDashBoard')

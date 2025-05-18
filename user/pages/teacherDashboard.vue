@@ -4,7 +4,7 @@
       <template #header>
         <div class="flex items-center justify-between">
           <h2 class="text-xl font-semibold">My Teaching Classes</h2>
-          <p class="text-sm text-gray-500">Current Semester: Spring 2024</p>
+          <p class="text-sm text-gray-500">Current Semester: {{ semester }}</p>
         </div>
       </template>
 
@@ -114,8 +114,7 @@
 <script setup>
 import { ref } from 'vue'
 
-const search = ref('')
-const statusFilter = ref('All Status')
+const semester = ref('');
 
 // Table columns configuration
 const columns = [
