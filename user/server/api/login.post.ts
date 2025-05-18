@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
 
   // console.log(user);
   
-  if (user === undefined) return { success: false, sessionId: '0', error: "Wrong email or password.", role: null};
+  if (user === undefined) return { success: false, sessionId: '0', error: "Wrong email or password.", role: null, userId: '0'};
 
   if (body.password === user.password) {
     const [session] = await db.execute(
@@ -21,6 +21,6 @@ export default defineEventHandler(async (event) => {
     return { success: true, sessionId: session.session_id, error: "None", role: user.role, userId: user.user_id};
   }
 
-  return { success: false, sessionId: '0', error: "Wrong email or password.", role: null};
+  return { success: false, sessionId: '0', error: "Wrong email or password.", role: null, userId: '0'};
 
 });
