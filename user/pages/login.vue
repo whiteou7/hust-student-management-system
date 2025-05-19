@@ -43,9 +43,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     }
     
     if (res.data.value?.role === 'student') {
-      router.push('/student/dashBoard')
+      router.push('/student/dashboard')
     } else {
-      router.push('/teacher/dashBoard')
+      router.push('/teacher/dashboard')
     }
   } else {
     errorMsg.value = 'Wrong credentials. Please try again.'

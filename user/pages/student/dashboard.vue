@@ -11,14 +11,16 @@
       <!-- Search and Filter Section -->
       <div class="mb-4 flex items-center gap-4">
         <UInput
-          
+          v-model="search"
+          variant="subtle"
           placeholder="Search classes..."
           icon="i-heroicons-magnifying-glass"
           class="w-64"
         />
         <USelect
-         
-          :options="['All Days', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']"
+          v-model="filter"
+          variant="subtle"
+          :items="filterItems"
           placeholder="Filter by day"
           class="w-40"
         />
@@ -28,7 +30,7 @@
       <UTable
         sticky
         :columns="columns"
-        :data="classData"
+        :data="filteredClasses"
       />
     </UCard>
 
@@ -92,6 +94,11 @@ const classData = ref([])
 const classCount = ref(0)
 const currentSemester = ref(localStorage.getItem("currentSemester") || "")
 const errorMsg = ref("")
+const search = ref("")
+const filter = ref("All Days")
+const filterItems = ref([
+  "All Days", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+])
 
 const userId = localStorage.getItem("userId")
 
@@ -109,5 +116,17 @@ if (res.data.value && res.data.value.success) {
 } else if (res.data.value && !res.data.value.success) {
   errorMsg.value = res.data.value.err
 }
+
+const filteredClasses = computed(() => {
+  return classData.value.filter(item => {
+    const matchesSearch = search.value.trim() === "" || 
+      item.course_name.toLowerCase().includes(search.value.toLowerCase())
+
+    const matchesFilter = filter.value === "All Days" || 
+      item.day_of_week === filter.value
+
+    return matchesSearch && matchesFilter
+  })
+})
 
 </script>

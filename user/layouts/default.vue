@@ -1,32 +1,45 @@
 <template>
   <div class="layout-container">
-    <header class="header">
+    <header v-if="!isAuthPage" class="header">
       <h1>Hust Student Management System</h1>
+      <div class="header-buttons">
+        <button class="btn profile-btn">View Profile</button>
+        <button class="btn signout-btn" @click="handleSignOut">Sign Out</button>
+      </div>
     </header>
-    
-    <main class="main-content">
+
+    <main class="main-content" :class="{ 'no-header': isAuthPage }">
       <slot />
     </main>
   </div>
 </template>
 
+
 <script setup lang="ts">
-// Component logic can be added here
+import { useRouter, useRoute } from 'vue-router';
+
+const router = useRouter();
+const route = useRoute();
+
+const isAuthPage = computed(() => {
+  return ['/login', '/register'].includes(route.path);
+});
+
+const handleSignOut = () => {
+  // Clear all data from localStorage
+  localStorage.clear();
+  
+  // Redirect to login page
+  router.push('/login');
+};
 </script>
 
 <style scoped>
-.layout-container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  padding-top: 64px; /* Height of the header */
-}
-
 .header {
-  background-color: rgb(102, 123, 153); /* primary-500 */
-  color: white;
+  background-color: transparent;
+  color: rgb(255, 255, 255);
   padding: 1rem 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -35,6 +48,7 @@
   height: 64px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .header h1 {
@@ -43,8 +57,36 @@
   font-weight: 600;
 }
 
+.header-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  color: white;
+}
+
+.profile-btn {
+  background-color: #2c3e50; /* Darker blue/grey */
+}
+
+.signout-btn {
+  background-color: #e74c3c; /* Red */
+}
+
 .main-content {
   flex: 1;
   padding: 2rem;
+  padding-top: 64px;
 }
+
+.main-content.no-header {
+  padding-top: 0;
+}
+
 </style> 
