@@ -32,7 +32,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     }
   })
 
-  if (res.data.value && res.data.value.success) {
+  if (!res.data.value) {
+    errorMsg.value = "Failed to fetch user info."
+    return
+  }
+
+  if (res.data.value.success) {
     Cookies.set("sessionId", res.data.value.sessionId, { expires: 7, path: "/" })
     localStorage.setItem("userId", res.data.value?.userId)
     

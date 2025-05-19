@@ -40,7 +40,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       }
     })
 
-  if (res.data.value && res.data.value.success) {
+  if (!res.data.value) {
+    errorMsg.value = "Registration failed. Please try again."
+    return
+  }
+
+  if (res.data.value.success) {
     console.log(res.data.value.success)
 
     success.value = "Registration completed. Redirecting to login..."
@@ -49,7 +54,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         router.push("/login")
     }, 3000)
   } else {
-    errorMsg.value = res.data.value?.error ?? "Registration failed. Please try again."
+    errorMsg.value = res.data.value.error ?? "Registration failed. Please try again."
   }
 }
 </script>

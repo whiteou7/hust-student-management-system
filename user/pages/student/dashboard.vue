@@ -27,11 +27,11 @@
       </div>
 
       <!-- Classes Table -->
-      <UTable
-        sticky
-        :columns="columns"
-        :data="filteredClasses"
-      />
+    <UTable
+      sticky
+      :columns="columns"
+      :data="filteredClasses"
+    />
     </UCard>
 
     <!-- Summary Cards -->
@@ -71,6 +71,7 @@ const UButton = resolveComponent("UButton")
 const UDropdownMenu = resolveComponent("UDropdownMenu")
 const overlay = useOverlay()
 
+// Column display config
 const columns = [
   {
     accessorKey: "class_id",
@@ -96,35 +97,37 @@ const columns = [
     accessorKey: "result",
     header: "Result"
   },
-   {
-    id: "actions",
-    cell: ({ row }) => {
-      return h(
-        "div",
-        { class: "text-right" },
-        h(
-          UDropdownMenu,
-          {
-            content: {
-              align: "end"
-            },
-            items: getRowItems(row),
-            "aria-label": "Actions dropdown"
+  // Dropdown menu to show class info
+  {
+  id: "actions",
+  cell: ({ row }) => {
+    return h(
+      "div",
+      { class: "text-right" },
+      h(
+        UDropdownMenu,
+        {
+          content: {
+            align: "end"
           },
-          () =>
-            h(UButton, {
-              icon: "i-lucide-ellipsis-vertical",
-              color: "neutral",
-              variant: "ghost",
-              class: "ml-auto",
-              "aria-label": "Actions dropdown"
-            })
+          items: getRowItems(row),
+          "aria-label": "Actions dropdown"
+        },
+        () =>
+          h(UButton, {
+            icon: "i-lucide-ellipsis-vertical",
+            color: "neutral",
+            variant: "ghost",
+            class: "ml-auto",
+            "aria-label": "Actions dropdown"
+          })
         )
       )
     }
   }
 ]
 
+// Fetch and display class info on selected row
 function getRowItems(row) {
   return [
     {
@@ -140,10 +143,16 @@ function getRowItems(row) {
           }
         })
 
-        if (classInfoRes.value && classInfoRes.value.success) {
+        if (!classInfoRes.value ) {
+          errorMsg.value = "Failed to fetch class information"
+          return
+        }
+
+        if (classInfoRes.value.success) {
           modal.open({ classInfo: classInfoRes.value.classInfo })
         } else {
           errorMsg.value = classInfoRes.value?.err || "Failed to fetch class information"
+          return
         }
       }
     }
@@ -162,6 +171,7 @@ const filterItems = ref([
 
 const userId = localStorage.getItem("userId")
 
+// Fetch basic enrollment info 
 const res = await useFetch("/api/student-classes", {
   method: "POST",
   body: {
@@ -170,15 +180,18 @@ const res = await useFetch("/api/student-classes", {
   }
 })
 
-if (res.data.value && res.data.value.success) {
+if (!res.data.value) {
+  errorMsg.value = "Failed to fetch enrollment info."
+}
+
+if (res.data.value.success) {
   classData.value = res.data.value.classes
   classCount.value = classData.value.length
-} else if (res.data.value && !res.data.value.success) {
+} else {
   errorMsg.value = res.data.value.err
 }
 
-console.log(classData.value)
-
+// Filter and search classes
 const filteredClasses = computed(() => {
   return classData.value.filter(item => {
     const matchesSearch = search.value.trim() === "" || 
