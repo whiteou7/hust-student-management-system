@@ -114,79 +114,79 @@
 <script setup>
 import { ref } from 'vue'
 
-const semester = ref('');
+const semester = ref("")
 
 // Table columns configuration
 const columns = [
   {
-    key: 'course_name',
-    label: 'Course',
+    key: "course_name",
+    label: "Course",
     sortable: true,
-    id: 'course_name'
+    id: "course_name"
   },
   {
-    key: 'day_of_week',
-    label: 'Day',
+    key: "day_of_week",
+    label: "Day",
     sortable: true,
-    id: 'day_of_week'
+    id: "day_of_week"
   },
   {
-    key: 'location',
-    label: 'Location',
-    id: 'location'
+    key: "location",
+    label: "Location",
+    id: "location"
   },
   {
-    key: 'enrollment',
-    label: 'Enrollment',
-    id: 'enrollment'
+    key: "enrollment",
+    label: "Enrollment",
+    id: "enrollment"
   },
   {
-    key: 'status',
-    label: 'Status',
-    id: 'status'
+    key: "status",
+    label: "Status",
+    id: "status"
   },
   {
-    key: 'actions',
-    label: 'Actions',
-    id: 'actions'
+    key: "actions",
+    label: "Actions",
+    id: "actions"
   }
 ]
 
 // Mock data for demonstration
 const teachingClasses = ref([
   {
-    course_id: 'CS101',
-    course_name: 'Introduction to Programming',
-    day_of_week: 'Monday',
-    location: 'Room A101',
-    status: 'open',
+    course_id: "CS101",
+    course_name: "Introduction to Programming",
+    day_of_week: "Monday",
+    location: "Room A101",
+    status: "open",
     enrolled_count: 35,
     capacity: 40
   },
   {
-    course_id: 'CS202',
-    course_name: 'Data Structures',
-    day_of_week: 'Tuesday',
-    location: 'Room B202',
-    status: 'open',
+    course_id: "CS202",
+    course_name: "Data Structures",
+    day_of_week: "Tuesday",
+    location: "Room B202",
+    status: "open",
     enrolled_count: 40,
     capacity: 40
   },
   {
-    course_id: 'CS301',
-    course_name: 'Database Systems',
-    day_of_week: 'Wednesday',
-    location: 'Room C103',
-    status: 'open',
+    course_id: "CS301",
+    course_name: "Database Systems",
+    day_of_week: "Wednesday",
+    location: "Room C103",
+    status: "open",
     enrolled_count: 28,
     capacity: 35
   },
   {
-    course_id: 'CS401',
-    course_name: 'Software Engineering',
-    day_of_week: 'Thursday',
-    location: 'Room A205',
-    status: 'closed',
+    course_id: "CS401",
+    course_name: "Software Engineering",
+    day_of_week: "Thursday",
+    location: "Room A205",
+    status: "closed",
     enrolled_count: 25,
     capacity: 30
   }
@@ -194,11 +194,11 @@ const teachingClasses = ref([
 
 const showStudentList = (classData) => {
   // Implement student list modal or navigation
-  console.log('Show students for:', classData)
+  console.log("Show students for:", classData)
 }
 
 const manageGrades = (classData) => {
   // Implement grade management modal or navigation
-  console.log('Manage grades for:', classData)
+  console.log("Manage grades for:", classData)
 }
-</script> 
+</script>

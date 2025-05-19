@@ -16,22 +16,22 @@
 
 
 <script setup lang="ts">
-import { useRouter, useRoute } from 'vue-router';
+import { useRouter, useRoute } from "vue-router"
 
-const router = useRouter();
-const route = useRoute();
+const router = useRouter()
+const route = useRoute()
 
 const isAuthPage = computed(() => {
-  return ['/login', '/register'].includes(route.path);
-});
+  return ["/login", "/register"].includes(route.path)
+})
 
 const handleSignOut = () => {
   // Clear all data from localStorage
-  localStorage.clear();
+  localStorage.clear()
   
   // Redirect to login page
-  router.push('/login');
-};
+  router.push("/login")
+}
 </script>
 
 <style scoped>
@@ -89,4 +89,4 @@ const handleSignOut = () => {
   padding-top: 0;
 }
 
-</style> 
+</style>

@@ -49,17 +49,17 @@ const props = defineProps({
         type: Object,
         required: true,
         default: () => ({
-            class_id: '',
-            course_id: '',
-            course_name: '',
-            location: '',
+            class_id: "",
+            course_id: "",
+            course_name: "",
+            location: "",
             capacity: 0,
             enrolled_count: 0,
-            status: '',
-            day_of_week: '',
+            status: "",
+            day_of_week: "",
             credit: 0,
-            first_name: '',
-            last_name: ''
+            first_name: "",
+            last_name: ""
         })
     }
 })

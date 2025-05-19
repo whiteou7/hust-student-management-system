@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { sql } from "drizzle-orm"
 import {
   pgTable,
   unique,
@@ -17,22 +17,22 @@ import {
   uuid,
   uniqueIndex,
   check
-} from "drizzle-orm/pg-core";
+} from "drizzle-orm/pg-core"
 
-export const role = pgEnum('role', ['student', 'teacher']);
+export const role = pgEnum("role", ["student", "teacher"])
 
-export const graduation_status = pgEnum('graduation_status', ['graduated', 'enrolled', 'expelled']);
+export const graduation_status = pgEnum("graduation_status", ["graduated", "enrolled", "expelled"])
 
-export const class_status = pgEnum('class_status', ['open', 'closed']);
+export const class_status = pgEnum("class_status", ["open", "closed"])
 
-export const day_of_week = pgEnum('day_of_week', [
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday'
-]);
+export const day_of_week = pgEnum("day_of_week", [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday"
+])
 
 export const users = pgTable("users", {
   user_id: serial().primaryKey().notNull(),
@@ -41,18 +41,18 @@ export const users = pgTable("users", {
   email: varchar().unique(),
   password: varchar(),
   role: role().notNull()
-});
+})
 
 export const programs = pgTable("programs", {
   program_id: serial().primaryKey().notNull(),
   program_name: varchar().notNull(),
   total_credit: integer().notNull()
-});
+})
 
 export const schools = pgTable("schools", {
   school_id: serial().primaryKey().notNull(),
   school_name: varchar().notNull()
-});
+})
 
 export const students = pgTable("students", {
   student_id: integer().primaryKey().references(() => users.user_id, {
@@ -72,7 +72,7 @@ export const students = pgTable("students", {
     precision: 3,
     scale: 2
   }).default('0.00')
-});
+})
 
 export const teachers = pgTable("teachers", {
   teacher_id: integer().primaryKey().references(() => users.user_id, {
@@ -85,7 +85,7 @@ export const teachers = pgTable("teachers", {
   }),
   hired_year: integer(),
   qualification: varchar()
-});
+})
 
 export const courses = pgTable("courses", {
   course_id: varchar("course_id", { length: 6 }).primaryKey().unique(),
@@ -96,7 +96,7 @@ export const courses = pgTable("courses", {
     onDelete: "cascade",
     onUpdate: "cascade"
   })
-});
+})
 
 export const classes = pgTable("classes", {
   class_id: serial().primaryKey(),
@@ -114,7 +114,7 @@ export const classes = pgTable("classes", {
   status: class_status().notNull(),
   day_of_week: day_of_week().notNull(),
   location: text().notNull()
-});
+})
 
 export const sessions = pgTable("sessions", {
   session_id: serial().primaryKey(),
@@ -122,7 +122,7 @@ export const sessions = pgTable("sessions", {
     onDelete: "cascade",
     onUpdate: "cascade"
   }),
-});
+})
 
 export const enrollments = pgTable(
   "enrollments",
@@ -152,5 +152,5 @@ export const enrollments = pgTable(
     check("check_mid_term", sql`${table.mid_term} >= 0.00 AND ${table.mid_term} <= 10.00`),
     check("check_final_term", sql`${table.final_term} >= 0.00 AND ${table.final_term} <= 10.00`),
   ]
-);
+)
 

@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import type { FormSubmitEvent } from '@nuxt/ui'
-import { z } from 'zod';
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import type { FormSubmitEvent } from "@nuxt/ui"
+import { z } from "zod"
+import { ref } from "vue"
+import { useRouter } from "vue-router"
 
 const router = useRouter()
-const errorMsg = ref('')
-const success = ref('')
+const errorMsg = ref("")
+const success = ref("")
 
 const state = reactive({
-  email: '',
-  password: '',
-  confirmPassword: '',
-  user_id: '',
+  email: "",
+  password: "",
+  confirmPassword: "",
+  user_id: ""
 })
 
 const schema = z.object({
@@ -23,33 +23,33 @@ const schema = z.object({
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"]
-});
+})
 
-type Schema = z.output<typeof schema>;
+type Schema = z.output<typeof schema>
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  const data = event.data;
-  console.log(data.email + ' submitted.');
+  const data = event.data
+  console.log(data.email + " submitted.")
   
-  const res = await useFetch('/api/register', {
-      method: 'POST',
+  const res = await useFetch("/api/register", {
+      method: "POST",
       body: {
         email: data.email,
         password: data.password,
         user_id: data.user_id
       }
-    });
+    })
 
   if (res.data.value && res.data.value.success) {
-    console.log(res.data.value.success);
+    console.log(res.data.value.success)
 
-    success.value = "Registration completed. Redirecting to login...";
+    success.value = "Registration completed. Redirecting to login..."
     
     setTimeout(() => {
-        router.push('/login');
-    }, 3000);
+        router.push("/login")
+    }, 3000)
   } else {
-    errorMsg.value = res.data.value?.error ?? 'Registration failed. Please try again.';
+    errorMsg.value = res.data.value?.error ?? "Registration failed. Please try again."
   }
 }
 </script>
@@ -149,4 +149,4 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       </div>
     </div>
   </div>
-</template> 
+</template>

@@ -66,9 +66,9 @@
 
 <script setup lang = "js">
 import { ref, computed, onMounted } from "vue"
-import ClassInfoModal from '~/components/ClassInfoModal.vue'
-const UButton = resolveComponent('UButton')
-const UDropdownMenu = resolveComponent('UDropdownMenu')
+import ClassInfoModal from "~/components/ClassInfoModal.vue"
+const UButton = resolveComponent("UButton")
+const UDropdownMenu = resolveComponent("UDropdownMenu")
 const overlay = useOverlay()
 
 const columns = [
@@ -97,27 +97,27 @@ const columns = [
     header: "Result"
   },
    {
-    id: 'actions',
+    id: "actions",
     cell: ({ row }) => {
       return h(
-        'div',
-        { class: 'text-right' },
+        "div",
+        { class: "text-right" },
         h(
           UDropdownMenu,
           {
             content: {
-              align: 'end'
+              align: "end"
             },
             items: getRowItems(row),
-            'aria-label': 'Actions dropdown'
+            "aria-label": "Actions dropdown"
           },
           () =>
             h(UButton, {
-              icon: 'i-lucide-ellipsis-vertical',
-              color: 'neutral',
-              variant: 'ghost',
-              class: 'ml-auto',
-              'aria-label': 'Actions dropdown'
+              icon: "i-lucide-ellipsis-vertical",
+              color: "neutral",
+              variant: "ghost",
+              class: "ml-auto",
+              "aria-label": "Actions dropdown"
             })
         )
       )
@@ -190,5 +190,4 @@ const filteredClasses = computed(() => {
     return matchesSearch && matchesFilter
   })
 })
-
 </script>

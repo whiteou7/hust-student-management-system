@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import type { FormSubmitEvent } from '@nuxt/ui'
-import { z } from 'zod';
-import Cookies from 'js-cookie';
-import { useRouter } from 'vue-router'
-import { ref } from 'vue'
+import type { FormSubmitEvent } from "@nuxt/ui"
+import { z } from "zod"
+import Cookies from "js-cookie"
+import { useRouter } from "vue-router"
+import { ref } from "vue"
 
 const router = useRouter()
-const errorMsg = ref('')
+const errorMsg = ref("")
 
 const state = reactive({
-  email: '',
-  password: ''
+  email: "",
+  password: ""
 })
 
 const schema = z.object({
@@ -18,38 +18,38 @@ const schema = z.object({
   password: z.string().min(6)
 })
 
-type Schema = z.output<typeof schema>;
+type Schema = z.output<typeof schema>
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  const data = event.data;
-  console.log(data.email + ' submitted.');
+  const data = event.data
+  console.log(data.email + " submitted.")
 
-  const res = await useFetch('/api/login', {
-    method: 'POST',
+  const res = await useFetch("/api/login", {
+    method: "POST",
     body: {
       email: data.email,
       password: data.password
     }
-  });
+  })
 
   if (res.data.value && res.data.value.success) {
-    Cookies.set('sessionId', res.data.value.sessionId, { expires: 7, path: '/' });
-    localStorage.setItem('userId', res.data.value?.userId);
+    Cookies.set("sessionId", res.data.value.sessionId, { expires: 7, path: "/" })
+    localStorage.setItem("userId", res.data.value?.userId)
     
     // Fetch current semester
-    const semesterRes = await useFetch('/api/semester');
+    const semesterRes = await useFetch("/api/semester")
     if (semesterRes.data.value?.currentSemester) {
-      localStorage.setItem('currentSemester', semesterRes.data.value.currentSemester);
+      localStorage.setItem("currentSemester", semesterRes.data.value.currentSemester)
     }
     
-    if (res.data.value?.role === 'student') {
-      router.push('/student/dashboard')
+    if (res.data.value?.role === "student") {
+      router.push("/student/dashboard")
     } else {
-      router.push('/teacher/dashboard')
+      router.push("/teacher/dashboard")
     }
   } else {
-    errorMsg.value = 'Wrong credentials. Please try again.'
-  };
+    errorMsg.value = "Wrong credentials. Please try again."
+  }
 }
 </script>
 

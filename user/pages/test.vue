@@ -1,16 +1,16 @@
 <script setup lang="js">
-import ClassInfoModal from '~/components/ClassInfoModal.vue'
+import ClassInfoModal from "~/components/ClassInfoModal.vue"
 
 const overlay = useOverlay()
 
 const modal = overlay.create(ClassInfoModal)
 
 const classData = ref({
-    name: 'Introduction to Computer Science',
-    code: 'CS101',
-    instructor: 'Dr. Smith',
-    schedule: 'Mon/Wed 10:00 AM - 11:30 AM',
-    description: 'An introductory course covering fundamental concepts of computer science...',
+    name: "Introduction to Computer Science",
+    code: "CS101",
+    instructor: "Dr. Smith",
+    schedule: "Mon/Wed 10:00 AM - 11:30 AM",
+    description: "An introductory course covering fundamental concepts of computer science...",
     enrolledStudents: 45
 })
 
