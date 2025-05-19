@@ -66,6 +66,10 @@
 
 <script setup lang = "js">
 import { ref, computed, onMounted } from "vue"
+import ClassInfoModal from '~/components/ClassInfoModal.vue'
+const UButton = resolveComponent('UButton')
+const UDropdownMenu = resolveComponent('UDropdownMenu')
+const overlay = useOverlay()
 
 const columns = [
   {
@@ -87,8 +91,64 @@ const columns = [
   {
     accessorKey: "final_term",
     header: "Final Score"
+  },
+  {
+    accessorKey: "result",
+    header: "Result"
+  },
+   {
+    id: 'actions',
+    cell: ({ row }) => {
+      return h(
+        'div',
+        { class: 'text-right' },
+        h(
+          UDropdownMenu,
+          {
+            content: {
+              align: 'end'
+            },
+            items: getRowItems(row),
+            'aria-label': 'Actions dropdown'
+          },
+          () =>
+            h(UButton, {
+              icon: 'i-lucide-ellipsis-vertical',
+              color: 'neutral',
+              variant: 'ghost',
+              class: 'ml-auto',
+              'aria-label': 'Actions dropdown'
+            })
+        )
+      )
+    }
   }
 ]
+
+function getRowItems(row) {
+  return [
+    {
+      label: "View class information",
+      async onSelect() {
+        const modal = overlay.create(ClassInfoModal)
+        const classId = row.original.class_id
+
+        const { data: classInfoRes } = await useFetch("/api/class-info", {
+          method: "POST",
+          body: {
+            classId: classId
+          }
+        })
+
+        if (classInfoRes.value && classInfoRes.value.success) {
+          modal.open({ classInfo: classInfoRes.value.classInfo })
+        } else {
+          errorMsg.value = classInfoRes.value?.err || "Failed to fetch class information"
+        }
+      }
+    }
+  ]
+}
 
 const classData = ref([])
 const classCount = ref(0)
@@ -116,6 +176,8 @@ if (res.data.value && res.data.value.success) {
 } else if (res.data.value && !res.data.value.success) {
   errorMsg.value = res.data.value.err
 }
+
+console.log(classData.value)
 
 const filteredClasses = computed(() => {
   return classData.value.filter(item => {

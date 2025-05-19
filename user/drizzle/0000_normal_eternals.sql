@@ -28,6 +28,7 @@ CREATE TABLE "enrollments" (
 	"class_id" integer NOT NULL,
 	"mid_term" numeric(3, 2) DEFAULT '0.00' NOT NULL,
 	"final_term" numeric(3, 2) DEFAULT '0.00' NOT NULL,
+	"result" numeric(3, 2) DEFAULT '0.00',
 	"pass" boolean DEFAULT false NOT NULL,
 	CONSTRAINT "unique_student_class" UNIQUE("student_id","class_id"),
 	CONSTRAINT "check_mid_term" CHECK ("enrollments"."mid_term" >= 0.00 AND "enrollments"."mid_term" <= 10.00),

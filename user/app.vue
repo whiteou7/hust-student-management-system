@@ -1,8 +1,9 @@
 <template>
   <NuxtLayout>
-    <UApp>
+    <UApp toaster: ToasterProps>
       <NuxtPage />
     </UApp>
     
   </NuxtLayout>
+  <UModals />
 </template>

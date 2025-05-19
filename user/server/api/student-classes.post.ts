@@ -18,7 +18,8 @@ export default defineEventHandler (async (event) => {
         co.course_name,
         c.day_of_week,
         e.mid_term,
-        e.final_term
+        e.final_term,
+        e.result
       FROM 
         enrollments e
       JOIN 
