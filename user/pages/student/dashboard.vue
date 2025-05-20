@@ -65,7 +65,7 @@
 </template>
 
 <script setup lang = "js">
-import { ref, computed, onMounted } from "vue"
+import { ref, computed } from "vue"
 import ClassInfoModal from "~/components/ClassInfoModal.vue"
 const UButton = resolveComponent("UButton")
 const UDropdownMenu = resolveComponent("UDropdownMenu")

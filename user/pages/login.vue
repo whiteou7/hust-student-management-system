@@ -48,8 +48,10 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     }
     
     if (res.data.value?.role === "student") {
+      localStorage.setItem("role", "student")
       router.push("/student/dashboard")
     } else {
+      localStorage.setItem("role", "teacher")
       router.push("/teacher/dashboard")
     }
   } else {

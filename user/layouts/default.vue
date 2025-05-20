@@ -1,9 +1,9 @@
 <template>
   <div class="layout-container">
     <header v-if="!isAuthPage" class="header">
-      <h1>Hust Student Management System</h1>
+      <h1 @click="dashboardNavigate" class="clickable-header">Hust Student Management System</h1>
       <div class="header-buttons">
-        <button class="btn profile-btn">View Profile</button>
+        <button class="btn profile-btn" @click="viewProfile">View Profile</button>
         <button class="btn signout-btn" @click="handleSignOut">Sign Out</button>
       </div>
     </header>
@@ -25,6 +25,20 @@ const isAuthPage = computed(() => {
   return ["/login", "/register"].includes(route.path)
 })
 
+const dashboardNavigate = () => {
+  const role = localStorage.getItem("role")
+  if (role === "student") {
+    router.push("/student/dashboard")
+  } else router.push("/teacher/dashboard")
+}
+
+const viewProfile = () => {
+  const role = localStorage.getItem("role")
+  if (role === "student") {
+    router.push("/student/profile")
+  } else router.push("/teacher/profile")
+}
+
 const handleSignOut = () => {
   // Clear all data from localStorage
   localStorage.clear()
@@ -37,9 +51,11 @@ const handleSignOut = () => {
 <style scoped>
 .header {
   background-color: transparent;
-  color: rgb(255, 255, 255);
+  backdrop-filter: blur(10px); /* Apply blur effect */
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
+  color: rgb(255, 255, 255); /* Better contrast with lighter bg */
   padding: 1rem 2rem;
-  box-shadow: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Optional: soft shadow */
   position: fixed;
   top: 0;
   left: 0;
@@ -49,6 +65,16 @@ const handleSignOut = () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  backdrop-filter: blur(10px);
+}
+
+.clickable-header {
+  cursor: pointer;
+  color: #ffffff;
+  transition: color 0.2s;
+}
+.clickable-header:hover {
+  color: #3cff7a;
 }
 
 .header h1 {
