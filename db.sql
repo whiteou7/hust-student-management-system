@@ -1,200 +1,71 @@
-insert into users (first_name, last_name, email, password, role) values ('Devon', 'Griffen', null, 'wS8!+v6WlGTOS', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Darci', 'Armall', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Portie', 'Vedeneev', 'pvedeneev2@meetup.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Maddie', 'Joist', null, 'rX1(''PO!n>', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Cody', 'Bailes', null, 'tB4''lQBDZ', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Meggie', 'O'' Timony', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Corette', 'Lismore', 'clismore6@amazon.de', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Kaine', 'Takis', 'ktakis7@zimbio.com', 'eK1><s6p<"6', 'teacher');
-insert into users (first_name, last_name, email, password, role) values ('Sayers', 'Rothchild', 'srothchild8@google.com.au', 'mR3|oJ'')K>3_6', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Jana', 'McLice', 'jmclice9@yandex.ru', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Amye', 'Davana', 'adavanaa@mlb.com', 'fR2#"l6GPU', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Florina', 'Abell', 'fabellb@desdev.cn', 'dZ9!PSx$', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Erminia', 'Knatt', 'eknattc@jalbum.net', 'bV6#eM2}NjKG$', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Hedvig', 'Kobierzycki', null, 'cS3=LE&>L', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Vachel', 'Creavan', 'vcreavane@privacy.gov.au', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Lorene', 'Drackford', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Rutter', 'Ingliss', 'ringlissg@dedecms.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Luz', 'Lyddon', 'llyddonh@barnesandnoble.com', 'nN2%*(r+Q8S', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Lorne', 'Lidstone', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Lew', 'Georger', 'lgeorgerj@mozilla.org', 'mX2/Z4e{}2', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Vere', 'Mc Faul', 'vmcfaulk@npr.org', 'kK6~XZ{>~8pCT.v', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Milton', 'Goodnow', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Gavra', 'Bartke', 'gbartkem@hhs.gov', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Iorgos', 'Bryden', null, 'kT4+a,Tk?569??n', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Wilton', 'Ringer', 'wringero@weebly.com', 'oT0&34Ej#Z', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Tabbie', 'Martusov', 'tmartusovp@smh.com.au', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Ronalda', 'Mabone', 'rmaboneq@4shared.com', 'mF9<8MMV&5+JOl5~', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Merle', 'Parkeson', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Godwin', 'Diaper', null, 'bQ6+3.)=A~3f<t4E', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Torin', 'Phibb', null, 'qP8*1"Uhme', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Nathaniel', 'Frend', 'nfrendu@ucsd.edu', null, 'teacher');
-insert into users (first_name, last_name, email, password, role) values ('Cordi', 'Francis', 'cfrancisv@auda.org.au', 'kL7<S$}@s(ZrJ~', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Kessia', 'Pigden', 'kpigdenw@google.pl', 'yS0{IAZSE2#v$k', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Carmela', 'Belison', 'cbelisonx@cnet.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Reuven', 'Longlands', null, 'sQ3+QzY&@X1wL5XK', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Major', 'Duiged', null, 'wC7\6W\~kqwa@', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Sheila-kathryn', 'Pidwell', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Scarlet', 'MacAllister', 'smacallister11@biglobe.ne.jp', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Melisent', 'Filby', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Rudie', 'Elderkin', null, 'jX4(>h`3OkiqIh', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Morrie', 'Barns', 'mbarns14@usnews.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Brandise', 'Harron', 'bharron15@1und1.de', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Avie', 'Tesoe', 'atesoe16@cdc.gov', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Caye', 'Saw', null, 'pL6,>gSE', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Giff', 'Stable', 'gstable18@chicagotribune.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Brander', 'Feyer', 'bfeyer19@imdb.com', 'vZ5?pwC"~,nSf', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Donia', 'Normanville', 'dnormanville1a@merriam-webster.com', 'oK0.P{Vv44q><''', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Augusta', 'Drury', 'adrury1b@youtube.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Emogene', 'Ivanin', 'eivanin1c@is.gd', 'fB4=B}xS%', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Zsazsa', 'Deas', 'zdeas1d@istockphoto.com', 'mR5@Nn''yC''', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Billy', 'Petracchi', null, 'vF2%NY2*O', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Clay', 'Moorton', 'cmoorton1f@si.edu', null, 'teacher');
-insert into users (first_name, last_name, email, password, role) values ('Jose', 'Mielnik', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Fanny', 'Shortall', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Reamonn', 'Eckly', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Blondelle', 'Wheelhouse', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Hatti', 'Finley', 'hfinley1k@nifty.com', 'sT9#0BtIz', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Bertie', 'Rollo', 'brollo1l@fotki.com', 'lB0_!qC}l@}|O', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Dean', 'Lyddon', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Britta', 'Kyneton', 'bkyneton1n@pen.io', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Oswell', 'McCully', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Ty', 'Lundberg', null, 'aH2)+,''4BtPR', 'teacher');
-insert into users (first_name, last_name, email, password, role) values ('Roddie', 'Smitherham', 'rsmitherham1q@imgur.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Haily', 'McCord', 'hmccord1r@over-blog.com', 'kW8.ew+(7', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Genvieve', 'Gouthier', null, 'aB3''8IEb}*', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Gareth', 'Surgenor', null, 'aS4}GI4)+5i3', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Timmi', 'Gockelen', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Dedra', 'Catley', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Llewellyn', 'Carolan', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Clay', 'Wetton', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Isis', 'Meake', 'imeake1y@w3.org', 'lF1~8TgUj3', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Rozamond', 'Northill', 'rnorthill1z@fotki.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Cobbie', 'Bonifazio', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Kamillah', 'Woodruffe', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Kanya', 'Ferrandez', null, null, 'teacher');
-insert into users (first_name, last_name, email, password, role) values ('Wolfie', 'Llopis', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Susy', 'Sango', null, 'tK5?xK3({kw', 'student');
-insert into users (first_name, last_name, email, password, role) values ('La verne', 'Impy', 'limpy25@cloudflare.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Anni', 'Dexter', null, 'uR2&Ndbhwq>NN>', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Siobhan', 'Barnsdale', null, 'bQ1%\sl8P&!', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Man', 'Jaquemar', 'mjaquemar28@hibu.com', 'tV2)hpVX', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Rosalind', 'Raveau', null, 'nI7=@MG0>E>', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Bessy', 'Cashman', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Agata', 'Bamlet', null, 'nO4={T_$', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Andromache', 'Knoller', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Bernelle', 'MacKean', 'bmackean2d@cyberchimps.com', 'tR6,5by`LGaF8=V', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Alix', 'Flade', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Adela', 'Demange', 'ademange2f@pcworld.com', 'mF2\4#/vI5w', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Alexandre', 'Naris', null, 'yD7#7%ydEW', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Nollie', 'Priest', null, 'oM8~#j`dO9<r|O', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Phyllida', 'Cavnor', 'pcavnor2i@cnet.com', 'mU1=!xJ)\e@', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Andy', 'Tomaschke', 'atomaschke2j@de.vu', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Marney', 'Waud', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Sean', 'Skoggings', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Frederica', 'Cason', 'fcason2m@redcross.org', 'qQ6$|@c_', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Sisile', 'Allain', 'sallain2n@desdev.cn', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Laurel', 'Daunay', 'ldaunay2o@mozilla.com', 'vZ6+B`D.a}E@Y4Vt', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Hestia', 'Ofener', 'hofener2p@typepad.com', 'iE6(y#EZ', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Winne', 'Hatfield', null, 'aU3@\@3+%VLxVj\j', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Piper', 'Rosina', 'prosina2r@buzzfeed.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Glyn', 'Galego', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Jamaal', 'Olczak', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Sibby', 'Bohje', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Jens', 'Demeza', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Burk', 'Battison', 'bbattison2w@virginia.edu', 'tR9>8|c5RjBC_+>N', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Amie', 'Brenstuhl', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Kaia', 'Cowell', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Pearce', 'Eneas', 'peneas2z@reuters.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Leif', 'Swash', 'lswash30@discovery.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Audry', 'Semeradova', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Annabel', 'Franceschi', 'afranceschi32@tumblr.com', null, 'teacher');
-insert into users (first_name, last_name, email, password, role) values ('Cordie', 'Audiss', 'caudiss33@techcrunch.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Brenden', 'Krikorian', null, 'iX4<)dOR!&`mx', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Chip', 'Johnikin', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Lyle', 'Link', null, 'zJ6{PwxIAcK<h', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Helenka', 'O''Hoolahan', null, 'hA9\<NF*l', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Gregorius', 'Furmage', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Arley', 'Everist', null, 'kZ2}g5D0+!~<k~', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Ferrel', 'Diggles', 'fdiggles3a@narod.ru', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Gothart', 'Horbart', 'ghorbart3b@wikimedia.org', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Hannah', 'Posselt', null, null, 'teacher');
-insert into users (first_name, last_name, email, password, role) values ('Pamelina', 'Regis', null, 'oR2\H!#AxZ', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Pauline', 'Pearcey', null, 'jC5"}&Pda1%', 'teacher');
-insert into users (first_name, last_name, email, password, role) values ('Ki', 'Ferraraccio', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Samaria', 'Sollon', null, 'nO3#/{2%', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Hedi', 'Follen', null, 'tX1~_cX,iY', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Gael', 'Mowle', 'gmowle3i@vk.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Natal', 'Crummy', 'ncrummy3j@patch.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Kalli', 'Albone', null, 'uV2~bL8dxr\M', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Ingrim', 'Mateescu', 'imateescu3l@gnu.org', 'dB9*bGK1', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Bren', 'Symmons', null, null, 'teacher');
-insert into users (first_name, last_name, email, password, role) values ('Kettie', 'Ochterlonie', 'kochterlonie3n@purevolume.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Jock', 'Lucia', 'jlucia3o@vk.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Gayle', 'Davage', 'gdavage3p@umich.edu', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Gert', 'Shelmerdine', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Melony', 'Wrenn', null, 'yU3+os!{k2E`', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Amargo', 'Allabarton', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Marga', 'Fowlds', 'mfowlds3t@mayoclinic.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Griswold', 'Havoc', 'ghavoc3u@ebay.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Kahaleel', 'Veighey', null, 'oS3=r!=li8', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Damaris', 'Wittey', 'dwittey3w@webnode.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Kelly', 'Cattonnet', 'kcattonnet3x@apple.com', 'wV6&Sw+jcj~U@#j/', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Sile', 'Cummings', 'scummings3y@yellowbook.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Reggie', 'O''Loughane', 'roloughane3z@arizona.edu', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Hastie', 'Camsey', 'hcamsey40@odnoklassniki.ru', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Urbain', 'Thurlbeck', 'uthurlbeck41@lulu.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Edna', 'Rubinow', null, 'rU6<i{4@Rmx', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Trixie', 'Hampson', 'thampson43@cnet.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Cherish', 'Deveril', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Adam', 'Van Cassel', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Feliks', 'Alkin', 'falkin46@vimeo.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Alfons', 'Martinec', 'amartinec47@google.nl', 'uV5''4eV&HGt9J', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Modesta', 'Whiteway', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Ruggiero', 'Arnout', null, 'eL2?3hq`6Wz>', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Petunia', 'Ortsmann', null, 'zE9<{(eS!`bZE', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Lanny', 'Alenikov', 'lalenikov4b@squarespace.com', 'oG6|>oh}g<E9p', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Niven', 'Adamoli', 'nadamoli4c@mapy.cz', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Kristien', 'Fawdrie', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Bradley', 'Huburn', null, 'qQ2!%X,h', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Arlana', 'Glastonbury', 'aglastonbury4f@army.mil', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Missie', 'Eyden', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Kelcey', 'Havick', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Margo', 'Batie', null, 'hZ9,}&o7hp', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Hamid', 'Lindsell', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Jobey', 'Hindrick', null, 'rD8"51b`y#Y', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Gaynor', 'Mandrey', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Kori', 'Mothersdale', 'kmothersdale4m@dyndns.org', 'lE6}=#!gHCpg', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Maynord', 'Spleving', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Ali', 'McKimmie', 'amckimmie4o@about.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Nikolas', 'Rawlison', null, 'oC3#NL.z&&gE%', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Pavel', 'Spurdens', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Brnaby', 'Napper', null, 'zI3_%MkGTmrsSk', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Davida', 'Brinson', null, 'qL6>p#}Ma!z60YY', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Cindee', 'Fodden', null, 'wB3*uOu#{za', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Janine', 'Haward', null, 'kM6)0xc3\#>X{', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Elana', 'Pittwood', 'epittwood4v@chicagotribune.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Bernadette', 'Gonneau', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Rorie', 'Gruszecki', 'rgruszecki4x@cyberchimps.com', 'uJ4+t>L7>{9fD', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Dudley', 'Taphouse', 'dtaphouse4y@taobao.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Keen', 'Aliman', null, 'bW5`_sC{Vec', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Boyce', 'Dyka', 'bdyka50@prlog.org', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Matthew', 'Wratten', 'mwratten51@businesswire.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Rudolfo', 'Rizzardo', 'rrizzardo52@netvibes.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Sharron', 'Phonix', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Barbara-anne', 'Cristofalo', 'bcristofalo54@pinterest.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Claudia', 'Rikard', 'crikard55@reference.com', 'kC7/!Qjjida~$%', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Toiboid', 'Shardlow', 'tshardlow56@sina.com.cn', 'wD9_\MNFJ)7SL', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Maible', 'Yitshak', null, 'kN3''1KKt<)ZW', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Samuel', 'Allkins', 'sallkins58@amazon.de', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Cooper', 'Mundee', 'cmundee59@nyu.edu', 'bJ1|OqRaA"A', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Codee', 'Arntzen', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Almira', 'Shevlan', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Michel', 'Goldsby', null, 'hW9_~MD&8+N}`4tJ', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Magda', 'Kelwaybamber', null, 'bP6{vDR4Ad"', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Laurette', 'Paulus', 'lpaulus5e@google.ca', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Margot', 'Guyer', 'mguyer5f@yelp.com', null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Dillon', 'Martinson', null, 'fX7_opGtI', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Cosetta', 'Trye', null, null, 'student');
-insert into users (first_name, last_name, email, password, role) values ('Sandy', 'Corwin', null, 'hP6}~nnXx+`<l3', 'student');
-insert into users (first_name, last_name, email, password, role) values ('Myrvyn', 'Broe', 'mbroe5j@loc.gov', null, 'student');
+-- 1. Cập nhật danh sách schools
+INSERT INTO "schools" ("school_id", "school_name") VALUES
+(2, 'School of Engineering'),
+(3, 'School of Business'),
+(4, 'School of Language'),  
+(5, 'School of Physics');
+
+-- 2. Courses cho Computer Science (school_id=1)
+INSERT INTO "courses" ("course_id", "course_name", "credit", "tuition_per_credit", "school_id") VALUES
+('CS0101', 'Introduction to Programming', 3, 100, 1),
+('CS0102', 'Data Structures', 4, 120, 1),
+('CS0103', 'Algorithms', 4, 130, 1),
+('CS0104', 'Database Systems', 3, 110, 1),
+('CS0105', 'Computer Networks', 4, 140, 1),
+('CS0106', 'Operating Systems', 4, 130, 1),
+('CS0107', 'AI Fundamentals', 3, 150, 1),
+('CS0108', 'Web Development', 3, 115, 1),
+('CS0109', 'Software Engineering', 4, 125, 1),
+('CS0110', 'Cybersecurity', 3, 145, 1);
+
+-- 3. Courses cho Engineering (school_id=2)
+INSERT INTO "courses" ("course_id", "course_name", "credit", "tuition_per_credit", "school_id") VALUES
+('EN0201', 'Thermodynamics', 4, 90, 2),
+('EN0202', 'Circuit Analysis', 4, 110, 2),
+('EN0203', 'Fluid Mechanics', 4, 120, 2),
+('EN0204', 'Materials Science', 3, 95, 2),
+('EN0205', 'Structural Design', 4, 115, 2),
+('EN0206', 'Control Systems', 3, 105, 2),
+('EN0207', 'Robotics', 4, 130, 2),
+('EN0208', 'Renewable Energy', 3, 100, 2),
+('EN0209', 'CAD Modeling', 3, 110, 2),
+('EN0210', 'Engineering Math', 4, 100, 2);
+
+-- 4. Courses cho Business (school_id=3)
+INSERT INTO "courses" ("course_id", "course_name", "credit", "tuition_per_credit", "school_id") VALUES
+('BU0301', 'Financial Accounting', 4, 150, 3),
+('BU0302', 'Marketing Principles', 3, 130, 3),
+('BU0303', 'Business Statistics', 3, 120, 3),
+('BU0304', 'Operations Management', 4, 140, 3),
+('BU0305', 'Organizational Behavior', 3, 110, 3),
+('BU0306', 'Business Law', 3, 125, 3),
+('BU0307', 'Strategic Management', 4, 160, 3),
+('BU0308', 'Entrepreneurship', 3, 130, 3),
+('BU0309', 'International Business', 3, 135, 3),
+('BU0310', 'Digital Marketing', 3, 140, 3);
+
+-- 5. Courses cho Language (school_id=4)
+INSERT INTO "courses" ("course_id", "course_name", "credit", "tuition_per_credit", "school_id") VALUES
+('LA0401', 'English Linguistics', 3, 90, 4),
+('LA0402', 'French Literature', 3, 95, 4),
+('LA0403', 'Spanish Grammar', 3, 85, 4),
+('LA0404', 'Chinese Characters', 4, 100, 4),
+('LA0405', 'Translation Studies', 3, 110, 4),
+('LA0406', 'Phonetics', 2, 80, 4),
+('LA0407', 'Comparative Literature', 3, 105, 4),
+('LA0408', 'Academic Writing', 2, 75, 4),
+('LA0409', 'Japanese Culture', 3, 95, 4),
+('LA0410', 'German Conversation', 3, 90, 4);
+
+-- 6. Courses cho Physics (school_id=5)
+INSERT INTO "courses" ("course_id", "course_name", "credit", "tuition_per_credit", "school_id") VALUES
+('PH0501', 'Classical Mechanics', 4, 110, 5),
+('PH0502', 'Electromagnetism', 4, 120, 5),
+('PH0503', 'Quantum Physics', 4, 130, 5),
+('PH0504', 'Thermodynamics', 3, 100, 5),
+('PH0505', 'Nuclear Physics', 4, 140, 5),
+('PH0506', 'Astrophysics', 3, 125, 5),
+('PH0507', 'Optics', 3, 115, 5),
+('PH0508', 'Particle Physics', 4, 150, 5),
+('PH0509', 'Solid State Physics', 4, 135, 5),
+('PH0510', 'Computational Physics', 3, 120, 5);
