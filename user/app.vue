@@ -5,5 +5,4 @@
     </UApp>
     
   </NuxtLayout>
-  <UModals />
 </template>

@@ -13,11 +13,35 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const success = await db.execute(
+    await db.execute(
       sql.raw(`
-        
+        UPDATE
+          students s
+        SET
+          enrolled_year = ${body.enrolled_year}
+        WHERE
+          student_id = ${body.studentId};
       `)
     )
+
+    await db.execute(
+      sql.raw(`
+        UPDATE 
+          users u
+        SET
+          first_name = '${body.first_name}',
+          last_name = '${body.last_name}',
+          email = '${body.email}'
+        WHERE
+          user_id = ${body.studentId};
+      `)
+    );
+
+    console.log("updated info")
+    return {
+      success: true,
+      err: null
+    }
   }
   catch (error) {
     console.error("Error updating student info:", error)

@@ -4,16 +4,13 @@
     <UCard class="profile-header">
       <div class="profile-cover"></div>
       <div class="profile-info">
-        <div class="profile-avatar">
-          <UAvatar
-            size="xl"
-            class="avatar"
-          />
-        </div>
-        <div class="profile-details">
-          <div><UText class="text-white font-bold">{{ student.first_name }} {{ student.last_name }}</UText></div>
-          <UText class="student-id">Student ID: {{ student.student_id }} - </UText>
-          <UText class="department">{{ student.program_name }}</UText>
+        <UAvatar
+          size="2xl"
+          class="avatar"
+        />
+        <div style="display: flex; flex-direction: column;">
+          <div class="text-white font-bold">{{ student.first_name }} {{ student.last_name }}</div>
+          <div class="student-id">Student ID: {{ student.student_id }} - {{ student.program_name }}</div>
         </div>
       </div>
     </UCard>
@@ -32,7 +29,7 @@
               <UButton
                 variant="subtle"
                 icon="i-heroicons-pencil-square"
-                label="Edit Basic Info"
+                label="Edit"
                 @click="onClick"
               >
               </UButton>
@@ -46,7 +43,7 @@
                     </div>
                   </template>
 
-                  <UForm @submit="submitEdit">
+                  <UForm :state="editForm" @submit="submitEdit">
                     <div class="space-y-4">
                       <UFormField label="First Name">
                         <UInput v-model="editForm.first_name" placeholder="Enter first name" />
@@ -63,6 +60,10 @@
                       <UFormField label="Enrolled Year">
                         <UInput v-model="editForm.enrolled_year" type="number" placeholder="Enter enrolled year" />
                       </UFormField>
+
+                      <UButton type="submit">
+                        Submit
+                      </UButton>
                     </div>
 
                     <template #footer>
@@ -88,15 +89,15 @@
         <div class="info-grid">
         <div class="form-group">
             <label class="text-sm text-gray-500">Full Name</label>
-            <UText>{{ student.first_name }} {{ student.last_name }}</UText>
+            <div>{{ student.first_name }} {{ student.last_name }}</div>
         </div>
         <div class="form-group">
             <label class="text-sm text-gray-500">Email</label>
-            <UText>{{ student.email }}</UText>
+            <div>{{ student.email }}</div>
         </div>
         <div class="form-group">
             <label class="text-sm text-gray-500">Enrolled Year</label>
-            <UText>{{ student.enrolled_year }}</UText>
+            <div>{{ student.enrolled_year }}</div>
         </div>
         </div>
     
@@ -110,30 +111,30 @@
             <h2>Academic Information</h2>
           </div>
         </template>
-        <UForm>
-          <div class="info-grid">
-            <div class="form-group">
-              <label class="text-sm text-gray-500">Program</label>
-              <UText>{{ student.program_name }}</UText>
-            </div>
-            <div class="form-group">
-              <label class="text-sm text-gray-500">Warning Level</label>
-              <UText>{{ student.warning_level }}</UText>
-            </div>
-            <div class="form-group">
-              <label class="text-sm text-gray-500">Debt</label>
-              <UText>{{ student.debt }}</UText>
-            </div>
-            <div class="form-group">
-              <label class="text-sm text-gray-500">CPA</label>
-              <UText>{{ student.cpa }}</UText>
-            </div>
-            <div class="form-group">
-              <label class="text-sm text-gray-500">Accumulated Credit</label>
-              <UText>{{ student.accumulated_credit }}/{{ student.total_credit }}</UText>
-            </div>
+
+        <div class="info-grid">
+          <div class="form-group">
+            <label class="text-sm text-gray-500">Program</label>
+            <div>{{ student.program_name }}</div>
           </div>
-        </UForm>
+          <div class="form-group">
+            <label class="text-sm text-gray-500">Warning Level</label>
+            <div>{{ student.warning_level }}</div>
+          </div>
+          <div class="form-group">
+            <label class="text-sm text-gray-500">Debt</label>
+            <div>{{ student.debt }}</div>
+          </div>
+          <div class="form-group">
+            <label class="text-sm text-gray-500">CPA</label>
+            <div>{{ student.cpa }}</div>
+          </div>
+          <div class="form-group">
+            <label class="text-sm text-gray-500">Accumulated Credit</label>
+            <div>{{ student.accumulated_credit }}/{{ student.total_credit }}</div>
+          </div>
+        </div>
+
       </UCard>
 
       <!-- Current Courses -->
@@ -151,16 +152,16 @@
             class="course-card"
           >
             <h3>{{ course.name }}</h3>
-            <UText class="text-gray-500">{{ course.code }}</UText>
+            <div class="text-gray-500">{{ course.code }}</div>
             <div class="mt-2 space-y-1">
-              <UText class="flex items-center gap-1">
+              <div class="flex items-center gap-1">
                 <UIcon name="i-heroicons-clock" class="w-4 h-4" />
                 {{ course.schedule }}
-              </UText>
-              <UText class="flex items-center gap-1">
+              </div>
+              <div class="flex items-center gap-1">
                 <UIcon name="i-heroicons-user" class="w-4 h-4" />
                 {{ course.instructor }}
-              </UText>
+              </div>
             </div>
           </UCard>
         </div>
@@ -170,16 +171,16 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue"
 
 const student = ref({})
 const studentId = localStorage.getItem("userId")
 const toast = useToast()
 const editForm = ref({
-  first_name: '',
-  last_name: '',
-  email: '',
-  enrolled_year: ''
+  first_name: "",
+  last_name: "",
+  email: "",
+  enrolled_year: ""
 })
 
 const res = await useFetch("/api/student-info", {
@@ -210,6 +211,7 @@ async function onClick() {
 }
 
 async function submitEdit() {
+  console.log("submit button clicked")
   const res = await useFetch("/api/student-info", {
     method: "PUT",
     body: {
@@ -220,25 +222,25 @@ async function submitEdit() {
 
   if (!res.data.value) {
     toast.add({
-      title: 'Error',
-      description: 'Failed to update student info.',
-      color: 'red'
+      title: "Error",
+      description: "Failed to update student info.",
+      color: "red"
     })
     return
   }
 
   if (res.data.value.success) {
-    student.value = res.data.value.studentInfo
+    Object.assign(student.value, editForm.value)
     toast.add({
-      title: 'Success',
-      description: 'Information updated successfully',
-      color: 'green'
+      title: "Success",
+      description: "Information updated successfully",
+      color: "success"
     })
   } else {
     toast.add({
-      title: 'Error',
+      title: "Error",
       description: res.data.value.err,
-      color: 'red'
+      color: "error"
     })
   }
 }
@@ -265,15 +267,11 @@ async function submitEdit() {
 
 .profile-info {
   position: absolute;
-  bottom: -80px;
+  bottom: -75px;
   left: 40px;
   display: flex;
   align-items: flex-end;
   gap: 24px;
-}
-
-.profile-avatar {
-  position: relative;
 }
 
 .avatar {
@@ -286,12 +284,7 @@ async function submitEdit() {
   right: 10px;
 }
 
-.profile-details {
-  color: var(--color-gray-900);
-}
-
-.student-id, .department {
-  margin: 5px 0;
+.student-id {
   color: var(--color-gray-500);
 }
 
