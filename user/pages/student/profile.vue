@@ -183,6 +183,7 @@ const editForm = ref({
   enrolled_year: ""
 })
 
+// Fetch student info
 const res = await useFetch("/api/student-info", {
   method: "POST",
   body: {
@@ -210,8 +211,8 @@ async function onClick() {
   }
 }
 
+// Edit student profile after submitting
 async function submitEdit() {
-  console.log("submit button clicked")
   const res = await useFetch("/api/student-info", {
     method: "PUT",
     body: {
