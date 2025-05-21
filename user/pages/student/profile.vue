@@ -23,9 +23,65 @@
       <!-- Personal Information -->
       <UCard>
         <template #header>
-          <div class="flex items-center gap-2">
-            <UIcon name="i-heroicons-user" />
-            <h2>Personal Information</h2>
+          <div class="flex items-center justify-between w-full">
+            <div class="flex items-center gap-2">
+              <UIcon name="i-heroicons-user" />
+              <h2>Personal Information</h2>
+            </div>
+            <UModal>
+              <UButton
+                variant="subtle"
+                icon="i-heroicons-pencil-square"
+                label="Edit Basic Info"
+                @click="onClick"
+              >
+              </UButton>
+
+              <template #content>
+                <UCard>
+                  <template #header>
+                    <div class="flex items-center gap-2">
+                      <UIcon name="i-heroicons-pencil-square" />
+                      <h2>Edit Basic Information</h2>
+                    </div>
+                  </template>
+
+                  <UForm @submit="submitEdit">
+                    <div class="space-y-4">
+                      <UFormField label="First Name">
+                        <UInput v-model="editForm.first_name" placeholder="Enter first name" />
+                      </UFormField>
+                      
+                      <UFormField label="Last Name">
+                        <UInput v-model="editForm.last_name" placeholder="Enter last name" />
+                      </UFormField>
+                      
+                      <UFormField label="Email">
+                        <UInput v-model="editForm.email" type="email" placeholder="Enter email" />
+                      </UFormField>
+                      
+                      <UFormField label="Enrolled Year">
+                        <UInput v-model="editForm.enrolled_year" type="number" placeholder="Enter enrolled year" />
+                      </UFormField>
+                    </div>
+
+                    <template #footer>
+                      <div class="flex justify-end gap-2">
+                        <UButton
+                          variant="subtle"
+                          label="Cancel"
+                        >
+                        </UButton>
+                        <UButton
+                          label="Save changes"
+                        >
+                        </UButton>
+                      </div>
+                    </template>
+                  </UForm>
+                </UCard>
+              </template>
+            </UModal>
           </div>
         </template>
         
@@ -118,6 +174,13 @@ import { ref } from 'vue'
 
 const student = ref({})
 const studentId = localStorage.getItem("userId")
+const toast = useToast()
+const editForm = ref({
+  first_name: '',
+  last_name: '',
+  email: '',
+  enrolled_year: ''
+})
 
 const res = await useFetch("/api/student-info", {
   method: "POST",
@@ -134,6 +197,50 @@ if (res.data.value.success) {
   student.value = res.data.value.studentInfo
 } else {
   errorMsg.value = res.data.value.err
+}
+
+async function onClick() {
+  // Initialize form with current values
+  editForm.value = {
+    first_name: student.value.first_name,
+    last_name: student.value.last_name,
+    email: student.value.email,
+    enrolled_year: student.value.enrolled_year
+  }
+}
+
+async function submitEdit() {
+  const res = await useFetch("/api/student-info", {
+    method: "PUT",
+    body: {
+      studentId: parseInt(studentId ?? "0"),
+      ...editForm.value
+    }
+  })
+
+  if (!res.data.value) {
+    toast.add({
+      title: 'Error',
+      description: 'Failed to update student info.',
+      color: 'red'
+    })
+    return
+  }
+
+  if (res.data.value.success) {
+    student.value = res.data.value.studentInfo
+    toast.add({
+      title: 'Success',
+      description: 'Information updated successfully',
+      color: 'green'
+    })
+  } else {
+    toast.add({
+      title: 'Error',
+      description: res.data.value.err,
+      color: 'red'
+    })
+  }
 }
 
 </script>
