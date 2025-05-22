@@ -17,7 +17,7 @@ A Nuxt project incorporating Drizzle ORM and PostgreSQL.
 8. classes(**class_id**, teacher_id, course_id, capacity, semester, enrolled_count, status, day_of_week, location):
 - teacher_id refers to teachers.teacher_id
 - course_id refers to courses.course_id
-9. enrollments(**student_id**, class_id, mid_term, final_term, pass):
+9. enrollments(**student_id**, **class_id**, mid_term, final_term, pass):
 - student_id refers to students.student_id
 - class_id refers to classes.class_id
 
