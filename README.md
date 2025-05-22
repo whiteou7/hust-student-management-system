@@ -1,5 +1,5 @@
 ## Overview
-Framework used: Nuxt, drizzle, postgres
+A Nuxt project incorporating Drizzle ORM and PostgreSQL.
 
 ## Schema
 1. users(**user_id**, first_name, last_name, date_of_birth, address email, password, role)
