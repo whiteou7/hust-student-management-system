@@ -17,6 +17,7 @@ CREATE TABLE "classes" (
 CREATE TABLE "courses" (
 	"course_id" varchar(6) PRIMARY KEY NOT NULL,
 	"course_name" varchar NOT NULL,
+	"course_description" varchar NOT NULL,
 	"credit" integer NOT NULL,
 	"tuition_per_credit" integer NOT NULL,
 	"school_id" integer NOT NULL,
@@ -26,8 +27,8 @@ CREATE TABLE "courses" (
 CREATE TABLE "enrollments" (
 	"student_id" integer NOT NULL,
 	"class_id" integer NOT NULL,
-	"mid_term" numeric(3, 2) DEFAULT '0.00' NOT NULL,
-	"final_term" numeric(3, 2) DEFAULT '0.00' NOT NULL,
+	"mid_term" numeric(3, 2),
+	"final_term" numeric(3, 2),
 	"result" numeric(3, 2) DEFAULT '0.00',
 	"pass" boolean DEFAULT false NOT NULL,
 	CONSTRAINT "unique_student_class" UNIQUE("student_id","class_id"),
@@ -73,6 +74,8 @@ CREATE TABLE "users" (
 	"user_id" serial PRIMARY KEY NOT NULL,
 	"first_name" varchar NOT NULL,
 	"last_name" varchar NOT NULL,
+	"date_of_birth" date,
+	"address" varchar,
 	"email" varchar,
 	"password" varchar,
 	"role" "role" NOT NULL,

@@ -186,6 +186,17 @@ if (!res.data.value) {
 
 if (res.data.value.success) {
   classData.value = res.data.value.classes
+
+  // Handle null value
+  classData.value = classData.value.map(item => {
+    return {
+      ...item,
+      mid_term: item.mid_term === null ? "Ungraded" : item.mid_term,
+      final_term: item.final_term === null ? "Ungraded" : item.final_term,
+      result: item.result === null ? "Ungraded" : item.result
+    }
+  })
+
   classCount.value = classData.value.length
 } else {
   errorMsg.value = res.data.value.err
