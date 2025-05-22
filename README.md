@@ -2,7 +2,7 @@
 A Nuxt project incorporating Drizzle ORM and PostgreSQL.
 
 ## Schema
-1. users(**user_id**, first_name, last_name, date_of_birth, address email, password, role)
+1. users(**user_id**, first_name, last_name, date_of_birth, address, email, password, role)
 2. sessions(**session_id**, user_id): user_id refers to users.user_id
 3. students(**student_id**, program_id, enrolled_year, warning_level, accumulated_credit, graduated, debt, cpa):
 - student_id refers to users.user_id
