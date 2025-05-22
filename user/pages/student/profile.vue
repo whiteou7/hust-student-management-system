@@ -56,6 +56,14 @@
                       <UFormField label="Email">
                         <UInput v-model="editForm.email" type="email" placeholder="Enter email" />
                       </UFormField>
+
+                      <UFormField label="Date of Birth">
+                        <UInput v-model="editForm.date_of_birth" type="date" placeholder="Enter date of birth" />
+                      </UFormField>
+
+                      <UFormField label="Address">
+                        <UInput v-model="editForm.address" placeholder="Enter address" />
+                      </UFormField>
                       
                       <UFormField label="Enrolled Year">
                         <UInput v-model="editForm.enrolled_year" type="number" placeholder="Enter enrolled year" />
@@ -94,6 +102,14 @@
         <div class="form-group">
             <label class="text-sm text-gray-500">Email</label>
             <div>{{ student.email }}</div>
+        </div>
+        <div class="form-group">
+            <label class="text-sm text-gray-500">Date of Birth</label>
+            <div>{{ student.date_of_birth }}</div>
+        </div>
+        <div class="form-group">
+            <label class="text-sm text-gray-500">Address</label>
+            <div>{{ student.address }}</div>
         </div>
         <div class="form-group">
             <label class="text-sm text-gray-500">Enrolled Year</label>
@@ -180,6 +196,8 @@ const editForm = ref({
   first_name: "",
   last_name: "",
   email: "",
+  date_of_birth: "",
+  address: "",
   enrolled_year: ""
 })
 
@@ -192,13 +210,21 @@ const res = await useFetch("/api/student-info", {
 })
 
 if (!res.data.value) {
-  errorMsg.value = "Failed to fetch student info."
+  toast.add({
+    title: "Error",
+    description: "Failed to fetch student info.",
+    color: "error"
+  })
 }
 
 if (res.data.value.success) {
   student.value = res.data.value.studentInfo
 } else {
-  errorMsg.value = res.data.value.err
+  toast.add({
+    title: "Error",
+    description: res.data.value.err,
+    color: "error"
+  })
 }
 
 async function onClick() {
@@ -207,6 +233,8 @@ async function onClick() {
     first_name: student.value.first_name,
     last_name: student.value.last_name,
     email: student.value.email,
+    date_of_birth: student.value.date_of_birth,
+    address: student.value.address,
     enrolled_year: student.value.enrolled_year
   }
 }
@@ -262,9 +290,12 @@ async function submitEdit() {
 
 .profile-cover {
   height: 200px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-image: url('https://navi.edu.vn/blog/wp-content/uploads/2025/02/tuyen-sinh-2025-thong-tin-tuyen-sinh-dai-hoc-bach-khoa-ha-noi-hust.jpg'); /* Replace with actual image path */
+  background-size: cover;
+  background-position: center;
   border-radius: 12px;
 }
+
 
 .profile-info {
   position: absolute;

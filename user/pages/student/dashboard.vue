@@ -137,7 +137,7 @@ function getRowItems(row) {
         const classId = row.original.class_id
 
         const { data: classInfoRes } = await useFetch("/api/class-info", {
-          method: "GET",
+          method: "POST",
           body: {
             classId: classId
           }

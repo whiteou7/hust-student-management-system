@@ -31,7 +31,9 @@ export default defineEventHandler(async (event) => {
         SET
           first_name = '${body.first_name}',
           last_name = '${body.last_name}',
-          email = '${body.email}'
+          email = '${body.email}',
+          date_of_birth = '${body.date_of_birth}',
+          address = '${body.address}'
         WHERE
           user_id = ${body.studentId};
       `)

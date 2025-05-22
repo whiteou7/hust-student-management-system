@@ -20,6 +20,8 @@ export default defineEventHandler(async (event) => {
           u.first_name,
           u.last_name,
           u.email,
+          u.date_of_birth,
+          u.address,
           s.enrolled_year,
           s.warning_level,
           s.accumulated_credit,
