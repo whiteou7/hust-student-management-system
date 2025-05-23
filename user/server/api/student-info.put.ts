@@ -12,6 +12,32 @@ export default defineEventHandler(async (event) => {
     }
   }
 
+  if (body.debt !== undefined) {
+    try {
+      await db.execute(
+        sql.raw(`
+          UPDATE 
+            students s
+          SET 
+            debt = ${body.debt}
+          WHERE
+            student_id = ${body.studentId};
+        `)
+      )
+      return {
+        success: true,
+        err: null
+      }
+    }
+    catch (error) {
+      console.error(error)
+      return {
+        success: false,
+        err: "Internal server error."
+      }
+    }
+  }
+
   try {
     await db.execute(
       sql.raw(`

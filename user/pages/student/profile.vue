@@ -139,7 +139,12 @@
           </div>
           <div class="form-group">
             <label class="text-sm text-gray-500">Debt</label>
-            <div>{{ student.debt }}</div>
+            <div class="flex items-center space-x-2">
+              <span>{{ student.debt }}</span>
+              <span @click="payTuition" class="text-blue-600 hover:underline cursor-pointer text-sm">
+                Pay Tuition
+              </span>
+            </div>
           </div>
           <div class="form-group">
             <label class="text-sm text-gray-500">CPA</label>
@@ -205,6 +210,31 @@ const editForm = ref({
   address: "",
   enrolled_year: ""
 })
+
+async function payTuition() {
+  const res = await useFetch("/api/student-info", {
+    method: "PUT",
+    body: {
+      studentId: parseInt(studentId ?? "0"),
+      debt: 0
+    }
+  })
+
+  if (!res.data.value || !res.data.value.success) {
+    toast.add({
+      title: "Error",
+      description: "Transaction failed. Please try again.",
+      color: "error"
+    })
+    return;
+  }
+
+  toast.add({
+    title: "Success",
+    description: "Tuition paid successfully.",
+    color: "success"
+  })
+}
 
 // Fetch student info
 const res = await useFetch("/api/student-info", {
