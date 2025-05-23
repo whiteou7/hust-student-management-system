@@ -146,6 +146,10 @@
             <div>{{ student.cpa }}</div>
           </div>
           <div class="form-group">
+            <label class="text-sm text-gray-500">GPA (semester {{ currentSemester }})</label>
+            <div>{{ student.gpa }}</div>
+          </div>
+          <div class="form-group">
             <label class="text-sm text-gray-500">Accumulated Credit</label>
             <div>{{ student.accumulated_credit }}/{{ student.total_credit }}</div>
           </div>
@@ -192,6 +196,7 @@ import { ref } from "vue"
 const student = ref({})
 const studentId = localStorage.getItem("userId")
 const toast = useToast()
+const currentSemester = ref(localStorage.getItem("currentSemester"))
 const editForm = ref({
   first_name: "",
   last_name: "",
@@ -206,6 +211,7 @@ const res = await useFetch("/api/student-info", {
   method: "POST",
   body: {
     studentId: parseInt(studentId ?? "0"),
+    currentSemester: currentSemester ?? "0"
   }
 })
 

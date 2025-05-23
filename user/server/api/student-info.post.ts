@@ -29,15 +29,36 @@ export default defineEventHandler(async (event) => {
           s.debt,
           s.cpa,
           p.program_name,
-          p.total_credit
+          p.total_credit,
+          ROUND(AVG(e.result), 2) as gpa
         FROM 
           users u
         JOIN 
-          students s on u.user_id = s.student_id
+          students s ON u.user_id = s.student_id
         JOIN
-          programs p on s.program_id = p.program_id
+          programs p ON s.program_id = p.program_id
+        JOIN
+          enrollments e ON e.student_id = s.student_id
+        JOIN 
+          classes c ON c.class_id = e.class_id
         WHERE 
-          u.user_id = ${body.studentId};
+          u.user_id = ${body.studentId}
+          AND c.semester = '${body.currentSemester}'
+        GROUP BY
+          s.student_id,
+          u.first_name,
+          u.last_name,
+          u.email,
+          u.date_of_birth,
+          u.address,
+          s.enrolled_year,
+          s.warning_level,
+          s.accumulated_credit,
+          s.graduated,
+          s.debt,
+          s.cpa,
+          p.program_name,
+          p.total_credit;
       `)
     )
 
