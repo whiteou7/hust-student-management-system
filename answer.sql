@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 -- 1. Tạo hàm trigger cho thao tác INSERT (đăng ký lớp mới)
 CREATE OR REPLACE FUNCTION update_enrolled_count_insert()
@@ -88,3 +89,5 @@ BEFORE INSERT OR UPDATE ON public.enrollments
 FOR EACH ROW
 EXECUTE FUNCTION public.update_enrollment_pass_status();
 
+=======
+>>>>>>> 489f00c (empty answer.sql)
