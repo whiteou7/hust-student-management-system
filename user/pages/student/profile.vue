@@ -170,11 +170,21 @@
             <h2>All Enrolled Courses</h2>
           </div>
         </template>
+
+        <div class="mb-4 flex items-center gap-4">
+          <UInput
+            v-model="search"
+            variant="subtle"
+            placeholder="Search courses..."
+            icon="i-heroicons-magnifying-glass"
+            class="w-64"
+          />
+        </div>
         
         <UTable
           sticky
           :columns="columns"
-          :data="courses">
+          :data="filteredCourses">
 
         </UTable>
 
@@ -191,6 +201,7 @@ const studentId = localStorage.getItem("userId")
 const student = ref({})
 const toast = useToast()
 const currentSemester = ref(localStorage.getItem("currentSemester"))
+const search = ref("")
 
 // Fetch all courses
 const resCourses = await useFetch("/api/student-courses", {
@@ -210,7 +221,21 @@ if (!resCourses.data.value) {
 
 if (resCourses.data.value.success) {
   courses.value = resCourses.data.value.courses
-  console.log(courses.value)
+
+  // Handle pass status
+  courses.value = courses.value.map(item => {
+  return {
+    ...item,
+    pass: item.pass === true
+      ? "Passed"
+      : item.pass === null
+        ? "Ungraded"
+        : "Failed",
+    result: item.result === null ? "Ungraded" : item.result
+  }
+})
+
+
 } else {
   toast.add({
     title: "Error",
@@ -218,6 +243,19 @@ if (resCourses.data.value.success) {
     color: "error"
   })
 }
+
+// Apply filter to courses
+const filteredCourses = computed(() => {
+  const searchTerm = search.value.trim().toLowerCase()
+  
+  return courses.value.filter(item => {
+    return (
+      searchTerm === "" ||
+      item.course_name.toLowerCase().includes(searchTerm) ||
+      item.course_id.toLowerCase().includes(searchTerm)
+    )
+  })
+})
 
 // Column display config
 const columns = [
@@ -271,7 +309,7 @@ async function payTuition() {
       description: "Transaction failed. Please try again.",
       color: "error"
     })
-    return;
+    return
   }
 
   toast.add({

@@ -13,7 +13,7 @@ export default defineEventHandler (async (event) => {
 
   const courses = await db.execute(
     sql.raw(`
-      SELECT 
+      SELECT DISTINCT ON (co.course_id)
         co.course_id,
         co.course_name,
         co.course_description,
@@ -28,7 +28,11 @@ export default defineEventHandler (async (event) => {
       JOIN 
         courses co ON c.course_id = co.course_id
       WHERE 
-        e.student_id = ${body.studentId};  
+        e.student_id = ${body.studentId}
+      ORDER BY 
+        co.course_id,
+        e.pass DESC;  -- Prefer pass = true (true > false)
+
     `)
   )
 
