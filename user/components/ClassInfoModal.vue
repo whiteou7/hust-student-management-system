@@ -38,6 +38,11 @@
                     <h3 class="text-sm font-medium text-white">Status</h3>
                     <p class="mt-1 text-sm text-gray-400">{{ classInfo.status }}</p>
                 </div>
+
+                <div>
+                    <h3 class="text-sm font-medium text-white">Description</h3>
+                    <p class="mt-1 text-sm text-gray-400">{{ classInfo.course_description }}</p>
+                </div>
             </div>
         </template>
     </UModal>
@@ -52,6 +57,7 @@ const props = defineProps({
             class_id: "",
             course_id: "",
             course_name: "",
+            course_description: "",
             location: "",
             capacity: 0,
             enrolled_count: 0,

@@ -162,34 +162,22 @@
 
       </UCard>
 
-      <!-- Current Courses -->
+      <!-- All Enrolled Courses -->
       <UCard>
         <template #header>
           <div class="flex items-center gap-2">
             <UIcon name="i-heroicons-book-open" />
-            <h2>Current Courses</h2>
+            <h2>All Enrolled Courses</h2>
           </div>
         </template>
-        <div class="courses-list">
-          <UCard
-            v-for="course in student.courses"
-            :key="course.id"
-            class="course-card"
-          >
-            <h3>{{ course.name }}</h3>
-            <div class="text-gray-500">{{ course.code }}</div>
-            <div class="mt-2 space-y-1">
-              <div class="flex items-center gap-1">
-                <UIcon name="i-heroicons-clock" class="w-4 h-4" />
-                {{ course.schedule }}
-              </div>
-              <div class="flex items-center gap-1">
-                <UIcon name="i-heroicons-user" class="w-4 h-4" />
-                {{ course.instructor }}
-              </div>
-            </div>
-          </UCard>
-        </div>
+        
+        <UTable
+          sticky
+          :columns="columns"
+          :data="courses">
+
+        </UTable>
+
       </UCard>
     </div>
   </div>
@@ -198,10 +186,67 @@
 <script setup>
 import { ref } from "vue"
 
-const student = ref({})
+const courses = ref([])
 const studentId = localStorage.getItem("userId")
+const student = ref({})
 const toast = useToast()
 const currentSemester = ref(localStorage.getItem("currentSemester"))
+
+// Fetch all courses
+const resCourses = await useFetch("/api/student-courses", {
+  method: "POST",
+  body: {
+    studentId: parseInt(studentId ?? "0")
+  }
+})
+
+if (!resCourses.data.value) {
+  toast.add({
+    title: "Error",
+    description: "Failed to fetch course info.",
+    color: "error"
+  })
+}
+
+if (resCourses.data.value.success) {
+  courses.value = resCourses.data.value.courses
+  console.log(courses.value)
+} else {
+  toast.add({
+    title: "Error",
+    description: resCourses.data.value.err,
+    color: "error"
+  })
+}
+
+// Column display config
+const columns = [
+  {
+    accessorKey: "course_id",
+    header: "ID"
+  },
+  {
+    accessorKey: "course_name",
+    header: "Course Name"
+  },
+  {
+    accessorKey: "semester",
+    header: "Semester"
+  },
+  {
+    accessorKey: "credit",
+    header: "Credit"
+  },
+  {
+    accessorKey: "result",
+    header: "Result"
+  },
+  {
+    accessorKey: "pass",
+    header: "Status"
+  }
+]
+
 const editForm = ref({
   first_name: "",
   last_name: "",

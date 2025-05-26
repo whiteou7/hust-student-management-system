@@ -21,6 +21,7 @@ export default defineEventHandler(async (event) => {
           c.location,
           c.capacity,
           c.enrolled_count,
+          co.course_description,
           c.status,
           c.day_of_week,
           co.course_name,
