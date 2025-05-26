@@ -195,6 +195,7 @@
 
 <script setup>
 import { ref } from "vue"
+import CourseInfoModal from "~/components/CourseInfoModal.vue"
 
 const courses = ref([])
 const studentId = localStorage.getItem("userId")
@@ -202,6 +203,9 @@ const student = ref({})
 const toast = useToast()
 const currentSemester = ref(localStorage.getItem("currentSemester"))
 const search = ref("")
+const UButton = resolveComponent("UButton")
+const UDropdownMenu = resolveComponent("UDropdownMenu")
+const overlay = useOverlay()
 
 // Fetch all courses
 const resCourses = await useFetch("/api/student-courses", {
@@ -282,8 +286,76 @@ const columns = [
   {
     accessorKey: "pass",
     header: "Status"
+  },
+  {
+  id: "actions",
+  cell: ({ row }) => {
+    return h(
+      "div",
+      { class: "text-right" },
+      h(
+        UDropdownMenu,
+        {
+          content: {
+            align: "end"
+          },
+          items: getRowItems(row),
+          "aria-label": "Actions dropdown"
+        },
+        () =>
+          h(UButton, {
+            icon: "i-lucide-ellipsis-vertical",
+            color: "neutral",
+            variant: "ghost",
+            class: "ml-auto",
+            "aria-label": "Actions dropdown"
+          })
+        )
+      )
+    }
   }
 ]
+
+// Display course info on selected row
+function getRowItems(row) {
+  return [
+    {
+      label: "View course information",
+      async onSelect() {
+        const modal = overlay.create(CourseInfoModal)
+        const courseId = row.original.course_id
+
+        const { data: courseInfoRes } = await useFetch("/api/course-info", {
+          method: "POST",
+          body: {
+            courseId: courseId
+          }
+        })
+
+        if (!courseInfoRes.value ) {
+          toast.add({
+            title: "Error",
+            description: "Failed to fetch course information.",
+            color: "error"
+          })
+          return
+        }
+
+        if (courseInfoRes.value.success) {
+          console.log(courseInfoRes.value.courseInfo)
+          modal.open({ courseInfo: courseInfoRes.value.courseInfo })
+        } else {
+          toast.add({
+            title: "Error",
+            description: courseInfoRes.value?.err || "Failed to fetch course information",
+            color: "error"
+          })
+          return
+        }
+      }
+    }
+  ]
+}
 
 const editForm = ref({
   first_name: "",
