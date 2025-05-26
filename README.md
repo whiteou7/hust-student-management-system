@@ -35,6 +35,7 @@ A Nuxt project incorporating Drizzle ORM and PostgreSQL.
 7. Viết procedure để đăng kí lớp (input student_id và class_id), gọi function bài 6 để kiểm tra trước khi insert vào enrollment.
 8. Viết procedure để kiểm tra và update students.graduated, tốt nghiệp ('graduated') nếu đạt 100% tín chỉ và debt = 0, không tốt nghiệp ('enrolled') trong trường hợp còn lại.
 9. Viết trigger để gọi function 5 mỗi khi nhập điểm.
+10. Viết trigger để tính result = (mid_term + final_term)/2
 
 ## Roles
 
@@ -43,15 +44,18 @@ Tùng: manager/code review/backend/frontend
 Vũ: 
 
 - Design Relational Schema
+- Exercise 2 ✔
 
 Tín: 
 
 - Design Use Case Diagram ✔
-- Generate mock data
+- Generate mock data ✔
+- Exercise 1 ✔
 
 Nguyệt: 
 
-- Design ER Diagram ✔
+- Design ER Diagram ✔ (Late submission)
+- Exercise 4 ✔ (Late submission)
 
 ## Setup
 
