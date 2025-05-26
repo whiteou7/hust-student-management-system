@@ -39,23 +39,26 @@ A Nuxt project incorporating Drizzle ORM and PostgreSQL.
 
 ## Roles
 
-Tùng: manager/code review/backend/frontend
+Tùng: Manager/code review/backend/frontend + exercise 3 + 10
 
 Vũ: 
 
 - Design Relational Schema
 - Exercise 2 ✔
+- Exercise 5 + 9
 
 Tín: 
 
 - Design Use Case Diagram ✔
 - Generate mock data ✔
 - Exercise 1 ✔
+- Exercise 6 + 7
 
 Nguyệt: 
 
 - Design ER Diagram ✔ (Late submission)
 - Exercise 4 ✔ (Late submission)
+- Exercise 8
 
 ## Setup
 
