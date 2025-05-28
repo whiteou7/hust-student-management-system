@@ -30,7 +30,7 @@
                 variant="subtle"
                 icon="i-heroicons-pencil-square"
                 label="Edit"
-                @click="onClick"
+                @click="onEditProfile"
               >
               </UButton>
 
@@ -165,9 +165,20 @@
       <!-- All Enrolled Courses -->
       <UCard>
         <template #header>
-          <div class="flex items-center gap-2">
-            <UIcon name="i-heroicons-book-open" />
-            <h2>All Enrolled Courses</h2>
+          <div class="flex items-center justify-between w-full">
+            <div class="flex items-center gap-2">
+              <UIcon name="i-heroicons-book-open" />
+              <h2>All Enrolled Courses</h2>
+            </div>
+
+            <UButton
+              variant="subtle"
+              color="neutral"
+              icon="i-heroicons-arrow-up-right"
+              label="View all courses"
+              @click="onViewCourses"
+            >
+            </UButton>
           </div>
         </template>
 
@@ -196,11 +207,13 @@
 <script setup>
 import { ref } from "vue"
 import CourseInfoModal from "~/components/CourseInfoModal.vue"
+import { useRouter } from "vue-router"
 
 const courses = ref([])
 const studentId = localStorage.getItem("userId")
 const student = ref({})
 const toast = useToast()
+const router = useRouter()
 const currentSemester = ref(localStorage.getItem("currentSemester"))
 const search = ref("")
 const UButton = resolveComponent("UButton")
@@ -366,6 +379,12 @@ const editForm = ref({
   enrolled_year: ""
 })
 
+// Handle view all courses button
+function onViewCourses() {
+  router.push("/courses")
+}
+
+// Handle pay tuition
 async function payTuition() {
   const res = await useFetch("/api/student-info", {
     method: "PUT",
@@ -418,7 +437,8 @@ if (res.data.value.success) {
   })
 }
 
-async function onClick() {
+// Handle edit profile button
+async function onEditProfile() {
   // Initialize form with current values
   editForm.value = {
     first_name: student.value.first_name,
