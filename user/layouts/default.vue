@@ -2,10 +2,20 @@
   <div class="layout-container">
     <header v-if="!isAuthPage" class="header">
       <h1 @click="dashboardNavigate" class="clickable-header">Hust Student Management System</h1>
-      <div class="header-buttons">
-        <button class="btn profile-btn" @click="viewProfile">View Profile</button>
-        <button class="btn signout-btn" @click="handleSignOut">Sign Out</button>
-      </div>
+      <UDropdownMenu
+        :items="items"
+        :content="{
+          align: 'start',
+          side: 'bottom',
+          sideOffset: 8
+        }"
+        :ui="{
+          content: 'w-48'
+        }"
+        size="xl"
+      >
+        <UButton label="Navigation" icon="i-lucide-menu" color="neutral" variant="outline" />
+      </UDropdownMenu>
     </header>
 
     <main class="main-content" :class="{ 'no-header': isAuthPage }">
@@ -20,6 +30,32 @@ import { useRouter, useRoute } from "vue-router"
 
 const router = useRouter()
 const route = useRoute()
+
+import type { DropdownMenuItem } from '@nuxt/ui'
+
+const items: DropdownMenuItem[][] = [
+[
+  {
+    label: "Profile",
+    icon: "i-lucide-user",
+    onSelect() {
+      viewProfile()
+    }
+  },
+  {
+    label: "Class Registration",
+    icon: "i-lucide-book-open-text"
+  }
+], [
+  {
+    label: "Sign out",
+    icon: "i-lucide-log-out",
+    color: "error",
+    onSelect() {
+      signOut()
+    }
+  }
+]]
 
 const isAuthPage = computed(() => {
   return ["/login", "/register"].includes(route.path)
@@ -39,7 +75,7 @@ const viewProfile = () => {
   } else router.push("/teacher/profile")
 }
 
-const handleSignOut = () => {
+const signOut = () => {
   // Clear all data from localStorage
   localStorage.clear()
   
