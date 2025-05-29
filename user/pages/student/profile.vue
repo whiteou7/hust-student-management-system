@@ -9,7 +9,7 @@
           class="avatar"
         />
         <div style="display: flex; flex-direction: column;">
-          <div class="text-white font-bold">{{ student.first_name }} {{ student.last_name }}</div>
+          <div class="text-white font-bold">{{ student.full_name }}</div>
           <div class="student-id">Student ID: {{ student.student_id }} - {{ student.program_name }}</div>
         </div>
       </div>
@@ -97,7 +97,7 @@
         <div class="info-grid">
         <div class="form-group">
             <label class="text-sm text-gray-500">Full Name</label>
-            <div>{{ student.first_name }} {{ student.last_name }}</div>
+            <div>{{ student.full_name }}</div>
         </div>
         <div class="form-group">
             <label class="text-sm text-gray-500">Email</label>
