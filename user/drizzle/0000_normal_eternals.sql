@@ -4,7 +4,7 @@ CREATE TYPE "public"."graduation_status" AS ENUM('graduated', 'enrolled', 'expel
 CREATE TYPE "public"."role" AS ENUM('student', 'teacher');--> statement-breakpoint
 CREATE TABLE "classes" (
 	"class_id" serial PRIMARY KEY NOT NULL,
-	"teacher_id" integer NOT NULL,
+	"teacher_id" integer,
 	"course_id" varchar(6) NOT NULL,
 	"capacity" integer DEFAULT 0 NOT NULL,
 	"semester" varchar NOT NULL,
