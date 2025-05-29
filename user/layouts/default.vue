@@ -2,20 +2,31 @@
   <div class="layout-container">
     <header v-if="!isAuthPage" class="header">
       <h1 @click="dashboardNavigate" class="clickable-header">Hust Student Management System</h1>
-      <UDropdownMenu
-        :items="items"
-        :content="{
-          align: 'start',
-          side: 'bottom',
-          sideOffset: 8
-        }"
-        :ui="{
-          content: 'w-48'
-        }"
-        size="xl"
-      >
-        <UButton label="Navigation" icon="i-lucide-menu" color="neutral" variant="outline" />
-      </UDropdownMenu>
+      
+      <div class="flex items-center gap-4 ml-auto">
+        <UInput
+          v-model="searchQuery"
+          placeholder="Search..."
+          icon="i-heroicons-magnifying-glass-20-solid"
+          size="md"
+          @keydown.enter="openModal"
+        />
+
+        <UDropdownMenu
+          :items="items"
+          :content="{
+            align: 'start',
+            side: 'bottom',
+            sideOffset: 8
+          }"
+          :ui="{
+            content: 'w-48'
+          }"
+          size="xl"
+        >
+          <UButton label="Navigation" icon="i-lucide-menu" color="neutral" variant="outline" />
+        </UDropdownMenu>
+      </div>
     </header>
 
     <main class="main-content" :class="{ 'no-header': isAuthPage }">
@@ -27,11 +38,50 @@
 
 <script setup lang="ts">
 import { useRouter, useRoute } from "vue-router"
+import type { DropdownMenuItem } from "@nuxt/ui"
+import StudentInfoModal from "~/components/StudentInfoModal.vue"
 
+const toast = useToast()
 const router = useRouter()
 const route = useRoute()
+const overlay = useOverlay()
+const UButton = resolveComponent("UButton")
+const UDropdownMenu = resolveComponent("UDropdownMenu")
 
-import type { DropdownMenuItem } from '@nuxt/ui'
+const searchQuery = ref("")
+
+async function openModal() {
+  const { data: studentData } = await useFetch("/api/student-info", {
+    method: "POST",
+    body: {
+      studentId: searchQuery.value,
+      currentSemester: localStorage.getItem("currentSemester")
+    }
+  })
+
+  const modal = overlay.create(StudentInfoModal)
+
+  if (!studentData.value) {return}
+  if (!studentData.value.success || !studentData.value.studentInfo) {
+    toast.add({
+      title: "Error",
+      description: studentData.value.err ?? "",
+      color: "error"
+    })
+    return
+  }
+
+  modal.open({ 
+    studentInfo: {
+      student_id: searchQuery.value,
+      full_name: studentData.value.studentInfo.full_name,
+      email: studentData.value.studentInfo.email,
+      date_of_birth: studentData.value.studentInfo.date_of_birth,
+      enrolled_year: studentData.value.studentInfo.enrolled_year,
+      program: studentData.value.studentInfo.program_name
+    }
+  })
+}
 
 const items: DropdownMenuItem[][] = [
 [
@@ -122,23 +172,6 @@ const signOut = () => {
 .header-buttons {
   display: flex;
   gap: 1rem;
-}
-
-.btn {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 6px;
-  font-weight: 500;
-  cursor: pointer;
-  color: white;
-}
-
-.profile-btn {
-  background-color: #2c3e50; /* Darker blue/grey */
-}
-
-.signout-btn {
-  background-color: #e74c3c; /* Red */
 }
 
 .main-content {
