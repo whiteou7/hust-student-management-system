@@ -21,33 +21,39 @@ const schema = z.object({
 type Schema = z.output<typeof schema>
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  const data = event.data
-  console.log(data.email + " submitted.")
+  const loginData = event.data
+  console.log(loginData.email + " submitted.")
 
-  const res = await useFetch("/api/login", {
+  const { data } = await useFetch("/api/login", {
     method: "POST",
     body: {
-      email: data.email,
-      password: data.password
+      email: loginData.email,
+      password: loginData.password
     }
   })
 
-  if (!res.data.value) {
+  if (!data.value) {
     errorMsg.value = "Failed to fetch user info."
     return
   }
 
-  if (res.data.value.success) {
-    Cookies.set("sessionId", res.data.value.sessionId, { expires: 7, path: "/" })
-    localStorage.setItem("userId", res.data.value?.userId)
+  if (data.value.success) {
+    Cookies.set("sessionId", data.value?.sessionId, { expires: 7, path: "/" })
+    localStorage.setItem("userId", data.value?.userId)
     
     // Fetch current semester
-    const semesterRes = await useFetch("/api/semester")
-    if (semesterRes.data.value?.currentSemester) {
-      localStorage.setItem("currentSemester", semesterRes.data.value.currentSemester)
+    const { data: semesterData } = await useFetch("/api/semester")
+    if (semesterData.value) {
+      localStorage.setItem("currentSemester", semesterData.value.currentSemester)
+    }
+
+    // Fetch current class registration status
+    const { data: statusData } = await useFetch("/api/class-reg-status")
+    if (statusData.value) {
+      localStorage.setItem("classRegStatus", statusData.value.classRegStatus)
     }
     
-    if (res.data.value?.role === "student") {
+    if (data.value.role === "student") {
       localStorage.setItem("role", "student")
       router.push("/student/dashboard")
     } else {

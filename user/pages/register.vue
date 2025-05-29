@@ -28,25 +28,24 @@ const schema = z.object({
 type Schema = z.output<typeof schema>
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  const data = event.data
-  console.log(data.email + " submitted.")
+  const registerData = event.data
   
-  const res = await useFetch("/api/register", {
+  const { data } = await useFetch("/api/register", {
       method: "POST",
       body: {
-        email: data.email,
-        password: data.password,
-        user_id: data.user_id
+        email: registerData.email,
+        password: registerData.password,
+        user_id: registerData.user_id
       }
     })
 
-  if (!res.data.value) {
+  if (!data.value) {
     errorMsg.value = "Registration failed. Please try again."
     return
   }
 
-  if (res.data.value.success) {
-    console.log(res.data.value.success)
+  if (data.value.success) {
+    console.log(data.value.success)
 
     success.value = "Registration completed. Redirecting to login..."
     
@@ -54,7 +53,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         router.push("/login")
     }, 3000)
   } else {
-    errorMsg.value = res.data.value.error ?? "Registration failed. Please try again."
+    errorMsg.value = data.value.error ?? "Registration failed. Please try again."
   }
 }
 </script>

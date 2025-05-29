@@ -221,14 +221,14 @@ const UDropdownMenu = resolveComponent("UDropdownMenu")
 const overlay = useOverlay()
 
 // Fetch all courses
-const resCourses = await useFetch("/api/student-courses", {
+const { data: courseData } = await useFetch("/api/student-courses", {
   method: "POST",
   body: {
     studentId: parseInt(studentId ?? "0")
   }
 })
 
-if (!resCourses.data.value) {
+if (!courseData.value) {
   toast.add({
     title: "Error",
     description: "Failed to fetch course info.",
@@ -236,8 +236,8 @@ if (!resCourses.data.value) {
   })
 }
 
-if (resCourses.data.value.success) {
-  courses.value = resCourses.data.value.courses
+if (courseData.value.success) {
+  courses.value = courseData.value.courses
 
   // Handle pass status
   courses.value = courses.value.map(item => {
@@ -256,7 +256,7 @@ if (resCourses.data.value.success) {
 } else {
   toast.add({
     title: "Error",
-    description: resCourses.data.value.err,
+    description: courseData.value.err,
     color: "error"
   })
 }
@@ -338,14 +338,14 @@ function getRowItems(row) {
         const modal = overlay.create(CourseInfoModal)
         const courseId = row.original.course_id
 
-        const { data: courseInfoRes } = await useFetch("/api/course-info", {
+        const { data: courseInfoData } = await useFetch("/api/course-info", {
           method: "POST",
           body: {
             courseId: courseId
           }
         })
 
-        if (!courseInfoRes.value ) {
+        if (!courseInfoData.value ) {
           toast.add({
             title: "Error",
             description: "Failed to fetch course information.",
@@ -354,13 +354,13 @@ function getRowItems(row) {
           return
         }
 
-        if (courseInfoRes.value.success) {
-          console.log(courseInfoRes.value.courseInfo)
-          modal.open({ courseInfo: courseInfoRes.value.courseInfo })
+        if (courseInfoData.value.success) {
+          console.log(courseInfoData.value.courseInfo)
+          modal.open({ courseInfo: courseInfoData.value.courseInfo })
         } else {
           toast.add({
             title: "Error",
-            description: courseInfoRes.value?.err || "Failed to fetch course information",
+            description: courseInfoData.value?.err || "Failed to fetch course information",
             color: "error"
           })
           return
@@ -386,7 +386,7 @@ function onViewCourses() {
 
 // Handle pay tuition
 async function payTuition() {
-  const res = await useFetch("/api/student-info", {
+  const { data: editData } = await useFetch("/api/student-info", {
     method: "PUT",
     body: {
       studentId: parseInt(studentId ?? "0"),
@@ -394,7 +394,7 @@ async function payTuition() {
     }
   })
 
-  if (!res.data.value || !res.data.value.success) {
+  if (!editData.value || !editData.value.success) {
     toast.add({
       title: "Error",
       description: "Transaction failed. Please try again.",
@@ -411,7 +411,7 @@ async function payTuition() {
 }
 
 // Fetch student info
-const res = await useFetch("/api/student-info", {
+const { data: studentData } = await useFetch("/api/student-info", {
   method: "POST",
   body: {
     studentId: parseInt(studentId ?? "0"),
@@ -419,7 +419,7 @@ const res = await useFetch("/api/student-info", {
   }
 })
 
-if (!res.data.value) {
+if (!studentData.value) {
   toast.add({
     title: "Error",
     description: "Failed to fetch student info.",
@@ -427,12 +427,12 @@ if (!res.data.value) {
   })
 }
 
-if (res.data.value.success) {
-  student.value = res.data.value.studentInfo
+if (studentData.value.success) {
+  student.value = studentData.value.studentInfo
 } else {
   toast.add({
     title: "Error",
-    description: res.data.value.err,
+    description: studentData.value.err,
     color: "error"
   })
 }
@@ -452,7 +452,7 @@ async function onEditProfile() {
 
 // Edit student profile after submitting
 async function submitEdit() {
-  const res = await useFetch("/api/student-info", {
+  const { data: editData } = await useFetch("/api/student-info", {
     method: "PUT",
     body: {
       studentId: parseInt(studentId ?? "0"),
@@ -460,7 +460,7 @@ async function submitEdit() {
     }
   })
 
-  if (!res.data.value) {
+  if (!editData.value) {
     toast.add({
       title: "Error",
       description: "Failed to update student info.",
@@ -469,7 +469,7 @@ async function submitEdit() {
     return
   }
 
-  if (res.data.value.success) {
+  if (editData.value.success) {
     Object.assign(student.value, editForm.value)
     toast.add({
       title: "Success",
@@ -479,7 +479,7 @@ async function submitEdit() {
   } else {
     toast.add({
       title: "Error",
-      description: res.data.value.err,
+      description: editData.value.err,
       color: "error"
     })
   }
