@@ -7,7 +7,8 @@ export default defineEventHandler (async (event) => {
     return {
       success: false,
       err: "Invalid userId. Try signing in again.",
-      classes: null
+      classes: null,
+      miscInfo: null
     }
   }
 
@@ -32,9 +33,28 @@ export default defineEventHandler (async (event) => {
     `)
   )
 
+  const miscInfo = await db.execute(
+    sql.raw(`
+      SELECT
+        ROUND(AVG(e.result), 2) as gpa,
+        SUM(co.credit) as total_credit,
+        COUNT(c.class_id) as class_count
+      FROM
+        enrollments e
+      JOIN
+        classes c ON c.class_id = e.class_id
+      JOIN
+        courses co ON co.course_id = c.course_id
+      WHERE
+        e.student_id = ${body.userId}  
+        AND c.semester = '${body.semester}';
+    `)
+  )
+
   return {
     success: true,
     err: null,
-    classes: classArr
+    classes: classArr,
+    miscInfo: miscInfo[0]
   }
 })

@@ -38,21 +38,21 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
       <UCard>
         <div class="text-center">
-          <div class="text-2xl font-bold">15</div>
+          <div class="text-2xl font-bold"> {{ miscInfo.total_credit }} </div>
           <div class="text-sm text-gray-500">Total Credits This Semester</div>
         </div>
       </UCard>
       
       <UCard>
         <div class="text-center">
-          <div class="text-2xl font-bold">3.75</div>
+          <div class="text-2xl font-bold"> {{ miscInfo.gpa }} </div>
           <div class="text-sm text-gray-500">Current GPA</div>
         </div>
       </UCard>
 
       <UCard>
         <div class="text-center">
-          <div class="text-2xl font-bold"> {{ classCount }}</div>
+          <div class="text-2xl font-bold"> {{ miscInfo.class_count }}</div>
           <div class="text-sm text-gray-500">Enrolled Classes</div>
         </div>
       </UCard>
@@ -161,10 +161,10 @@ function getRowItems(row) {
 }
 
 const classData = ref([])
-const classCount = ref(0)
 const currentSemester = ref(localStorage.getItem("currentSemester") || "")
 const errorMsg = ref("")
 const search = ref("")
+const miscInfo = ref({})
 const filter = ref("All Days")
 const filterItems = ref([
   "All Days", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
@@ -187,6 +187,7 @@ if (!res.data.value) {
 
 if (res.data.value.success) {
   classData.value = res.data.value.classes
+  miscInfo.value = res.data.value.miscInfo
 
   // Handle null value
   classData.value = classData.value.map(item => {
@@ -197,8 +198,6 @@ if (res.data.value.success) {
       result: item.result === null ? "Ungraded" : item.result
     }
   })
-
-  classCount.value = classData.value.length
 } else {
   errorMsg.value = res.data.value.err
 }
