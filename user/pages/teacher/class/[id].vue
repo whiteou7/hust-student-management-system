@@ -81,6 +81,18 @@ const students = ref([])
 const gradeForm = ref({ midTerm: "", finalTerm: "" })
 const sortKey = ref('student_id')
 
+// Function to update grade and return api response
+const updateGrade = async (studentId, midTerm, finalTerm) => {
+  await useFetch("/api/class-students", {
+    method: "PUT",
+    body: {
+      studentId,
+      midTerm,
+      finalTerm
+    }
+  })
+}
+
 // Table column config
 const columns = [
   { accessorKey: "student_id", header: "Student ID" },
