@@ -4,23 +4,25 @@ import { db_user as db } from "../../drizzle/db"
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
-  if (!body.studentId) {
+  if (body.studentId == null || body.studentId === "") {
     return {
       success: false,
-      err: "Student ID is required"
+      err: "Missing body parameters."
     }
   }
+  if (body.midTerm == null || body.midTerm === "") {body.midTerm = "NULL"} 
+  if (body.finalTerm == null || body.finalTerm === "") {body.finalTerm = "NULL"} 
 
   try {
-    const students = await db.execute(
+    await db.execute(
       sql.raw(`
         UPDATE
-          enrollments e
+          enrollments
         SET
-          e.mid_term = ${body.midTerm},
-          e.final_term = ${body.finalTerm}
+          mid_term = ${body.midTerm},
+          final_term = ${body.finalTerm}
         WHERE 
-          e.student_id = ${body.studentId};
+          student_id = ${body.studentId};
       `)
     )
 

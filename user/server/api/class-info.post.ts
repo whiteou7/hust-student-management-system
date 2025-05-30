@@ -49,7 +49,6 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    console.log(classInfo[0])
     return {
       success: true,
       err: null,
