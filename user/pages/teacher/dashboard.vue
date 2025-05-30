@@ -32,7 +32,13 @@
           class="h-[150px] flex flex-col justify-between h-full hover:shadow-lg transition"
         >
           <template #header>
-            <div class="text-lg font-semibold"> {{ class_.class_id }} - {{ class_.course_id }} {{ class_.course_name }} </div>
+            <NuxtLink
+              :to="`/teacher/class/${class_.class_id}`"
+              class="text-lg font-semibold hover:underline focus:outline-none"
+              style="display: block;"
+            >
+              {{ class_.class_id }} - {{ class_.course_id }} {{ class_.course_name }}
+            </NuxtLink>
           </template>
 
           <div>

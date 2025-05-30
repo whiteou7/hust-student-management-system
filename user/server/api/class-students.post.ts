@@ -8,59 +8,52 @@ export default defineEventHandler(async (event) => {
     return {
       success: false,
       err: "Class ID is required",
-      classInfo: null
+      students: null
     }
   }
 
   try {
-    const classInfo = await db.execute(
+    const students = await db.execute(
       sql.raw(`
         SELECT 
-          c.class_id,
-          c.course_id,
-          c.location,
-          c.capacity,
-          c.enrolled_count,
-          co.course_description,
-          c.status,
-          c.day_of_week,
-          co.course_name,
-          co.credit,
-          u.first_name,
-          u.last_name
+          e.student_id,
+          CONCAT(u.first_name, ' ', u.last_name) AS full_name,
+          e.mid_term,
+          e.final_term,
+          e.result,
+          e.pass
         FROM 
           classes c
         JOIN 
-          courses co ON c.course_id = co.course_id
-        JOIN 
-          teachers t ON c.teacher_id = t.teacher_id
-        JOIN 
-          users u ON t.teacher_id = u.user_id
+          enrollments e ON e.class_id = c.class_id
+        JOIN
+          students s ON e.student_id = s.student_id
+        JOIN
+          users u ON u.user_id = s.student_id
         WHERE 
           c.class_id = ${body.classId};
       `)
     )
 
-    if (!classInfo.length) {
+    if (!students.length) {
       return {
         success: false,
         err: "Class not found",
-        classInfo: null
+        students: null
       }
     }
 
-    console.log(classInfo[0])
     return {
       success: true,
       err: null,
-      classInfo: classInfo[0]
+      students: students
     }
   } catch (error) {
     console.error("Error fetching class info:", error)
     return {
       success: false,
       err: "Internal server error",
-      classInfo: null
+      students: null
     }
   }
 }) 
