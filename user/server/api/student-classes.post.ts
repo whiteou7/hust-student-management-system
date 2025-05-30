@@ -3,12 +3,11 @@ import { db_user as db } from "../../drizzle/db"
 export default defineEventHandler (async (event) => {
   const body = await readBody(event)
 
-  if (body.userId == 0) {
+  if (body.userId == 0 || body.userId == null) {
     return {
       success: false,
       err: "Invalid userId. Try signing in again.",
-      classes: null,
-      miscInfo: null
+      classes: null
     }
   }
 
