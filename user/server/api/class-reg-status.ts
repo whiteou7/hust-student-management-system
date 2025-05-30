@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "fs"
 import { join } from "path"
 
-const configPath = join(process.cwd(), "config", "classRegStatus.json")
+const configPath = join(process.cwd(), "configs", "classRegStatus.json")
 
 export default defineEventHandler(async (event) => {
   const method = event.method

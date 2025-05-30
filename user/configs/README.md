@@ -1,0 +1,1 @@
+so basically "global" variables like current semester and class registration status stored in json
