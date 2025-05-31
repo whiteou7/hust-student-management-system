@@ -18,8 +18,16 @@
                         <p class="mt-1 text-sm text-gray-400">{{ teacherInfo.email }}</p>
                     </div>
                     <div>
-                        <h3 class="text-sm font-medium text-white">School Name</h3>
-                        <p class="mt-1 text-sm text-gray-400">{{ teacherInfo.school_name }}</p>
+                        <h3 class="text-sm font-medium text-white">Email</h3>
+                        <p class="mt-1 text-sm text-gray-400">{{ teacherInfo.email }}</p>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-white">Position</h3>
+                        <p class="mt-1 text-sm text-gray-400">{{ teacherInfo.position }}</p>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-white">Profession</h3>
+                        <p class="mt-1 text-sm text-gray-400">{{ teacherInfo.profession }}</p>
                     </div>
                     <div>
                         <h3 class="text-sm font-medium text-white">Hired Year</h3>
@@ -42,7 +50,9 @@ const props = defineProps({
             email: "",
             school_name: "",
             hired_year: "",
-            qualification: ""
+            qualification: "",
+            profession: "",
+            position: ""
         })
     }
 })

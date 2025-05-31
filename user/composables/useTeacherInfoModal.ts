@@ -33,7 +33,9 @@ export async function useTeacherInfoModal({ searchQuery, overlay, toast }: UseTe
       email: teacherData.value.teacherInfo.email,
       school_name: teacherData.value.teacherInfo.school_name,
       hired_year: teacherData.value.teacherInfo.hired_year,
-      qualification: teacherData.value.teacherInfo.qualification
+      qualification: teacherData.value.teacherInfo.qualification,
+      profession: teacherData.value.teacherInfo.profession,
+      position: teacherData.value.teacherInfo.position
     }
   })
 }
