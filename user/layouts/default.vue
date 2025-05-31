@@ -1,6 +1,6 @@
 <template>
   <div class="layout-container">
-    <header v-if="!isAuthPage" class="header">
+    <header v-if="!isAuthPage && !isAdmin" class="header">
       <h1 @click="dashboardNavigate" class="clickable-header">Hust Student Management System</h1>
       
       <div class="flex items-center gap-4 ml-auto">
@@ -46,6 +46,7 @@ const route = useRoute()
 const overlay = useOverlay()
 const UButton = resolveComponent("UButton")
 const UDropdownMenu = resolveComponent("UDropdownMenu")
+const isAdmin = ref(localStorage.getItem("role") === "admin")
 
 const searchQuery = ref("")
 

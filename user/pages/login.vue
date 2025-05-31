@@ -38,8 +38,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   }
 
   if (data.value.success) {
-    Cookies.set("sessionId", data.value?.sessionId, { expires: 7, path: "/" })
-    localStorage.setItem("userId", data.value?.userId)
+    if (data.value?.userId != null) {
+      localStorage.setItem("userId", data.value?.userId)
+    }
     
     // Fetch current semester
     const { data: semesterData } = await useFetch("/api/semester")
@@ -56,9 +57,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     if (data.value.role === "student") {
       localStorage.setItem("role", "student")
       router.push("/student/dashboard")
-    } else {
+    } else if (data.value.role === "teacher") {
       localStorage.setItem("role", "teacher")
       router.push("/teacher/dashboard")
+    } else {
+      localStorage.setItem("role", "admin")
+      router.push("/admin/dashboard")
     }
   } else {
     errorMsg.value = "Wrong credentials. Please try again."
