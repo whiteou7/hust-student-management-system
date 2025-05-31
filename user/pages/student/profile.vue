@@ -45,27 +45,27 @@
 
                   <UForm :state="editForm" @submit="submitEdit">
                     <div class="space-y-4">
-                      <UFormField label="First Name">
+                      <UFormField label="First Name" required>
                         <UInput v-model="editForm.first_name" placeholder="Enter first name" />
                       </UFormField>
                       
-                      <UFormField label="Last Name">
+                      <UFormField label="Last Name" required>
                         <UInput v-model="editForm.last_name" placeholder="Enter last name" />
                       </UFormField>
                       
-                      <UFormField label="Email">
+                      <UFormField label="Email" required>
                         <UInput v-model="editForm.email" type="email" placeholder="Enter email" />
                       </UFormField>
 
-                      <UFormField label="Date of Birth">
+                      <UFormField label="Date of Birth" required>
                         <UInput v-model="editForm.date_of_birth" type="date" placeholder="Enter date of birth" />
                       </UFormField>
 
-                      <UFormField label="Address">
+                      <UFormField label="Address" required>
                         <UInput v-model="editForm.address" placeholder="Enter address" />
                       </UFormField>
                       
-                      <UFormField label="Enrolled Year">
+                      <UFormField label="Enrolled Year" required>
                         <UInput v-model="editForm.enrolled_year" type="number" placeholder="Enter enrolled year" />
                       </UFormField>
 

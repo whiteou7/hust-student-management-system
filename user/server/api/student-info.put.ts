@@ -4,11 +4,10 @@ import { db_user as db } from "../../drizzle/db"
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
-  if (body.studentId == 0) {
+  if (body.studentId == 0 || body.studentId == null) {
     return {
       success: false,
-      err: "Student ID is required.",
-      studentInfo: null
+      err: "Student ID is required."
     }
   }
 
@@ -65,7 +64,6 @@ export default defineEventHandler(async (event) => {
       `)
     );
 
-    console.log("updated info")
     return {
       success: true,
       err: null

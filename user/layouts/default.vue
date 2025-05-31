@@ -89,6 +89,13 @@ const items: DropdownMenuItem[][] = [
   {
     label: "Class Registration",
     icon: "i-lucide-book-open-text"
+  },
+  {
+    label: "View All Courses",
+    icon: "i-lucide-school",
+    onSelect() {
+      router.push("/courses")
+    }
   }
 ], [
   {

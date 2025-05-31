@@ -17,9 +17,15 @@ export default defineEventHandler(async (event) => {
       sql.raw(`
         SELECT 
           t.teacher_id,
+          u.first_name,
+          u.last_name,
           CONCAT(u.first_name, ' ', u.last_name) AS full_name,
           u.email,
+          u.address,
+          u.date_of_birth,
           t.qualification,
+          t.position,
+          t.profession,
           t.hired_year,
           s.school_name
         FROM 
