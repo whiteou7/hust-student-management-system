@@ -235,17 +235,16 @@ if (courseData.value.success) {
 
   // Handle pass status
   courses.value = courses.value.map(item => {
-  return {
-    ...item,
-    pass: item.pass === true
-      ? "Passed"
-      : item.pass === null
-        ? "Ungraded"
-        : "Failed",
-    result: item.result === null ? "Ungraded" : item.result
-  }
-})
-
+    return {
+      ...item,
+      pass: item.pass === true
+        ? "Passed"
+        : item.pass === null
+          ? "Ungraded"
+          : "Failed",
+      result: item.result === null ? "Ungraded" : item.result
+    }
+  })
 
 } else {
   toast.add({
@@ -295,28 +294,28 @@ const columns = [
     header: "Status"
   },
   {
-  id: "actions",
-  cell: ({ row }) => {
-    return h(
-      "div",
-      { class: "text-right" },
-      h(
-        UDropdownMenu,
-        {
-          content: {
-            align: "end"
-          },
-          items: getRowItems(row),
-          "aria-label": "Actions dropdown"
-        },
-        () =>
-          h(UButton, {
-            icon: "i-lucide-ellipsis-vertical",
-            color: "neutral",
-            variant: "ghost",
-            class: "ml-auto",
+    id: "actions",
+    cell: ({ row }) => {
+      return h(
+        "div",
+        { class: "text-right" },
+        h(
+          UDropdownMenu,
+          {
+            content: {
+              align: "end"
+            },
+            items: getRowItems(row),
             "aria-label": "Actions dropdown"
-          })
+          },
+          () =>
+            h(UButton, {
+              icon: "i-lucide-ellipsis-vertical",
+              color: "neutral",
+              variant: "ghost",
+              class: "ml-auto",
+              "aria-label": "Actions dropdown"
+            })
         )
       )
     }
@@ -339,7 +338,7 @@ function getRowItems(row) {
           }
         })
 
-        if (!courseInfoData.value ) {
+        if (!courseInfoData.value) {
           toast.add({
             title: "Error",
             description: "Failed to fetch course information.",
@@ -500,7 +499,6 @@ async function submitEdit() {
   background-position: center;
   border-radius: 12px;
 }
-
 
 .profile-info {
   position: absolute;

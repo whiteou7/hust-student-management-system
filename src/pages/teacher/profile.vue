@@ -250,7 +250,6 @@ async function submitEdit() {
   border-radius: 12px;
 }
 
-
 .profile-info {
   position: absolute;
   bottom: -75px;
