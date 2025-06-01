@@ -13,6 +13,9 @@ onMounted(() => {
     case "teacher":
       router.push("/teacher/dashboard")
       break
+    case "admin":
+      router.push("/admin/dashboard")
+      break
     default:
       router.push("/login")
       break

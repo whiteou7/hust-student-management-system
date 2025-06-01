@@ -3,12 +3,12 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   eslint: {
     config: {
-      stylistic: true // <---
+      stylistic: false // <---
     }
   },
   modules: ["@nuxt/ui", "@nuxt/eslint"],
   css: ["~/assets/css/main.css"],
-  compatibilityDate: '2025-05-30',
+  compatibilityDate: "2025-05-30",
   nitro: {
     routeRules: {
       "/_nuxt/**": {

@@ -49,7 +49,7 @@ const isAdmin = ref(localStorage.getItem("role") === "admin")
 
 const searchQuery = ref("")
 
-const openModal = async() => {
+const openModal = async () => {
   const query = searchQuery.value.trim()
   if (!query.includes(":")) {
     toast.add({ title: "Invalid search format", description: "Please use 'student:{id}' or 'teacher:{id}'." })
