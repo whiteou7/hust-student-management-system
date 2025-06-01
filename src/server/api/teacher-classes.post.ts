@@ -36,7 +36,13 @@ export default defineEventHandler (async (event) => {
     sql.raw(`
       SELECT 
         COUNT(c.class_id) AS total_class_count,
-        COUNT(CASE WHEN c.day_of_week = TRIM(TO_CHAR(CURRENT_DATE, 'Day'))::day_of_week THEN 1 END) AS today_class_count
+        COUNT(
+          CASE 
+            WHEN TRIM(TO_CHAR(CURRENT_DATE, 'Day')) != 'Sunday'
+                AND c.day_of_week = TRIM(TO_CHAR(CURRENT_DATE, 'Day'))::day_of_week
+            THEN 1 
+          END
+        ) AS today_class_count
       FROM
         classes c
       WHERE
