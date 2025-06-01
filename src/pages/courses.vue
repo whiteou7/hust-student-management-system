@@ -45,21 +45,13 @@ const { data: schoolsData } = await useFetch('/api/all-schools');
 allSchools.value = schoolsData.value.schools.map(obj => Object.values(obj)[0]);
 
 onMounted(async () => {
-  try {
-    const { data } = await useFetch("/api/all-courses")
-    if (data.value.success || data.value) {
-      courses.value = data.value.courses || []
-    } else {
-      toast.add({
-        title: "Error",
-        description: data.value.err,
-        color: "error"
-      })
-    }
-  } catch (e) {
+  const { data } = await useFetch("/api/all-courses")
+  if (data.value.success || data.value) {
+    courses.value = data.value.courses || []
+  } else {
     toast.add({
       title: "Error",
-      description: "Failed to fetch course list.",
+      description: data.value.err,
       color: "error"
     })
   }

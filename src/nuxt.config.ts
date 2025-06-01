@@ -1,8 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-
-  modules: ["@nuxt/ui"],
+  eslint: {
+    config: {
+      stylistic: true // <---
+    }
+  },
+  modules: ["@nuxt/ui", "@nuxt/eslint"],
   css: ["~/assets/css/main.css"],
   compatibilityDate: '2025-05-30',
   nitro: {

@@ -2,7 +2,7 @@
   <div class="profile-container">
     <!-- Profile Header -->
     <UCard class="profile-header">
-      <div class="profile-cover"></div>
+      <div class="profile-cover"/>
       <div class="profile-info">
         <UAvatar
           size="2xl"
@@ -31,8 +31,7 @@
                 icon="i-heroicons-pencil-square"
                 label="Edit"
                 @click="onEditProfile"
-              >
-              </UButton>
+              />
 
               <template #content>
                 <UCard>
@@ -69,12 +68,10 @@
                         <UButton
                           variant="subtle"
                           label="Cancel"
-                        >
-                        </UButton>
+                        />
                         <UButton
                           label="Save changes"
-                        >
-                        </UButton>
+                        />
                       </div>
                     </template>
                   </UForm>
@@ -141,12 +138,10 @@
 
 <script setup>
 import { ref } from "vue"
-import { useRouter } from "vue-router"
 
 const teacherId = localStorage.getItem("userId")
 const teacher = ref({})
 const toast = useToast()
-const router = useRouter()
 
 // Fetch teacher info
 const { data: teacherData } = await useFetch("/api/teacher-info", {

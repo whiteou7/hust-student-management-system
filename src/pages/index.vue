@@ -1,7 +1,3 @@
-<template>
-
-</template>
-
 <script setup lang="js">
     import { useRouter } from "vue-router"
     import { onMounted } from "vue"

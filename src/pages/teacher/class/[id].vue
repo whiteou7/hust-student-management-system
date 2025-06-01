@@ -24,7 +24,7 @@
           />
         </UCard>
       </div>
-      <div class="flex-1" v-if="Object.keys(selectedStudent).length > 0">
+      <div v-if="Object.keys(selectedStudent).length > 0" class="flex-1">
         <UCard>
           <template #header>
             <h1 class="text-2xl font-bold mb-4">

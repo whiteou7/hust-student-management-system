@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm"
 import { db_user as db } from "../../drizzle/db"
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async () => {
   try {
     const schools = await db.execute(
       sql.raw(`
@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
   } catch (error) {
     return {
       success: false,
-      err: "Internal server error",
+      err: error,
       schools: null
     }
   }

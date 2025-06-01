@@ -2,7 +2,7 @@
   <div class="profile-container">
     <!-- Profile Header -->
     <UCard class="profile-header">
-      <div class="profile-cover"></div>
+      <div class="profile-cover"/>
       <div class="profile-info">
         <UAvatar
           size="2xl"
@@ -31,8 +31,7 @@
                 icon="i-heroicons-pencil-square"
                 label="Edit"
                 @click="onEditProfile"
-              >
-              </UButton>
+              />
 
               <template #content>
                 <UCard>
@@ -79,12 +78,10 @@
                         <UButton
                           variant="subtle"
                           label="Cancel"
-                        >
-                        </UButton>
+                        />
                         <UButton
                           label="Save changes"
-                        >
-                        </UButton>
+                        />
                       </div>
                     </template>
                   </UForm>
@@ -141,7 +138,7 @@
             <label class="text-sm text-gray-500">Debt</label>
             <div class="flex items-center space-x-2">
               <span>{{ student.debt }}</span>
-              <span @click="payTuition" class="text-blue-600 hover:underline cursor-pointer text-sm">
+              <span class="text-blue-600 hover:underline cursor-pointer text-sm" @click="payTuition">
                 Pay Tuition
               </span>
             </div>
@@ -177,8 +174,7 @@
               icon="i-heroicons-arrow-up-right"
               label="View all courses"
               @click="onViewCourses"
-            >
-            </UButton>
+            />
           </div>
         </template>
 
@@ -195,9 +191,7 @@
         <UTable
           sticky
           :columns="columns"
-          :data="filteredCourses">
-
-        </UTable>
+          :data="filteredCourses"/>
 
       </UCard>
     </div>
@@ -415,7 +409,7 @@ const { data: studentData } = await useFetch("/api/student-info", {
   method: "POST",
   body: {
     studentId: parseInt(studentId ?? "0"),
-    currentSemester: currentSemester ?? "0"
+    currentSemester: currentSemester.value ?? "0"
   }
 })
 

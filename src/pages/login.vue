@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from "@nuxt/ui"
 import { z } from "zod"
-import Cookies from "js-cookie"
 import { useRouter } from "vue-router"
 import { ref } from "vue"
 
@@ -129,7 +128,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         <div class="mt-6">
           <div class="relative">
             <div class="absolute inset-0 flex items-center">
-              <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
+              <div class="w-full border-t border-gray-300 dark:border-gray-600"/>
             </div>
             <div class="relative flex justify-center text-sm">
               <span class="bg-white dark:bg-gray-800 px-2 text-gray-500 dark:text-gray-400">Don't have an account?</span>

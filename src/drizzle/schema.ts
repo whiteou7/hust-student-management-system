@@ -5,17 +5,10 @@ import {
   pgEnum,
   serial,
   varchar,
-  foreignKey,
   integer,
   boolean,
-  time,
   numeric,
   text,
-  index,
-  date,
-  primaryKey,
-  uuid,
-  uniqueIndex,
   check
 } from "drizzle-orm/pg-core"
 

@@ -1,7 +1,7 @@
 <template>
   <div class="layout-container">
     <header v-if="!isAuthPage && !isAdmin" class="header">
-      <h1 @click="dashboardNavigate" class="clickable-header">Hust Student Management System</h1>
+      <h1 class="clickable-header" @click="dashboardNavigate">Hust Student Management System</h1>
       
       <div class="flex items-center gap-4 ml-auto">
         <UInput
