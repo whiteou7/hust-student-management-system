@@ -54,7 +54,6 @@
           </template>
         </UCard>
       </div>
-
       
     </UCard>
 
@@ -79,7 +78,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue"
 
 const semester = ref(localStorage.getItem("currentSemester"))
 const classes = ref([])

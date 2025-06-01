@@ -79,7 +79,7 @@ const classId = route.params.id
 const classInfo = ref({})
 const students = ref([])
 const gradeForm = ref({ midTerm: "", finalTerm: "" })
-const sortKey = ref('student_id')
+const sortKey = ref("student_id")
 
 // Function to update grade and return api response
 const updateGrade = async (studentId, midTerm, finalTerm) => {
@@ -122,9 +122,9 @@ const sortedStudents = computed(() => {
     let aVal = a[sortKey.value]
     let bVal = b[sortKey.value]
     // For result, handle 'Ungraded' as lowest
-    if (sortKey.value === 'result') {
-      aVal = aVal === 'Ungraded' ? -Infinity : Number(aVal)
-      bVal = bVal === 'Ungraded' ? -Infinity : Number(bVal)
+    if (sortKey.value === "result") {
+      aVal = aVal === "Ungraded" ? -Infinity : Number(aVal)
+      bVal = bVal === "Ungraded" ? -Infinity : Number(bVal)
     }
     if (aVal < bVal) return -1
     if (aVal > bVal) return 1
@@ -142,9 +142,9 @@ onMounted(async () => {
 
   if (!classData.value || !classData.value.success) {
     toast.add({
-        title: "Error",
-        description: classData.value.err,
-        color: "error"
+      title: "Error",
+      description: classData.value.err,
+      color: "error"
     })
     return
   }
@@ -158,9 +158,9 @@ onMounted(async () => {
   })
   if (!studentData.value || !studentData.value.success) {
     toast.add({
-        title: "Error",
-        description: studentData.value.err,
-        color: "error"
+      title: "Error",
+      description: studentData.value.err,
+      color: "error"
     })
     return
   }

@@ -12,9 +12,6 @@ export default withNuxt({
     // 🔢 2-space indent
     indent: ["error", 2, { SwitchCase: 1 }],
 
-    // ✅ Require newline at end of file
-    "eol-last": ["error", "always"],
-
     // 🧹 No extra spaces
     "no-multi-spaces": ["error"],
 
@@ -26,7 +23,11 @@ export default withNuxt({
     "space-infix-ops": ["error"],
     "space-before-blocks": ["error", "always"],
     "space-in-parens": ["error", "never"],
-    "space-before-function-paren": ["error", "never"],
+    "space-before-function-paren": ["error", {
+      anonymous: "never",
+      named: "never",
+      asyncArrow: "always"
+    }],
     "comma-spacing": ["error", { before: false, after: true }],
     "array-bracket-spacing": ["error", "never"],
     "object-curly-spacing": ["error", "always"],

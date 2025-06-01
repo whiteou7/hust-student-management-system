@@ -44,7 +44,7 @@ const allSchools = ref("")
 const { data: schoolsData } = await useFetch("/api/all-schools")
 allSchools.value = schoolsData.value.schools.map(obj => Object.values(obj)[0])
 
-onMounted(async() => {
+onMounted(async () => {
   const { data } = await useFetch("/api/all-courses")
   if (data.value.success || data.value) {
     courses.value = data.value.courses || []

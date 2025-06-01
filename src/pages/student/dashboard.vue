@@ -99,28 +99,28 @@ const columns = [
   },
   // Dropdown menu to show class info
   {
-  id: "actions",
-  cell: ({ row }) => {
-    return h(
-      "div",
-      { class: "text-right" },
-      h(
-        UDropdownMenu,
-        {
-          content: {
-            align: "end"
-          },
-          items: getRowItems(row),
-          "aria-label": "Actions dropdown"
-        },
-        () =>
-          h(UButton, {
-            icon: "i-lucide-ellipsis-vertical",
-            color: "neutral",
-            variant: "ghost",
-            class: "ml-auto",
+    id: "actions",
+    cell: ({ row }) => {
+      return h(
+        "div",
+        { class: "text-right" },
+        h(
+          UDropdownMenu,
+          {
+            content: {
+              align: "end"
+            },
+            items: getRowItems(row),
             "aria-label": "Actions dropdown"
-          })
+          },
+          () =>
+            h(UButton, {
+              icon: "i-lucide-ellipsis-vertical",
+              color: "neutral",
+              variant: "ghost",
+              class: "ml-auto",
+              "aria-label": "Actions dropdown"
+            })
         )
       )
     }
@@ -143,7 +143,7 @@ function getRowItems(row) {
           }
         })
 
-        if (!classInfoRes.value ) {
+        if (!classInfoRes.value) {
           errorMsg.value = "Failed to fetch class information"
           return
         }

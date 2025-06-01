@@ -31,13 +31,13 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   const registerData = event.data
   
   const { data } = await useFetch("/api/register", {
-      method: "POST",
-      body: {
-        email: registerData.email,
-        password: registerData.password,
-        user_id: registerData.user_id
-      }
-    })
+    method: "POST",
+    body: {
+      email: registerData.email,
+      password: registerData.password,
+      user_id: registerData.user_id
+    }
+  })
 
   if (!data.value) {
     errorMsg.value = "Registration failed. Please try again."
@@ -50,7 +50,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     success.value = "Registration completed. Redirecting to login..."
     
     setTimeout(() => {
-        router.push("/login")
+      router.push("/login")
     }, 3000)
   } else {
     errorMsg.value = data.value.error ?? "Registration failed. Please try again."
