@@ -75,9 +75,6 @@ CREATE OR REPLACE PROCEDURE enroll_student_in_class(
 ) AS $$
 DECLARE
     v_eligible BOOLEAN;
-    v_course_id VARCHAR(6);
-    v_tuition_per_credit INTEGER;
-    v_credit INTEGER;
 BEGIN
     /* 
     Kiểm tra sinh viên có đủ điều kiện đăng ký không
@@ -90,26 +87,11 @@ BEGIN
         RAISE EXCEPTION 'Student does not meet enrollment requirements for this class';
     END IF;
     
-    -- Lấy thông tin môn học để tính học phí
-    SELECT c.course_id, c.tuition_per_credit, c.credit
-    INTO v_course_id, v_tuition_per_credit, v_credit
-    FROM courses c
-    JOIN classes cl ON c.course_id = cl.course_id
-    WHERE cl.class_id = p_class_id;
-    
     -- Bắt đầu transaction để đảm bảo tính toàn vẹn dữ liệu
     BEGIN
         -- Thêm bản ghi đăng ký vào bảng enrollments
         INSERT INTO enrollments (student_id, class_id, mid_term, final_term, pass)
         VALUES (p_student_id, p_class_id, NULL, NULL, NULL);
-        
-        /* 
-        Cập nhật công nợ của sinh viên
-        Học phí = số tín chỉ * học phí mỗi tín chỉ
-        */
-        UPDATE students
-        SET debt = debt + (v_tuition_per_credit * v_credit)
-        WHERE student_id = p_student_id;
         
         -- Xác nhận transaction nếu thành công
         COMMIT;
