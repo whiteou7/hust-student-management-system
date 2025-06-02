@@ -1,3 +1,4 @@
+---4
 DELIMITER //
 
 CREATE TRIGGER increase_student_debt
@@ -17,5 +18,23 @@ BEGIN
     WHERE student_id = NEW.student_id;
 END;
 //
+
+DELIMITER ;
+
+---8
+DELIMITER $$
+
+CREATE PROCEDURE CheckGraduation()
+BEGIN
+    -- Cập nhật trạng thái tốt nghiệp
+    UPDATE students
+    SET graduated = 'graduated'
+    WHERE credits_completed >= total_credits_required AND debt = 0;
+
+    -- Cập nhật trạng thái chưa tốt nghiệp
+    UPDATE students
+    SET graduated = 'enrolled'
+    WHERE credits_completed < total_credits_required OR debt > 0;
+END $$
 
 DELIMITER ;
