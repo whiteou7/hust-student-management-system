@@ -30,28 +30,40 @@ A Nuxt project incorporating Drizzle ORM and PostgreSQL.
 - warning level = 0 nếu trượt < 3 môn
 - warning level = 1 nếu trượt < 6 môn
 - warning level = 2 nếu trượt < 9 môn
-(câu này chú ý tính tổng môn trượt không phải lớp trượt, ý tưởng join enrollments x classes, nếu có 1 môn 2 lớp 1 trượt 1 đạt thì môn đó đạt)
-6. Viết function để kiểm tra học sinh có đăng kí được lớp không (đăng kí được nếu enrolled_count < capacity, status = 'open', warning level = 0 thì đăng kí được tất cả các lớp, = 1 thì đăng kí max 75% tín chỉ, = 2 thì đăng kí max 50% tín chỉ) (câu này join khá nhiều bảng, enrollments x classes x courses để lấy thông tin tín chỉ, enrollments x students để tính tổng tín chỉ.
+  
+(chú ý trượt môn != trượt lớp, ví dụ nếu có 1 môn 2 lớp 1 trượt 1 đạt thì môn đó đạt)
+
+6. Viết function để kiểm tra học sinh có đăng kí được lớp không, trả về boolean 
+
+Đăng kí được nếu enrolled_count < capacity, status = 'open', warning level = 0 thì đăng kí được tất cả các lớp, = 1 thì đăng kí max 75% tín chỉ, = 2 thì đăng kí max 50% tín chỉ (idea join enrollments x classes x courses để lấy thông tin tín chỉ, enrollments x students để tính tổng tín chỉ)
+
 7. Viết procedure để đăng kí lớp (input student_id và class_id), gọi function bài 6 để kiểm tra trước khi insert vào enrollment.
-8. Viết procedure để kiểm tra và update students.graduated, tốt nghiệp ('graduated') nếu đạt 100% tín chỉ và debt = 0, không tốt nghiệp ('enrolled') trong trường hợp còn lại.
-9. Viết trigger để gọi function 5 mỗi khi nhập điểm.
+8. Viết procedure để set students.graduated, tốt nghiệp ('graduated') nếu đạt 100% tín chỉ và debt = 0, không tốt nghiệp ('enrolled') trong trường hợp còn lại.
+9. Viết trigger để gọi function 5 mỗi khi nhập điểm trong enrollments.
+10. Viết trigger để tính result = (mid_term + final_term)/2
 
 ## Roles
 
-Tùng: manager/code review/backend/frontend
+Tùng: Manager/code review/backend/frontend + exercise 3 + 10
 
 Vũ: 
 
 - Design Relational Schema
+- Exercise 2 ✔
+- Exercise 5 + 9
 
 Tín: 
 
 - Design Use Case Diagram ✔
-- Generate mock data
+- Generate mock data ✔
+- Exercise 1 ✔
+- Exercise 6 + 7
 
 Nguyệt: 
 
-- Design ER Diagram ✔
+- Design ER Diagram ✔ (Late submission)
+- Exercise 4 ✔ (Late submission)
+- Exercise 8
 
 ## Setup
 

@@ -185,3 +185,4 @@ BEGIN
     -- Trả về NULL cho AFTER trigger là phổ biến.
     RETURN NULL; -- Hoặc RETURN NEW; cho INSERT/UPDATE, RETURN OLD; cho DELETE nếu cần.
 END;
+
