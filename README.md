@@ -38,7 +38,7 @@ A Nuxt project incorporating Drizzle ORM and PostgreSQL.
 Đăng kí được nếu enrolled_count < capacity, status = 'open', warning level = 0 thì đăng kí được tất cả các lớp, = 1 thì đăng kí max 75% tín chỉ, = 2 thì đăng kí max 50% tín chỉ (idea join enrollments x classes x courses để lấy thông tin tín chỉ, enrollments x students để tính tổng tín chỉ)
 
 7. Viết procedure để đăng kí lớp (input student_id và class_id), gọi function bài 6 để kiểm tra trước khi insert vào enrollment.
-8. Viết procedure để set students.graduated, tốt nghiệp ('graduated') nếu đạt 100% tín chỉ và debt = 0, không tốt nghiệp ('enrolled') trong trường hợp còn lại.
+8. Viết function để kiểm tra điều kiện tốt nghiệp: đạt 100% tín chỉ và hoàn thành các môn học, không tốt nghiệp ('enrolled') trong trường hợp còn lại.
 9. Viết trigger để gọi function 5 mỗi khi nhập điểm trong enrollments.
 10. Viết trigger để tính result = (mid_term + final_term)/2
 
@@ -50,20 +50,20 @@ Vũ:
 
 - Design Relational Schema
 - Exercise 2 ✔
-- Exercise 5 + 9
+- Exercise 5 + 9 ✔ (Late submission)
 
 Tín: 
 
 - Design Use Case Diagram ✔
 - Generate mock data ✔
 - Exercise 1 ✔
-- Exercise 6 + 7
+- Exercise 6 + 7 ✔ (Late submission)
 
 Nguyệt: 
 
 - Design ER Diagram ✔ (Late submission)
 - Exercise 4 ✔ (Late submission)
-- Exercise 8
+- Exercise 8 ✔ (Late submission)
 
 ## Setup
 
