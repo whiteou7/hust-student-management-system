@@ -15,16 +15,16 @@ export default defineEventHandler(async (event) => {
     await db.execute(
       sql.raw(`
         UPDATE
-          courses co
+          courses
         SET
-          co.course_id = ${body.course_id},
-          co.course_name = '${body.course_name}',
-          co.course_description = '${body.course_description}',
-          co.tuition_per_credit = ${body.tuition_per_credit},
-          co.credit = ${body.credit},
-          co.school_id = ${body.school_id}
+          course_id = '${body.courseId}',
+          course_name = '${body.courseName}',
+          course_description = '${body.courseDescription}',
+          tuition_per_credit = ${body.tuitionPerCredit},
+          credit = ${body.credit},
+          school_id = ${body.schoolId}
         WHERE 
-          co.course_id = '${body.courseId}';
+          course_id = '${body.courseId}';
       `)
     )
 

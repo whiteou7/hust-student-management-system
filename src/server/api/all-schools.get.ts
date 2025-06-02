@@ -6,6 +6,7 @@ export default defineEventHandler(async () => {
     const schools = await db.execute(
       sql.raw(`
         SELECT 
+          s.school_id,
           s.school_name
         FROM 
           schools s;
