@@ -137,8 +137,8 @@ function getRowItems(row) {
         const classId = row.original.class_id
 
         const { data: classInfoRes } = await useFetch("/api/class-info", {
-          method: "POST",
-          body: {
+          method: "GET",
+          query: {
             classId: classId
           }
         })
@@ -174,12 +174,14 @@ const userId = localStorage.getItem("userId")
 
 // Fetch basic enrollment info 
 const res = await useFetch("/api/student-classes", {
-  method: "POST",
-  body: {
+  method: "GET",
+  query: {
     userId: parseInt(userId ?? "0"),
     semester: currentSemester.value
   }
 })
+
+console.log(res.data.value)
 
 if (!res.data.value) {
   errorMsg.value = "Failed to fetch enrollment info."

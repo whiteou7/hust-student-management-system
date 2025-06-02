@@ -31,8 +31,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   const registerData = event.data
   
   const { data } = await useFetch("/api/register", {
-    method: "POST",
-    body: {
+    method: "GET",
+    query: {
       email: registerData.email,
       password: registerData.password,
       user_id: registerData.user_id

@@ -2,9 +2,9 @@ import { sql } from "drizzle-orm"
 import { db_user as db } from "../../drizzle/db"
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event)
+  const query = await getQuery(event)
 
-  if (body.studentId == 0) {
+  if (query.studentId == 0) {
     return {
       success: false,
       err: "Student ID is required.",
@@ -43,8 +43,8 @@ export default defineEventHandler(async (event) => {
         JOIN 
           classes c ON c.class_id = e.class_id
         WHERE 
-          u.user_id = ${body.studentId}
-          AND c.semester = '${body.currentSemester}'
+          u.user_id = ${query.studentId}
+          AND c.semester = '${query.currentSemester}'
         GROUP BY
           s.student_id,
           u.first_name,
@@ -63,7 +63,7 @@ export default defineEventHandler(async (event) => {
       `)
     )
 
-    // console.log(studentInfo[0] + body.currentSemester + body.studentId)
+    // console.log(studentInfo[0] + query.currentSemester + query.studentId)
 
     if (!studentInfo.length) {
       return {

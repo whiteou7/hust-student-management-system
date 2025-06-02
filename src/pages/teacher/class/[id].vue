@@ -136,8 +136,8 @@ const sortedStudents = computed(() => {
 onMounted(async () => {
   // Fetch basic class info
   const { data: classData } = await useFetch("/api/class-info", {
-    method: "POST",
-    body: { classId }
+    method: "GET",
+    query: { classId }
   })
 
   if (!classData.value || !classData.value.success) {
@@ -153,8 +153,8 @@ onMounted(async () => {
 
   // Fetch student list
   const { data: studentData } = await useFetch("/api/class-students", {
-    method: "POST",
-    body: { classId }
+    method: "GET",
+    query: { classId }
   })
   if (!studentData.value || !studentData.value.success) {
     toast.add({
@@ -205,8 +205,8 @@ const onSubmitGrade = async () => {
 
   // Refresh students list after updating grade
   const { data: studentData } = await useFetch("/api/class-students", {
-    method: "POST",
-    body: { classId }
+    method: "GET",
+    query: { classId }
   })
   if (studentData.value && studentData.value.success) {
     students.value = studentData.value.students.map(item => {

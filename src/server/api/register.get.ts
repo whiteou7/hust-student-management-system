@@ -1,12 +1,12 @@
 import { sql } from "drizzle-orm"
 import { db_user as db } from "../../drizzle/db"
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event)
+  const query = await getQuery(event)
 
-  // console.log(body.email + " " + body.password)
+  // console.log(query.email + " " + query.password)
 
   const [user] = await db.execute(
-    sql.raw(`select * from users where user_id = '${body.user_id}';`)
+    sql.raw(`select * from users where user_id = '${query.user_id}';`)
   )
 
   // console.log(user)

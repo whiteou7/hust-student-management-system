@@ -24,8 +24,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   console.log(loginData.email + " submitted.")
 
   const { data } = await useFetch("/api/login", {
-    method: "POST",
-    body: {
+    method: "GET",
+    query: {
       email: loginData.email,
       password: loginData.password
     }

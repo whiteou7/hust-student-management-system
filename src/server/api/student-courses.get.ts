@@ -1,9 +1,9 @@
 import { sql } from "drizzle-orm"
 import { db_user as db } from "../../drizzle/db"
 export default defineEventHandler (async (event) => {
-  const body = await readBody(event)
+  const query = await getQuery(event)
 
-  if (body.userId == 0) {
+  if (query.userId == 0) {
     return {
       success: false,
       err: "Invalid userId. Try signing in again.",
@@ -28,7 +28,7 @@ export default defineEventHandler (async (event) => {
       JOIN 
         courses co ON c.course_id = co.course_id
       WHERE 
-        e.student_id = ${body.studentId}
+        e.student_id = ${query.studentId}
       ORDER BY 
         co.course_id,
         e.pass DESC;  -- Prefer pass = true (true > false)

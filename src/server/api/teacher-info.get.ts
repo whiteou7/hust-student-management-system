@@ -2,9 +2,9 @@ import { sql } from "drizzle-orm"
 import { db_user as db } from "../../drizzle/db"
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event)
+  const query = await getQuery(event)
 
-  if (body.teacherId == 0) {
+  if (query.teacherId == 0) {
     return {
       success: false,
       err: "Teacher ID is required.",
@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
         JOIN 
           schools s ON s.school_id = t.school_id
         WHERE 
-          u.user_id = ${body.teacherId};
+          u.user_id = ${query.teacherId};
       `)
     )
 

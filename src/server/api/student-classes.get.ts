@@ -1,9 +1,9 @@
 import { sql } from "drizzle-orm"
 import { db_user as db } from "../../drizzle/db"
 export default defineEventHandler (async (event) => {
-  const body = await readBody(event)
+  const query = await getQuery(event)
 
-  if (body.userId == 0 || body.userId == null) {
+  if (query.userId == 0 || query.userId == null) {
     return {
       success: false,
       err: "Invalid userId. Try signing in again.",
@@ -27,8 +27,8 @@ export default defineEventHandler (async (event) => {
       JOIN 
         courses co ON c.course_id = co.course_id
       WHERE 
-        e.student_id = ${body.userId}  
-        AND c.semester = '${body.semester}';  
+        e.student_id = ${query.userId}  
+        AND c.semester = '${query.semester}';  
     `)
   )
 
@@ -45,8 +45,8 @@ export default defineEventHandler (async (event) => {
       JOIN
         courses co ON co.course_id = c.course_id
       WHERE
-        e.student_id = ${body.userId}  
-        AND c.semester = '${body.semester}';
+        e.student_id = ${query.userId}  
+        AND c.semester = '${query.semester}';
     `)
   )
 

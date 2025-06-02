@@ -216,8 +216,8 @@ const overlay = useOverlay()
 
 // Fetch all courses
 const { data: courseData } = await useFetch("/api/student-courses", {
-  method: "POST",
-  body: {
+  method: "GET",
+  query: {
     studentId: parseInt(studentId ?? "0")
   }
 })
@@ -332,8 +332,8 @@ function getRowItems(row) {
         const courseId = row.original.course_id
 
         const { data: courseInfoData } = await useFetch("/api/course-info", {
-          method: "POST",
-          body: {
+          method: "GET",
+          query: {
             courseId: courseId
           }
         })
@@ -405,8 +405,8 @@ async function payTuition() {
 
 // Fetch student info
 const { data: studentData } = await useFetch("/api/student-info", {
-  method: "POST",
-  body: {
+  method: "GET",
+  query: {
     studentId: parseInt(studentId ?? "0"),
     currentSemester: currentSemester.value ?? "0"
   }

@@ -93,8 +93,8 @@ const filterItems = ref([
 // Fetch class list
 onMounted(async () => {
   const { data: classData } = await useFetch("/api/teacher-classes", {
-    method: "POST",
-    body: {
+    method: "GET",
+    query: {
       semester: semester.value,
       userId: localStorage.getItem("userId")
     }

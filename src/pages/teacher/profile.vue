@@ -145,8 +145,8 @@ const toast = useToast()
 
 // Fetch teacher info
 const { data: teacherData } = await useFetch("/api/teacher-info", {
-  method: "POST",
-  body: {
+  method: "GET",
+  query: {
     teacherId: parseInt(teacherId ?? "0")
   }
 })

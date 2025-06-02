@@ -3,11 +3,11 @@ import { db_user as db } from "../../drizzle/db"
 import process from "process"
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event)
+  const query = await getQuery(event)
 
   if (
-    body.email === process.env.ADMIN_USER &&
-    body.password === process.env.ADMIN_PASS
+    query.email === process.env.ADMIN_USER &&
+    query.password === process.env.ADMIN_PASS
   ) {
     return {
       success: true,
@@ -18,12 +18,12 @@ export default defineEventHandler(async (event) => {
   }
 
   const [user] = await db.execute(
-    sql.raw(`select * from users where email = '${body.email}';`)
+    sql.raw(`select * from users where email = '${query.email}';`)
   )
   
   if (user == undefined) return { success: false, sessionId: "0", error: "Wrong email or password.", role: null, userId: "0" }
 
-  if (body.password === user.password) {
+  if (query.password === user.password) {
     return { success: true, error: "None", role: user.role, userId: user.user_id }
   }
 
