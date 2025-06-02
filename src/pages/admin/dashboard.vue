@@ -11,9 +11,9 @@
         />
     </UCard>
 
-    <UCard v-if="Object.keys(selectedCourse).length > 0">
+    <UCard>
       <template #header>
-        <h2 class="text-2xl font-bold">Edit Course</h2>
+        <h2 class="text-2xl font-bold">Edit/Add Course</h2>
       </template>
       <UForm :state="editCourseForm" @submit="handleEditCourse">
         <div class="max-w-md mx-auto flex flex-col space-y-4">
@@ -47,15 +47,28 @@
 
           <div class="flex justify-end space-x-2">
             <UButton color="gray" @click="cancelEdit">Cancel</UButton>
+            <UButton v-if="editCourseForm.courseId" type="button" color="error" @click="handleDeleteCourse">Delete</UButton>
             <UButton type="submit" color="primary">Save Changes</UButton>
           </div>
         </div>
       </UForm>
     </UCard>
 
-    <UCard v-if="Object.keys(selectedClass).length > 0">
+    <UCard>
       <template #header>
-        <h2 class="text-2xl font-bold">Edit Class</h2>
+        <h2 class="text-2xl font-bold">All Classes</h2>
+      </template>
+        <UTable 
+          :data="classes" 
+          :columns="classColumns"
+          sticky
+          class="flex-1 max-h-[312px]"
+        />
+    </UCard>
+
+    <UCard>
+      <template #header>
+        <h2 class="text-2xl font-bold">Edit/Add Class</h2>
       </template>
       <UForm :state="editClassForm" @submit="handleEditClass">
         <div class="max-w-md mx-auto flex flex-col space-y-4">
@@ -92,22 +105,11 @@
           </UFormField>
           <div class="flex justify-end space-x-2">
             <UButton color="gray" @click="cancelEditClass">Cancel</UButton>
+            <UButton v-if="editClassForm.classId" type="button" color="red" @click="handleDeleteClass">Delete</UButton>
             <UButton type="submit" color="primary">Save Changes</UButton>
           </div>
         </div>
       </UForm>
-    </UCard>
-
-    <UCard>
-      <template #header>
-        <h2 class="text-2xl font-bold">All Classes</h2>
-      </template>
-        <UTable 
-          :data="classes" 
-          :columns="classColumns"
-          sticky
-          class="flex-1 max-h-[312px]"
-        />
     </UCard>
   </div>
 </template>
@@ -339,66 +341,131 @@ function cancelEditClass() {
 
 async function handleEditCourse() {
   try {
-    const response = await useFetch("/api/course-info", {
-      method: "PUT",
+    const isEdit = !!selectedCourse.value && !!selectedCourse.value.course_id
+    const response = await useFetch(isEdit ? "/api/course-info" : "/api/course-info", {
+      method: isEdit ? "PUT" : "POST",
       body: editCourseForm.value
     })
-    
     if (response.data.value?.success) {
       await fetchCourses()
       toast.add({
         title: "Success",
-        description: "Course updated successfully",
+        description: isEdit ? "Course updated successfully" : "Course added successfully",
         color: "success"
       })
       cancelEdit()
     } else {
       toast.add({
         title: "Error",
-        description: response.data.value?.err || "Failed to update course",
+        description: response.data.value?.err || (isEdit ? "Failed to update course" : "Failed to add course"),
         color: "error"
       })
-      console.error("Failed to update course:", response.data.value?.err)
+      console.error(isEdit ? "Failed to update course:" : "Failed to add course:", response.data.value?.err)
     }
   } catch (error) {
     toast.add({
       title: "Error",
-      description: "Error updating course",
+      description: isEdit ? "Error updating course" : "Error adding course",
       color: "error"
     })
-    console.error("Error updating course:", error)
+    console.error(isEdit ? "Error updating course:" : "Error adding course:", error)
   }
 }
 
 async function handleEditClass() {
   try {
-    const response = await useFetch("/api/class-info", {
-      method: "PUT",
+    const isEdit = !!selectedClass.value && !!selectedClass.value.class_id
+    const response = await useFetch(isEdit ? "/api/class-info" : "/api/class-info", {
+      method: isEdit ? "PUT" : "POST",
       body: editClassForm.value
     })
     if (response.data.value?.success) {
       await fetchClasses()
       toast.add({
         title: "Success",
-        description: "Class updated successfully",
+        description: isEdit ? "Class updated successfully" : "Class added successfully",
         color: "success"
       })
       cancelEditClass()
     } else {
       toast.add({
         title: "Error",
-        description: response.data.value?.err || "Failed to update class",
+        description: response.data.value?.err || (isEdit ? "Failed to update class" : "Failed to add class"),
         color: "error"
       })
-      console.error("Failed to update class:", response.data.value?.err)
+      console.error(isEdit ? "Failed to update class:" : "Failed to add class:", response.data.value?.err)
     }
   } catch (error) {
     toast.add({
       title: "Error",
-      description: "Error updating class",
+      description: isEdit ? "Error updating class" : "Error adding class",
       color: "error"
     })
-    console.error("Error updating class:", error)
+    console.error(isEdit ? "Error updating class:" : "Error adding class:", error)
+  }
+}
+
+async function handleDeleteCourse() {
+  try {
+    const response = await useFetch("/api/course-info", {
+      method: "DELETE",
+      body: { courseId: editCourseForm.value.courseId }
+    })
+    if (response.data.value?.success) {
+      await fetchCourses()
+      toast.add({
+        title: "Success",
+        description: "Course deleted successfully",
+        color: "success"
+      })
+      cancelEdit()
+    } else {
+      toast.add({
+        title: "Error",
+        description: response.data.value?.err || "Failed to delete course",
+        color: "error"
+      })
+      console.error("Failed to delete course:", response.data.value?.err)
+    }
+  } catch (error) {
+    toast.add({
+      title: "Error",
+      description: "Error deleting course",
+      color: "error"
+    })
+    console.error("Error deleting course:", error)
+  }
+}
+
+async function handleDeleteClass() {
+  try {
+    const response = await useFetch("/api/class-info", {
+      method: "DELETE",
+      body: { classId: editClassForm.value.classId }
+    })
+    if (response.data.value?.success) {
+      await fetchClasses()
+      toast.add({
+        title: "Success",
+        description: "Class deleted successfully",
+        color: "success"
+      })
+      cancelEditClass()
+    } else {
+      toast.add({
+        title: "Error",
+        description: response.data.value?.err || "Failed to delete class",
+        color: "error"
+      })
+      console.error("Failed to delete class:", response.data.value?.err)
+    }
+  } catch (error) {
+    toast.add({
+      title: "Error",
+      description: "Error deleting class",
+      color: "error"
+    })
+    console.error("Error deleting class:", error)
   }
 }
 </script>
