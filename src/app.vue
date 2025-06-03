@@ -1,10 +1,10 @@
 <template>
-  <NuxtLayout>
-    <UApp
+  <UApp
       toaster:
       ToasterProps
 >
+    <NuxtLayout>
       <NuxtPage />
-    </UApp>
-  </NuxtLayout>
+    </NuxtLayout>
+  </UApp>
 </template>

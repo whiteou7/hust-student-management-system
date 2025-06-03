@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "fs"
 import { join } from "path"
 
-const configPath = join(process.cwd(), "configs", "currentSemester.json")
+const configPath = join(process.cwd(), "configs", "nextSemester.json")
 
 export default defineEventHandler(async (event) => {
   const method = event.method
@@ -15,11 +15,11 @@ export default defineEventHandler(async (event) => {
   if (method === "PUT") {
     const body = await readBody(event)
 
-    if (!body.currentSemester || typeof body.currentSemester !== "string") {
-      throw createError({ statusCode: 400, statusMessage: "Invalid currentSemester" })
+    if (!body.nextSemester || typeof body.nextSemester !== "string") {
+      throw createError({ statusCode: 400, statusMessage: "Invalid nextSemester" })
     }
 
-    writeFileSync(configPath, JSON.stringify({ currentSemester: body.currentSemester }, null, 2))
+    writeFileSync(configPath, JSON.stringify({ nextSemester: body.nextSemester }, null, 2))
     return { success: true }
   }
 
