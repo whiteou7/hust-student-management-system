@@ -1,30 +1,10 @@
 ## Overview
 A Nuxt project incorporating Drizzle ORM and PostgreSQL.
 
-## Schema
-1. users(**user_id**, first_name, last_name, date_of_birth, address, email, password, role)
-2. sessions(**session_id**, user_id): user_id refers to users.user_id
-3. students(**student_id**, program_id, enrolled_year, warning_level, accumulated_credit, graduated, debt, cpa):
-- student_id refers to users.user_id
-- program_id refers to programs.program_id
-4. teachers(**teacher_id**, school_id, hired_year, qualification):
-- teacher_id refers to users.user_id
-- school_id refers to schools.school_id
-5. programs(**program_id**, program_name, total_credit)
-6. schools(**school_id**, school_name)
-7. courses(**course_id**, course_name, course_description, credit, tuition_per_credit, school_id):
-- school_id refers to schools.school_id
-8. classes(**class_id**, teacher_id, course_id, capacity, semester, enrolled_count, status, day_of_week, location):
-- teacher_id refers to teachers.teacher_id
-- course_id refers to courses.course_id
-9. enrollments(**student_id**, **class_id**, mid_term, final_term, pass):
-- student_id refers to students.student_id
-- class_id refers to classes.class_id
-
-## To-do
-1. Viết trigger để mỗi khi học sinh đăng kí hoặc đổi lớp trong enrollments, enrolled_count của các lớp bị ảnh hưởng được update.
-2. Viết trigger để set enrollments.pass = false nếu mid_term < 3 || final_term < 4, enrollments.pass = true trong các trường hợp còn lại. Nếu mid_term = null hoặc final_term = null thì enrollments.pass = null.
-3. Viết trigger để mỗi khi nhập điểm trong enrollments, cpa và accumulated_credit của sinh viên sẽ được update (cpa hệ 10, pass = false thì không tính cpa và accumulated_credit không tăng)
+## Stuff
+1. Tạo classes_view: enrolled_count.
+2. Tạo enrollments_view: pass = false nếu mid_term < 3 || final_term < 4, pass = true trong các trường hợp còn lại. Nếu mid_term = null hoặc final_term = null thì pass = null.
+3. Tạo students_view: cpa và accumulated_credit của sinh viên (cpa hệ 10, pass = false thì không tính cpa và accumulated_credit không tăng)
 4. Viết trigger để mỗi khi học sinh đăng kí lớp trong enrollments, học phí (debt) được tăng.
 5. Viết function để tính warning level của học sinh
 - warning level = 0 nếu trượt < 3 môn
@@ -39,8 +19,8 @@ A Nuxt project incorporating Drizzle ORM and PostgreSQL.
 
 7. Viết procedure để đăng kí lớp (input student_id và class_id), gọi function bài 6 để kiểm tra trước khi insert vào enrollment.
 8. Viết function để kiểm tra điều kiện tốt nghiệp: đạt 100% tín chỉ và hoàn thành các môn học, không tốt nghiệp ('enrolled') trong trường hợp còn lại.
-9. Viết trigger để gọi function 5 mỗi khi nhập điểm trong enrollments.
-10. Viết trigger để tính result = (mid_term + final_term)/2
+9. Tạo students_view: warning_level.
+10. Tạo enrollments_view: result (= avg(mid_term, final_term))
 
 ## Roles
 
@@ -90,7 +70,3 @@ git push origin main
 ```
 4. Go to your repo on github and make a pull request
 
-## Resources
-- Slides from class
-- https://docs.google.com/document/d/1z4kSNJSZIf1RW-bD8KXOEY1H9KFlgj76gJ6-m-EUyeE/edit?usp=sharing
-- https://github.com/hung9988/HUST-STUDENT-MANAGER/tree/main
