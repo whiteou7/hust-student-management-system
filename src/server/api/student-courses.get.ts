@@ -22,9 +22,9 @@ export default defineEventHandler (async (event) => {
         e.pass,
         co.credit
       FROM 
-        enrollments e
+        enrollments_view e
       JOIN 
-        classes c ON e.class_id = c.class_id
+        classes_view c ON e.class_id = c.class_id
       JOIN 
         courses co ON c.course_id = co.course_id
       WHERE 

@@ -21,10 +21,11 @@ A Nuxt project incorporating Drizzle ORM and PostgreSQL.
 8. Viết function để kiểm tra điều kiện tốt nghiệp: đạt 100% tín chỉ và hoàn thành các môn học, không tốt nghiệp ('enrolled') trong trường hợp còn lại.
 9. Tạo students_view: warning_level.
 10. Tạo enrollments_view: result (= avg(mid_term, final_term))
+11. Viết function tính gpa.
 
 ## Roles
 
-Tùng: Manager/code review/backend/frontend + exercise 3 + 10
+Tùng: Manager/code review/backend/frontend + exercise 3 + 10 + 11
 
 Vũ: 
 

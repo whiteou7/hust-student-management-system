@@ -23,11 +23,11 @@ export default defineEventHandler(async (event) => {
           e.result,
           e.pass
         FROM 
-          classes c
+          classes_view c
         JOIN 
-          enrollments e ON e.class_id = c.class_id
+          enrollments_view e ON e.class_id = c.class_id
         JOIN
-          students s ON e.student_id = s.student_id
+          students_view s ON e.student_id = s.student_id
         JOIN
           users u ON u.user_id = s.student_id
         WHERE 
@@ -56,4 +56,4 @@ export default defineEventHandler(async (event) => {
       students: null
     }
   }
-}) 
+})

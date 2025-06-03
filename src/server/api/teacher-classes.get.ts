@@ -23,7 +23,7 @@ export default defineEventHandler (async (event) => {
         c.location,
         CONCAT(c.enrolled_count::text, '/', c.capacity::text) as enrolled_count
       FROM 
-        classes c
+        classes_view c
       JOIN 
         courses co ON c.course_id = co.course_id
       WHERE 
@@ -44,7 +44,7 @@ export default defineEventHandler (async (event) => {
           END
         ) AS today_class_count
       FROM
-        classes c
+        classes_view c
       WHERE
         c.teacher_id = ${query.userId}
         AND c.semester = '${query.semester}';

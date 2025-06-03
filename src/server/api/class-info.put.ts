@@ -22,7 +22,6 @@ export default defineEventHandler(async (event) => {
           course_id = '${body.courseId}',
           capacity = ${body.capacity},
           semester = '${body.semester}',
-          enrolled_count = ${body.enrolledCount},
           status = '${body.status}',
           day_of_week = '${body.dayOfWeek}',
           location = '${body.location}'

@@ -21,9 +21,9 @@ export default defineEventHandler (async (event) => {
         e.final_term,
         e.result
       FROM 
-        enrollments e
+        enrollments_view e
       JOIN 
-        classes c ON e.class_id = c.class_id
+        classes_view c ON e.class_id = c.class_id
       JOIN 
         courses co ON c.course_id = co.course_id
       WHERE 
@@ -39,9 +39,9 @@ export default defineEventHandler (async (event) => {
         SUM(co.credit) as total_credit,
         COUNT(c.class_id) as class_count
       FROM
-        enrollments e
+        enrollments_view e
       JOIN
-        classes c ON c.class_id = e.class_id
+        classes_view c ON c.class_id = e.class_id
       JOIN
         courses co ON co.course_id = c.course_id
       WHERE

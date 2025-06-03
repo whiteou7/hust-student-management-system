@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  if (body.debt !== undefined) {
+  if (body.debt != undefined) {
     try {
       await db.execute(
         sql.raw(`

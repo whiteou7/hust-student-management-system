@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
         WHERE
           user_id = ${body.teacherId};
       `)
-    );
+    )
 
     return {
       success: true,

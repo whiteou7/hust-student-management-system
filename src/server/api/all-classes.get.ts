@@ -20,7 +20,7 @@ export default defineEventHandler(async () => {
           u.user_id,
           c.semester
         FROM 
-          classes c
+          classes_view c
         JOIN 
           courses co ON c.course_id = co.course_id
         JOIN 
@@ -51,4 +51,4 @@ export default defineEventHandler(async () => {
       classes: null
     }
   }
-}) 
+})

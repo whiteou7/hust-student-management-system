@@ -28,38 +28,22 @@ export default defineEventHandler(async (event) => {
           s.accumulated_credit,
           s.graduated,
           s.debt,
-          s.cpa,
+          ROUND(s.cpa, 2) as cpa,
           p.program_name,
           p.total_credit,
-          ROUND(AVG(e.result), 2) as gpa
+          ROUND(calculate_gpa(${query.studentId}, '${query.currentSemester}'), 2) as gpa
         FROM 
           users u
         JOIN 
-          students s ON u.user_id = s.student_id
+          students_view s ON u.user_id = s.student_id
         JOIN
           programs p ON s.program_id = p.program_id
         JOIN
-          enrollments e ON e.student_id = s.student_id
+          enrollments_view e ON e.student_id = s.student_id
         JOIN 
-          classes c ON c.class_id = e.class_id
+          classes_view c ON c.class_id = e.class_id
         WHERE 
-          u.user_id = ${query.studentId}
-          AND c.semester = '${query.currentSemester}'
-        GROUP BY
-          s.student_id,
-          u.first_name,
-          u.last_name,
-          u.email,
-          u.date_of_birth,
-          u.address,
-          s.enrolled_year,
-          s.warning_level,
-          s.accumulated_credit,
-          s.graduated,
-          s.debt,
-          s.cpa,
-          p.program_name,
-          p.total_credit;
+          u.user_id = ${query.studentId};
       `)
     )
 
@@ -86,4 +70,4 @@ export default defineEventHandler(async (event) => {
       studentInfo: null
     }
   }
-}) 
+})

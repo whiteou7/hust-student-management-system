@@ -91,9 +91,6 @@
           <UFormField class="block w-full mb-2" label="Semester" required>
             <UInput v-model="editClassForm.semester" class="w-full" />
           </UFormField>
-          <UFormField class="block w-full mb-2" label="Enrolled Count" required>
-            <UInput v-model="editClassForm.enrolledCount" type="number" class="w-full" />
-          </UFormField>
           <UFormField class="block w-full mb-2" label="Status" required>
             <UInput v-model="editClassForm.status" class="w-full" />
           </UFormField>
