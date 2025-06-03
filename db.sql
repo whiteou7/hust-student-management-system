@@ -71,24 +71,408 @@ CREATE TYPE public.role AS ENUM (
 ALTER TYPE public.role OWNER TO postgres;
 
 --
--- Name: update_result(); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: adjust_student_debt(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.update_result() RETURNS trigger
+CREATE FUNCTION public.adjust_student_debt() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$
-BEGIN
-    IF NEW.mid_term IS NULL OR NEW.final_term IS NULL THEN
-        NEW.result := NULL;
-    ELSE
-        NEW.result := ROUND((NEW.mid_term + NEW.final_term) / 2.0, 2);
-    END IF;
-    RETURN NEW;
-END;
+    AS $$
+DECLARE
+    old_debt NUMERIC := 0;
+    new_debt NUMERIC := 0;
+BEGIN
+    IF (TG_OP = 'INSERT') THEN
+        SELECT c.credit * c.tuition_per_credit
+        INTO new_debt
+        FROM classes cl
+        JOIN courses c ON cl.course_id = c.course_id
+        WHERE cl.class_id = NEW.class_id;
+
+        UPDATE students
+        SET debt = debt + new_debt
+        WHERE student_id = NEW.student_id;
+
+    ELSIF (TG_OP = 'DELETE') THEN
+        SELECT c.credit * c.tuition_per_credit
+        INTO old_debt
+        FROM classes cl
+        JOIN courses c ON cl.course_id = c.course_id
+        WHERE cl.class_id = OLD.class_id;
+
+        UPDATE students
+        SET debt = debt - old_debt
+        WHERE student_id = OLD.student_id;
+
+    ELSIF (TG_OP = 'UPDATE') THEN
+        -- Only act if class_id actually changed
+        IF (NEW.class_id <> OLD.class_id) THEN
+            SELECT c.credit * c.tuition_per_credit
+            INTO old_debt
+            FROM classes cl
+            JOIN courses c ON cl.course_id = c.course_id
+            WHERE cl.class_id = OLD.class_id;
+
+            SELECT c.credit * c.tuition_per_credit
+            INTO new_debt
+            FROM classes cl
+            JOIN courses c ON cl.course_id = c.course_id
+            WHERE cl.class_id = NEW.class_id;
+
+            UPDATE students
+            SET debt = debt - old_debt + new_debt
+            WHERE student_id = NEW.student_id;
+        END IF;
+    END IF;
+
+    RETURN NULL;
+END;
 $$;
 
 
-ALTER FUNCTION public.update_result() OWNER TO postgres;
+ALTER FUNCTION public.adjust_student_debt() OWNER TO postgres;
+
+--
+-- Name: calculate_accumulated_credit(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.calculate_accumulated_credit(student_id integer) RETURNS integer
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  total_credits INTEGER := 0;
+BEGIN
+  SELECT 
+    COALESCE(SUM(c.credit), 0)
+  INTO total_credits
+  FROM enrollments e
+  JOIN classes cl ON e.class_id = cl.class_id
+  JOIN courses c ON cl.course_id = c.course_id
+  WHERE e.student_id = calculate_accumulated_credit.student_id AND e.pass = TRUE;
+
+  RETURN total_credits;
+END;
+$$;
+
+
+ALTER FUNCTION public.calculate_accumulated_credit(student_id integer) OWNER TO postgres;
+
+--
+-- Name: calculate_cpa(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.calculate_cpa(student_id integer) RETURNS numeric
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  total_weighted_score NUMERIC := 0;
+  total_credits INTEGER := 0;
+  result NUMERIC := NULL;
+BEGIN
+  SELECT 
+    COALESCE(SUM(c.credit), 0),
+    COALESCE(SUM(c.credit * ((e.mid_term + e.final_term)/2.0)), 0)
+  INTO total_credits, total_weighted_score
+  FROM enrollments e
+  JOIN classes cl ON e.class_id = cl.class_id
+  JOIN courses c ON cl.course_id = c.course_id
+  WHERE e.student_id = calculate_cpa.student_id AND e.pass = TRUE;
+
+  IF total_credits > 0 THEN
+    result := total_weighted_score / total_credits;
+  END IF;
+
+  RETURN result;
+END;
+$$;
+
+
+ALTER FUNCTION public.calculate_cpa(student_id integer) OWNER TO postgres;
+
+--
+-- Name: calculate_pass_status(numeric, numeric); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.calculate_pass_status(mid_term numeric, final_term numeric) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+    pass_status BOOLEAN;
+BEGIN
+    IF mid_term IS NULL OR final_term IS NULL THEN
+        pass_status := NULL;
+    ELSIF mid_term < 3 OR final_term < 4 THEN
+        pass_status := FALSE;
+    ELSE
+        pass_status := TRUE;
+    END IF;
+    
+    RETURN pass_status;
+END;
+$$;
+
+
+ALTER FUNCTION public.calculate_pass_status(mid_term numeric, final_term numeric) OWNER TO postgres;
+
+--
+-- Name: calculate_result(numeric, numeric); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.calculate_result(mid_term numeric, final_term numeric) RETURNS numeric
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+    result NUMERIC;
+BEGIN
+    IF mid_term IS NULL OR final_term IS NULL THEN
+        result := NULL;
+    ELSE
+        result := ROUND((mid_term + final_term) / 2.0, 2);
+    END IF;
+    RETURN result;
+END;
+$$;
+
+
+ALTER FUNCTION public.calculate_result(mid_term numeric, final_term numeric) OWNER TO postgres;
+
+--
+-- Name: calculate_student_warning_level(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.calculate_student_warning_level(p_student_id integer) RETURNS integer
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+    v_failed_courses_count INT;
+    v_warning_level INT;
+BEGIN
+    -- Tính số lượng môn học (course_id) mà sinh viên đã trượt.
+    -- Một môn học được coi là trượt nếu sinh viên KHÔNG có bất kỳ bản ghi đăng ký nào
+    -- cho môn học đó với trạng thái 'pass = TRUE'
+    -- VÀ có ÍT NHẤT MỘT bản ghi đăng ký cho môn học đó với trạng thái 'pass = FALSE'.
+    WITH StudentDistinctCourses AS (
+        -- Lấy tất cả các mã môn học (course_id) riêng biệt mà sinh viên đã đăng ký
+        SELECT DISTINCT cls.course_id
+        FROM public.enrollments enr
+        JOIN public.classes cls ON enr.class_id = cls.class_id
+        WHERE enr.student_id = p_student_id
+    )
+    SELECT COUNT(sdc.course_id)
+    INTO v_failed_courses_count
+    FROM StudentDistinctCourses sdc
+    WHERE
+        -- Điều kiện 1: Sinh viên không có bản ghi nào là 'pass = TRUE' cho môn học này
+        NOT EXISTS (
+            SELECT 1
+            FROM public.enrollments e_pass
+            JOIN public.classes c_pass ON e_pass.class_id = c_pass.class_id
+            WHERE e_pass.student_id = p_student_id
+              AND c_pass.course_id = sdc.course_id
+              AND e_pass.pass = TRUE
+        )
+        -- Điều kiện 2: Sinh viên có ít nhất một bản ghi là 'pass = FALSE' cho môn học này
+        -- Điều này để phân biệt với trường hợp môn học chưa có điểm hoặc đang học (pass vẫn là default false)
+        -- mà thực sự đã có kết quả là trượt.
+        AND EXISTS (
+            SELECT 1
+            FROM public.enrollments e_fail
+            JOIN public.classes c_fail ON e_fail.class_id = c_fail.class_id
+            WHERE e_fail.student_id = p_student_id
+              AND c_fail.course_id = sdc.course_id
+              AND e_fail.pass = FALSE
+        );
+
+    -- Xác định warning level dựa trên số môn trượt
+    IF v_failed_courses_count < 3 THEN
+        v_warning_level := 0; -- 0, 1, 2 môn trượt
+    ELSIF v_failed_courses_count < 6 THEN
+        v_warning_level := 1; -- 3, 4, 5 môn trượt
+    ELSIF v_failed_courses_count < 9 THEN
+        v_warning_level := 2; -- 6, 7, 8 môn trượt
+    ELSE
+        v_warning_level := 2; -- Từ 9 môn trượt trở lên, vẫn là mức 2 (theo cách hiểu đề bài "<9 môn" cho mức 2)
+    END IF;
+
+    RETURN v_warning_level;
+END;
+$$;
+
+
+ALTER FUNCTION public.calculate_student_warning_level(p_student_id integer) OWNER TO postgres;
+
+--
+-- Name: check_enrollment_eligibility(integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.check_enrollment_eligibility(p_student_id integer, p_class_id integer) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+    v_warning_level INTEGER;
+    v_current_credits INTEGER;
+    v_class_capacity INTEGER;
+    v_enrolled_count INTEGER;
+    v_class_status TEXT;
+    v_course_credit INTEGER;
+    v_max_allowed_credits INTEGER;
+    v_total_program_credits INTEGER;
+BEGIN
+    /* 
+    Lấy mức cảnh báo của sinh viên
+    0: Không cảnh báo
+    1: Cảnh báo nhẹ (giới hạn 75% tín chỉ)
+    2: Cảnh báo nặng (giới hạn 50% tín chỉ)
+    */
+    SELECT warning_level INTO v_warning_level
+    FROM students
+    WHERE student_id = p_student_id;
+    
+    -- Lấy thông tin sức chứa, số lượng đã đăng ký, trạng thái và số tín chỉ của lớp
+    SELECT c.capacity, c.enrolled_count, c.status, cr.credit
+    INTO v_class_capacity, v_enrolled_count, v_class_status, v_course_credit
+    FROM classes c
+    JOIN courses cr ON c.course_id = cr.course_id
+    WHERE c.class_id = p_class_id;
+    
+    -- Kiểm tra điều kiện cơ bản: lớp còn chỗ và đang mở đăng ký
+    IF v_enrolled_count >= v_class_capacity OR v_class_status != 'open' THEN
+        RETURN FALSE;
+    END IF;
+    
+    -- Tính tổng số tín chỉ sinh viên đã đăng ký trong học kỳ hiện tại
+    SELECT COALESCE(SUM(cr.credit), 0) INTO v_current_credits
+    FROM enrollments e
+    JOIN classes cl ON e.class_id = cl.class_id
+    JOIN courses cr ON cl.course_id = cr.course_id
+    WHERE e.student_id = p_student_id AND cl.semester = (
+        SELECT semester FROM classes WHERE class_id = p_class_id
+    );
+    
+    -- Lấy tổng số tín chỉ yêu cầu của chương trình học
+    SELECT total_credit INTO v_total_program_credits
+    FROM programs
+    WHERE program_id = (SELECT program_id FROM students WHERE student_id = p_student_id);
+    
+    -- Xác định số tín chỉ tối đa được đăng ký dựa trên mức cảnh báo
+    CASE v_warning_level
+        WHEN 0 THEN v_max_allowed_credits := v_total_program_credits; -- Không giới hạn
+        WHEN 1 THEN v_max_allowed_credits := CEIL(v_total_program_credits * 0.75); -- Giới hạn 75%
+        WHEN 2 THEN v_max_allowed_credits := CEIL(v_total_program_credits * 0.5); -- Giới hạn 50%
+        ELSE RETURN FALSE; -- Mức cảnh báo không hợp lệ
+    END CASE;
+    
+    -- Kiểm tra nếu đăng ký thêm sẽ vượt quá giới hạn tín chỉ
+    IF (v_current_credits + v_course_credit) > v_max_allowed_credits THEN
+        RETURN FALSE;
+    END IF;
+    
+    -- Nếu tất cả điều kiện đều thỏa mãn
+    RETURN TRUE;
+END;
+$$;
+
+
+ALTER FUNCTION public.check_enrollment_eligibility(p_student_id integer, p_class_id integer) OWNER TO postgres;
+
+--
+-- Name: check_graduation_status(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.check_graduation_status(p_student_id integer) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+    v_program_id INT;
+    v_completed_course INT;
+    v_total_course INT;
+    v_completed_credit INT;
+    v_total_credit INT;
+BEGIN
+    -- Get the student's program ID
+    SELECT program_id INTO v_program_id
+    FROM students
+    WHERE student_id = p_student_id;
+    RAISE NOTICE 'program_id = %', v_program_id;
+
+    -- Count distinct completed courses that are part of program requirements
+    SELECT COUNT(DISTINCT c.course_id) INTO v_completed_course
+    FROM enrollments e
+    JOIN classes c ON e.class_id = c.class_id
+    RIGHT JOIN program_requirements pr ON pr.course_id = c.course_id
+    WHERE e.student_id = p_student_id
+      AND e.pass = TRUE;
+    RAISE NOTICE 'completed_course = %', v_completed_course;
+
+    -- Get total required courses in the program
+    SELECT COUNT(course_id) INTO v_total_course
+    FROM program_requirements
+    WHERE program_id = v_program_id;
+    RAISE NOTICE 'total_course = %', v_total_course;
+
+    -- Get total completed credits, avoiding duplicate course_ids
+    SELECT SUM(DISTINCT co.credit) INTO v_completed_credit
+    FROM enrollments e
+    JOIN classes c ON e.class_id = c.class_id
+    JOIN courses co ON co.course_id = c.course_id
+    WHERE e.student_id = p_student_id
+      AND e.pass = TRUE;
+    RAISE NOTICE 'completed_credit = %', v_completed_credit;
+
+    -- Get the required total credit for the program
+    SELECT total_credit INTO v_total_credit
+    FROM programs
+    WHERE program_id = v_program_id;
+    RAISE NOTICE 'total_credit = %', v_total_credit;
+
+    -- Return graduation status
+    RETURN v_completed_course = v_total_course
+           AND v_completed_credit >= v_total_credit;
+END;
+$$;
+
+
+ALTER FUNCTION public.check_graduation_status(p_student_id integer) OWNER TO postgres;
+
+--
+-- Name: enroll_student_in_class(integer, integer); Type: PROCEDURE; Schema: public; Owner: postgres
+--
+
+CREATE PROCEDURE public.enroll_student_in_class(IN p_student_id integer, IN p_class_id integer)
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+    v_eligible BOOLEAN;
+BEGIN
+    /* 
+    Kiểm tra sinh viên có đủ điều kiện đăng ký không
+    Sử dụng function check_enrollment_eligibility đã tạo ở trên
+    */
+    v_eligible := check_enrollment_eligibility(p_student_id, p_class_id);
+    
+    -- Nếu không đủ điều kiện, báo lỗi
+    IF NOT v_eligible THEN
+        RAISE EXCEPTION 'Student does not meet enrollment requirements for this class';
+    END IF;
+    
+    -- Bắt đầu transaction để đảm bảo tính toàn vẹn dữ liệu
+    BEGIN
+        -- Thêm bản ghi đăng ký vào bảng enrollments
+        INSERT INTO enrollments (student_id, class_id, mid_term, final_term, pass)
+        VALUES (p_student_id, p_class_id, NULL, NULL, NULL);
+        
+        -- Xác nhận transaction nếu thành công
+        COMMIT;
+    EXCEPTION
+        WHEN OTHERS THEN
+            -- Rollback nếu có lỗi xảy ra
+            ROLLBACK;
+            RAISE EXCEPTION 'Enrollment failed: %', SQLERRM;
+    END;
+END;
+$$;
+
+
+ALTER PROCEDURE public.enroll_student_in_class(IN p_student_id integer, IN p_class_id integer) OWNER TO postgres;
 
 SET default_tablespace = '';
 
@@ -100,11 +484,10 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.classes (
     class_id integer NOT NULL,
-    teacher_id integer NOT NULL,
+    teacher_id integer,
     course_id character varying(6) NOT NULL,
     capacity integer DEFAULT 0 NOT NULL,
     semester character varying NOT NULL,
-    enrolled_count integer DEFAULT 0 NOT NULL,
     status public.class_status NOT NULL,
     day_of_week public.day_of_week NOT NULL,
     location text NOT NULL
@@ -136,6 +519,25 @@ ALTER SEQUENCE public.classes_class_id_seq OWNED BY public.classes.class_id;
 
 
 --
+-- Name: classes_view; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public.classes_view AS
+SELECT
+    NULL::integer AS class_id,
+    NULL::integer AS teacher_id,
+    NULL::character varying(6) AS course_id,
+    NULL::integer AS capacity,
+    NULL::character varying AS semester,
+    NULL::public.class_status AS status,
+    NULL::public.day_of_week AS day_of_week,
+    NULL::text AS location,
+    NULL::bigint AS enrolled_count;
+
+
+ALTER VIEW public.classes_view OWNER TO postgres;
+
+--
 -- Name: courses; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -158,16 +560,42 @@ ALTER TABLE public.courses OWNER TO postgres;
 CREATE TABLE public.enrollments (
     student_id integer NOT NULL,
     class_id integer NOT NULL,
-    mid_term numeric(3,2),
-    final_term numeric(3,2),
-    pass boolean DEFAULT false NOT NULL,
-    result numeric(3,2),
+    mid_term numeric(4,2),
+    final_term numeric(4,2),
     CONSTRAINT check_final_term CHECK (((final_term IS NULL) OR ((final_term >= 0.00) AND (final_term <= 10.00)))),
     CONSTRAINT check_mid_term CHECK (((mid_term IS NULL) OR ((mid_term >= 0.00) AND (mid_term <= 10.00))))
 );
 
 
 ALTER TABLE public.enrollments OWNER TO postgres;
+
+--
+-- Name: enrollments_view; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public.enrollments_view AS
+ SELECT student_id,
+    class_id,
+    mid_term,
+    final_term,
+    public.calculate_result(mid_term, final_term) AS result,
+    public.calculate_pass_status(mid_term, final_term) AS pass
+   FROM public.enrollments;
+
+
+ALTER VIEW public.enrollments_view OWNER TO postgres;
+
+--
+-- Name: program_requirements; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.program_requirements (
+    program_id integer,
+    course_id character varying(6)
+);
+
+
+ALTER TABLE public.program_requirements OWNER TO postgres;
 
 --
 -- Name: programs; Type: TABLE; Schema: public; Owner: postgres
@@ -239,40 +667,6 @@ ALTER SEQUENCE public.schools_school_id_seq OWNED BY public.schools.school_id;
 
 
 --
--- Name: sessions; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.sessions (
-    session_id integer NOT NULL,
-    user_id integer NOT NULL
-);
-
-
-ALTER TABLE public.sessions OWNER TO postgres;
-
---
--- Name: sessions_session_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.sessions_session_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.sessions_session_id_seq OWNER TO postgres;
-
---
--- Name: sessions_session_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.sessions_session_id_seq OWNED BY public.sessions.session_id;
-
-
---
 -- Name: students; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -280,15 +674,30 @@ CREATE TABLE public.students (
     student_id integer NOT NULL,
     program_id integer NOT NULL,
     enrolled_year integer NOT NULL,
-    warning_level integer DEFAULT 0,
-    accumulated_credit integer DEFAULT 0,
     graduated public.graduation_status DEFAULT 'enrolled'::public.graduation_status,
-    debt integer DEFAULT 0,
-    cpa numeric(3,2) DEFAULT 0.00
+    debt integer DEFAULT 0
 );
 
 
 ALTER TABLE public.students OWNER TO postgres;
+
+--
+-- Name: students_view; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public.students_view AS
+ SELECT student_id,
+    program_id,
+    enrolled_year,
+    graduated,
+    debt,
+    public.calculate_student_warning_level(student_id) AS warning_level,
+    public.calculate_accumulated_credit(student_id) AS accumulated_credit,
+    public.calculate_cpa(student_id) AS cpa
+   FROM public.students;
+
+
+ALTER VIEW public.students_view OWNER TO postgres;
 
 --
 -- Name: teachers; Type: TABLE; Schema: public; Owner: postgres
@@ -298,7 +707,9 @@ CREATE TABLE public.teachers (
     teacher_id integer NOT NULL,
     school_id integer NOT NULL,
     hired_year integer,
-    qualification character varying
+    qualification character varying,
+    profession character varying,
+    "position" character varying
 );
 
 
@@ -366,13 +777,6 @@ ALTER TABLE ONLY public.schools ALTER COLUMN school_id SET DEFAULT nextval('publ
 
 
 --
--- Name: sessions session_id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.sessions ALTER COLUMN session_id SET DEFAULT nextval('public.sessions_session_id_seq'::regclass);
-
-
---
 -- Name: users user_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -383,10 +787,11 @@ ALTER TABLE ONLY public.users ALTER COLUMN user_id SET DEFAULT nextval('public.u
 -- Data for Name: classes; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.classes (class_id, teacher_id, course_id, capacity, semester, enrolled_count, status, day_of_week, location) FROM stdin;
-2	32	CS0102	30	2024.2	1	open	Tuesday	Room 102
-3	53	BU0309	30	2024.2	1	open	Saturday	Room 202
-1	9	CS0101	30	2024.2	1	open	Monday	Room 101
+COPY public.classes (class_id, teacher_id, course_id, capacity, semester, status, day_of_week, location) FROM stdin;
+3	2	BU0309	30	2024.2	open	Saturday	Room 202
+1	2	CS0101	30	2024.2	open	Monday	Room 101
+4	9	CS0103	30	2023.2	open	Friday	Room 101
+2	9	CS0102	30	2024.2	open	Tuesday	Room 102
 \.
 
 
@@ -395,7 +800,6 @@ COPY public.classes (class_id, teacher_id, course_id, capacity, semester, enroll
 --
 
 COPY public.courses (course_id, course_name, credit, tuition_per_credit, school_id, course_description) FROM stdin;
-CS101	Intro to Programming	3	500	1	\N
 CS0101	Introduction to Programming	3	100	1	Covers programming basics using a modern language. Learn variables, loops, functions, and problem-solving.
 CS0102	Data Structures	4	120	1	Introduces arrays, stacks, queues, linked lists, trees, and graphs for data organization.
 CS0103	Algorithms	4	130	1	Focuses on algorithm design, analysis, and optimization techniques including sorting and searching.
@@ -446,6 +850,7 @@ PH0507	Optics	3	115	5	Covers the principles of light, reflection, refraction, an
 PH0508	Particle Physics	4	150	5	Studies the particles and forces that compose matter at subatomic levels.
 PH0509	Solid State Physics	4	135	5	Explores properties and behaviors of solids, including crystals and semiconductors.
 PH0510	Computational Physics	3	120	5	Application of numerical and computational methods to physics problems.
+CS0100	Object Oriented Programming	4	100	1	Object Oriented Programming.
 \.
 
 
@@ -453,10 +858,22 @@ PH0510	Computational Physics	3	120	5	Application of numerical and computational 
 -- Data for Name: enrollments; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.enrollments (student_id, class_id, mid_term, final_term, pass, result) FROM stdin;
-1	1	8.50	8.50	t	8.50
-1	2	5.00	\N	f	\N
-1	3	8.00	\N	t	\N
+COPY public.enrollments (student_id, class_id, mid_term, final_term) FROM stdin;
+1	1	6.00	9.00
+1	3	6.00	9.00
+1	2	6.00	3.00
+1	4	6.00	3.00
+2	1	6.00	7.00
+\.
+
+
+--
+-- Data for Name: program_requirements; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.program_requirements (program_id, course_id) FROM stdin;
+1	CS0101
+1	CS0102
 \.
 
 
@@ -466,6 +883,7 @@ COPY public.enrollments (student_id, class_id, mid_term, final_term, pass, resul
 
 COPY public.programs (program_id, program_name, total_credit) FROM stdin;
 1	Computer Science	120
+2	Computer Engineering	120
 \.
 
 
@@ -474,64 +892,11 @@ COPY public.programs (program_id, program_name, total_credit) FROM stdin;
 --
 
 COPY public.schools (school_id, school_name) FROM stdin;
-1	School of Engineering
 2	School of Engineering
 3	School of Business
 4	School of Language
 5	School of Physics
-\.
-
-
---
--- Data for Name: sessions; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.sessions (session_id, user_id) FROM stdin;
-1	1
-2	1
-3	1
-4	1
-5	1
-6	1
-7	1
-8	1
-9	1
-10	1
-11	1
-12	1
-13	1
-14	1
-15	1
-16	1
-17	1
-18	1
-19	1
-20	1
-21	1
-22	1
-23	1
-24	1
-25	1
-26	1
-27	1
-28	1
-29	1
-30	1
-31	1
-32	1
-33	1
-34	1
-35	1
-36	1
-37	1
-38	1
-39	1
-40	1
-41	1
-42	1
-43	1
-44	1
-45	1
+1	School of Information Technology
 \.
 
 
@@ -539,8 +904,9 @@ COPY public.sessions (session_id, user_id) FROM stdin;
 -- Data for Name: students; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.students (student_id, program_id, enrolled_year, warning_level, accumulated_credit, graduated, debt, cpa) FROM stdin;
-1	1	2022	0	0	enrolled	0	0.00
+COPY public.students (student_id, program_id, enrolled_year, graduated, debt) FROM stdin;
+2	2	2020	enrolled	300
+1	1	2022	enrolled	300
 \.
 
 
@@ -548,10 +914,11 @@ COPY public.students (student_id, program_id, enrolled_year, warning_level, accu
 -- Data for Name: teachers; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.teachers (teacher_id, school_id, hired_year, qualification) FROM stdin;
-9	1	2015	PhD
-32	1	2020	PhD
-53	2	2023	PhD
+COPY public.teachers (teacher_id, school_id, hired_year, qualification, profession, "position") FROM stdin;
+9	1	2015	PhD	Mathematics	Teacher
+32	1	2020	PhD	Mathematics	Secretary
+53	2	2023	PhD	Mathematics	Secretary
+2	1	2025	PhD	Mathematics	Teacher
 \.
 
 
@@ -560,7 +927,6 @@ COPY public.teachers (teacher_id, school_id, hired_year, qualification) FROM std
 --
 
 COPY public.users (user_id, first_name, last_name, email, password, role, date_of_birth, address) FROM stdin;
-2	Devon	Griffen	\N	wS8!+v6WlGTOS	student	\N	\N
 3	Darci	Armall	\N	\N	student	\N	\N
 4	Portie	Vedeneev	pvedeneev2@meetup.com	\N	student	\N	\N
 5	Maddie	Joist	\N	rX1('PO!n>	student	\N	\N
@@ -760,6 +1126,7 @@ COPY public.users (user_id, first_name, last_name, email, password, role, date_o
 199	Cosetta	Trye	\N	\N	student	\N	\N
 200	Sandy	Corwin	\N	hP6}~nnXx+`<l3	student	\N	\N
 201	Myrvyn	Broe	mbroe5j@loc.gov	\N	student	\N	\N
+2	Devon	Griffen	teacher@g.com	123456	teacher	2005-01-26	Tieu vuong quoc 36
 1	John	Doe	fps4day@gmail.com	123456	student	2005-01-05	Tieu vuong quoc 36
 \.
 
@@ -786,13 +1153,6 @@ SELECT pg_catalog.setval('public.schools_school_id_seq', 1, true);
 
 
 --
--- Name: sessions_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.sessions_session_id_seq', 45, true);
-
-
---
 -- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -816,6 +1176,14 @@ ALTER TABLE ONLY public.courses
 
 
 --
+-- Name: program_requirements program_course_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.program_requirements
+    ADD CONSTRAINT program_course_unique UNIQUE (program_id, course_id);
+
+
+--
 -- Name: programs programs_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -829,14 +1197,6 @@ ALTER TABLE ONLY public.programs
 
 ALTER TABLE ONLY public.schools
     ADD CONSTRAINT schools_pkey PRIMARY KEY (school_id);
-
-
---
--- Name: sessions sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.sessions
-    ADD CONSTRAINT sessions_pkey PRIMARY KEY (session_id);
 
 
 --
@@ -880,10 +1240,29 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: enrollments trg_update_result; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: classes_view _RETURN; Type: RULE; Schema: public; Owner: postgres
 --
 
-CREATE TRIGGER trg_update_result BEFORE INSERT OR UPDATE ON public.enrollments FOR EACH ROW EXECUTE FUNCTION public.update_result();
+CREATE OR REPLACE VIEW public.classes_view AS
+ SELECT c.class_id,
+    c.teacher_id,
+    c.course_id,
+    c.capacity,
+    c.semester,
+    c.status,
+    c.day_of_week,
+    c.location,
+    count(e.student_id) AS enrolled_count
+   FROM (public.classes c
+     JOIN public.enrollments e ON ((e.class_id = c.class_id)))
+  GROUP BY c.class_id;
+
+
+--
+-- Name: enrollments trg_adjust_student_debt; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER trg_adjust_student_debt AFTER INSERT OR DELETE OR UPDATE ON public.enrollments FOR EACH ROW EXECUTE FUNCTION public.adjust_student_debt();
 
 
 --
@@ -927,11 +1306,19 @@ ALTER TABLE ONLY public.enrollments
 
 
 --
--- Name: sessions sessions_user_id_users_user_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: program_requirements program_requirements_course_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.sessions
-    ADD CONSTRAINT sessions_user_id_users_user_id_fk FOREIGN KEY (user_id) REFERENCES public.users(user_id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.program_requirements
+    ADD CONSTRAINT program_requirements_course_id_fkey FOREIGN KEY (course_id) REFERENCES public.courses(course_id);
+
+
+--
+-- Name: program_requirements program_requirements_program_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.program_requirements
+    ADD CONSTRAINT program_requirements_program_id_fkey FOREIGN KEY (program_id) REFERENCES public.programs(program_id);
 
 
 --
