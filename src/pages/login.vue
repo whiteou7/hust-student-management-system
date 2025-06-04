@@ -60,8 +60,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       localStorage.setItem("role", "teacher")
       router.push("/teacher/dashboard")
     } else {
-      localStorage.setItem("role", "admin")
-      router.push("/admin/dashboard")
+      localStorage.setItem("role", "manager")
+      router.push("/manager/dashboard")
     }
   } else {
     errorMsg.value = "Wrong credentials. Please try again."

@@ -112,6 +112,10 @@
 </template>
 
 <script setup>
+definePageMeta({
+  layout: "manager"
+})
+
 const UButton = resolveComponent("UButton")
 const selectedCourse = ref({})
 const selectedClass = ref({})

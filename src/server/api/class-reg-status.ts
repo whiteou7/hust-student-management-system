@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     return json
   }
 
-  if (method === "POST") {
+  if (method === "PUT") {
     const body = await readBody(event)
 
     if (typeof body.classRegStatus !== "boolean") {
