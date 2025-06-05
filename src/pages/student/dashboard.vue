@@ -149,7 +149,6 @@ function getRowItems(row) {
         }
 
         if (classInfoRes.value.success) {
-          console.log(classInfoRes.value.classInfo)
           modal.open({ classInfo: classInfoRes.value.classInfo })
         } else {
           errorMsg.value = classInfoRes.value?.err || "Failed to fetch class information"

@@ -88,7 +88,26 @@ const items: DropdownMenuItem[][] = [
     },
     {
       label: "Class Registration",
-      icon: "i-lucide-book-open-text"
+      icon: "i-lucide-book-open-text",
+      async onSelect() {
+        const { data: statusData } = await useFetch("/api/class-reg-status")
+
+        if (!statusData || !statusData.value) {
+          toast.add({ 
+            title: "Error", 
+            description: "This is not the time for class registration!",
+            color: "error"
+          })
+          return
+        }
+        const role = localStorage.getItem("role")
+
+        if (role == "student") {
+          router.push("/student/class-registration")
+        } else {
+          router.push("/teacher/class-registration")
+        }
+      }
     },
     {
       label: "View All Courses",

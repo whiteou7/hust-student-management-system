@@ -72,9 +72,6 @@
       </template>
       <UForm :state="editClassForm" @submit="handleEditClass">
         <div class="max-w-md mx-auto flex flex-col space-y-4">
-          <UFormField class="block w-full mb-2" label="Class ID" required>
-            <UInput v-model="editClassForm.classId" class="w-full" />
-          </UFormField>
           <UFormField class="block w-full mb-2" label="Teacher" required>
             <USelect
               v-model="editClassForm.teacherId"
@@ -92,7 +89,11 @@
             <UInput v-model="editClassForm.semester" class="w-full" />
           </UFormField>
           <UFormField class="block w-full mb-2" label="Status" required>
-            <UInput v-model="editClassForm.status" class="w-full" />
+            <USelect
+              v-model="editClassForm.status"
+              :items="classStatusOptions"
+              class="w-full"
+            />
           </UFormField>
           <UFormField class="block w-full mb-2" label="Day of Week" required>
             <UInput v-model="editClassForm.dayOfWeek" class="w-full" />
@@ -239,6 +240,10 @@ const teacherOptions = computed(() =>
     value: teacher.teacher_id
   }))
 )
+const classStatusOptions = [
+  { label: "Open", value: "open" },
+  { label: "Closed", value: "closed" }
+]
 
 // Watch selectedCourse to update form
 watch(selectedCourse, (newValue) => {
@@ -261,7 +266,6 @@ watch(selectedCourse, (newValue) => {
 watch(selectedClass, (newValue) => {
   if (newValue) {
     editClassForm.value = {
-      classId: newValue.class_id,
       teacherId: teachers.value.find(t => t.full_name === newValue.full_name)?.teacher_id || "",
       courseId: newValue.course_id,
       capacity: newValue.capacity,
@@ -340,6 +344,15 @@ function cancelEditClass() {
   editClassForm.value = {}
 }
 
+async function refetchAll() {
+  await Promise.all([
+    fetchCourses(),
+    fetchClasses(),
+    fetchSchools(),
+    fetchTeachers()
+  ])
+}
+
 async function handleEditCourse() {
   try {
     const isEdit = !!selectedCourse.value && !!selectedCourse.value.course_id
@@ -348,7 +361,7 @@ async function handleEditCourse() {
       body: editCourseForm.value
     })
     if (response.data.value?.success) {
-      await fetchCourses()
+      await refetchAll()
       toast.add({
         title: "Success",
         description: isEdit ? "Course updated successfully" : "Course added successfully",
@@ -381,7 +394,7 @@ async function handleEditClass() {
       body: editClassForm.value
     })
     if (response.data.value?.success) {
-      await fetchClasses()
+      await refetchAll()
       toast.add({
         title: "Success",
         description: isEdit ? "Class updated successfully" : "Class added successfully",
@@ -413,7 +426,7 @@ async function handleDeleteCourse() {
       body: { courseId: editCourseForm.value.courseId }
     })
     if (response.data.value?.success) {
-      await fetchCourses()
+      await refetchAll()
       toast.add({
         title: "Success",
         description: "Course deleted successfully",
@@ -445,7 +458,7 @@ async function handleDeleteClass() {
       body: { classId: editClassForm.value.classId }
     })
     if (response.data.value?.success) {
-      await fetchClasses()
+      await refetchAll()
       toast.add({
         title: "Success",
         description: "Class deleted successfully",
