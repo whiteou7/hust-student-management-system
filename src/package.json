@@ -24,7 +24,7 @@
     "drizzle-orm": "^0.43.1",
     "eslint": "^9.28.0",
     "js-cookie": "^3.0.5",
-    "nuxt": "^3.17.3",
+    "nuxt": "^3.17.0",
     "pg": "^8.16.0",
     "postgres": "^3.4.5",
     "typescript": "^5.8.3",
