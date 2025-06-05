@@ -72,7 +72,7 @@
       </template>
       <UForm :state="editClassForm" @submit="handleEditClass">
         <div class="max-w-md mx-auto flex flex-col space-y-4">
-          <UFormField class="block w-full mb-2" label="Teacher" required>
+          <UFormField class="block w-full mb-2" label="Teacher">
             <USelect
               v-model="editClassForm.teacherId"
               :items="teacherOptions"

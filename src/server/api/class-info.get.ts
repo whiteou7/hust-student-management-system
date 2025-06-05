@@ -32,9 +32,9 @@ export default defineEventHandler(async (event) => {
           classes_view c
         JOIN 
           courses co ON c.course_id = co.course_id
-        JOIN 
+        LEFT JOIN 
           teachers t ON c.teacher_id = t.teacher_id
-        JOIN 
+        LEFT JOIN 
           users u ON t.teacher_id = u.user_id
         WHERE 
           c.class_id = ${query.classId};

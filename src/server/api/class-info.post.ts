@@ -4,11 +4,15 @@ import { db_user as db } from "../../drizzle/db"
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
-  if (!body.teacherId || !body.courseId || !body.capacity || !body.semester || !body.status || !body.dayOfWeek || !body.location) {
+  if (!body.courseId || !body.capacity || !body.semester || !body.status || !body.dayOfWeek || !body.location) {
     return {
       success: false,
       err: "Missing required fields"
     }
+  }
+
+  if (!body.teacherId) {
+    body.teacherId = "NULL"
   }
 
   try {
