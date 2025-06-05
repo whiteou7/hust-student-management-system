@@ -7,9 +7,13 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare && npm rebuild",
+    "postinstall": "npm rebuild --platform=linux --arch=x64",
     "lint": "eslint . --ext .js,.ts,.vue",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "engines": {
+      "node": "18.x",
+      "npm": ">=8.0.0"
+    }
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
