@@ -348,7 +348,6 @@ function getRowItems(row) {
         }
 
         if (courseInfoData.value.success) {
-          console.log(courseInfoData.value.courseInfo)
           modal.open({ courseInfo: courseInfoData.value.courseInfo })
         } else {
           toast.add({
@@ -401,6 +400,8 @@ async function payTuition() {
     description: "Tuition paid successfully.",
     color: "success"
   })
+
+  student.value.debt = 0
 }
 
 // Fetch student info

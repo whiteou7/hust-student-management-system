@@ -1,68 +1,73 @@
 <template>
   <div class="p-6">
-    <!-- Available Classes Table -->
-    <UCard class="mb-8">
-      <template #header>
-        <div class="flex items-center justify-between">
-          <h2 class="text-xl font-semibold">Available Classes for Registration</h2>
-        </div>
-      </template>
-      <div class="mb-4 flex items-center gap-4">
-        <UInput
-          v-model="searchAvailable"
-          variant="subtle"
-          placeholder="Search classes..."
-          icon="i-heroicons-magnifying-glass"
-          class="w-64"
-        />
-        <USelect
-          v-model="filterAvailable"
-          variant="subtle"
-          :items="filterItems"
-          placeholder="Filter by day"
-          class="w-40"
-        />
-      </div>
-      <UTable
-        sticky
-        :columns="columns"
-        :data="filteredAvailableClasses"
-      />
-    </UCard>
-
-    <!-- Enrolled Classes Table -->
-    <UCard>
-      <template #header>
-        <div class="flex items-center justify-between">
-          <h2 class="text-xl font-semibold">Enrolled Classes</h2>
-        </div>
-      </template>
-      <div class="mb-4 flex items-center gap-4">
-        <UInput
-          v-model="searchEnrolled"
-          variant="subtle"
-          placeholder="Search classes..."
-          icon="i-heroicons-magnifying-glass"
-          class="w-64"
-        />
-        <USelect
-          v-model="filterEnrolled"
-          variant="subtle"
-          :items="filterItems"
-          placeholder="Filter by day"
-          class="w-40"
-        />
-      </div>
-      <UTable
-        sticky
-        :columns="enrolledColumns"
-        :data="filteredEnrolledClasses"
-      />
-    </UCard>
-
-    <div v-if="errorMsg" class="text-red-500 text-center mt-4">
-      {{ errorMsg }}
+    <div v-if="!classRegStatus" class="text-center text-xl text-red-600 font-bold py-20">
+      This is not the period for class registration
     </div>
+    <template v-else>
+      <!-- Available Classes Table -->
+      <UCard class="mb-8">
+        <template #header>
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-semibold">Available Classes for Registration</h2>
+          </div>
+        </template>
+        <div class="mb-4 flex items-center gap-4">
+          <UInput
+            v-model="searchAvailable"
+            variant="subtle"
+            placeholder="Search classes..."
+            icon="i-heroicons-magnifying-glass"
+            class="w-64"
+          />
+          <USelect
+            v-model="filterAvailable"
+            variant="subtle"
+            :items="filterItems"
+            placeholder="Filter by day"
+            class="w-40"
+          />
+        </div>
+        <UTable
+          sticky
+          :columns="columns"
+          :data="filteredAvailableClasses"
+        />
+      </UCard>
+
+      <!-- Enrolled Classes Table -->
+      <UCard>
+        <template #header>
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-semibold">Enrolled Classes</h2>
+          </div>
+        </template>
+        <div class="mb-4 flex items-center gap-4">
+          <UInput
+            v-model="searchEnrolled"
+            variant="subtle"
+            placeholder="Search classes..."
+            icon="i-heroicons-magnifying-glass"
+            class="w-64"
+          />
+          <USelect
+            v-model="filterEnrolled"
+            variant="subtle"
+            :items="filterItems"
+            placeholder="Filter by day"
+            class="w-40"
+          />
+        </div>
+        <UTable
+          sticky
+          :columns="enrolledColumns"
+          :data="filteredEnrolledClasses"
+        />
+      </UCard>
+
+      <div v-if="errorMsg" class="text-red-500 text-center mt-4">
+        {{ errorMsg }}
+      </div>
+    </template>
   </div>
 </template>
 
@@ -180,6 +185,7 @@ const filterItems = ref([
 ])
 
 const userId = localStorage.getItem("userId")
+const classRegStatus = ref(true)
 
 // Fetch next semester
 const { data: semesterData } = await useFetch("/api/next-semester", {
@@ -187,6 +193,15 @@ const { data: semesterData } = await useFetch("/api/next-semester", {
 })
 
 const nextSemester = semesterData.value.nextSemester
+
+// Fetch class registration status
+try {
+  const { data: regStatusData } = await useFetch("/api/class-reg-status", { method: "GET" })
+  classRegStatus.value = !!regStatusData.value?.classRegStatus
+} catch (e) {
+  console.log(e)
+  classRegStatus.value = false
+}
 
 // Fetch available and enrolled classes for registration
 const res = await useFetch("/api/class-registration", {
@@ -342,6 +357,7 @@ async function onUnregister(selectedClass) {
   }
 }
 
+// View selected class's information
 async function onView(selectedClass) {
   const modal = overlay.create(ClassInfoModal)
 

@@ -77,6 +77,8 @@ const openModal = async () => {
   }
 }
 
+const role = ref(localStorage.getItem("role"))
+
 const items: DropdownMenuItem[][] = [
   [
     {
@@ -86,29 +88,16 @@ const items: DropdownMenuItem[][] = [
         viewProfile()
       }
     },
-    {
-      label: "Class Registration",
-      icon: "i-lucide-book-open-text",
-      async onSelect() {
-        const { data: statusData } = await useFetch("/api/class-reg-status")
-
-        if (!statusData || !statusData.value) {
-          toast.add({ 
-            title: "Error", 
-            description: "This is not the time for class registration!",
-            color: "error"
-          })
-          return
-        }
-        const role = localStorage.getItem("role")
-
-        if (role == "student") {
+    // Only show "Class Registration" if role is not teacher
+    ...(role.value !== "teacher"
+      ? [{
+        label: "Class Registration",
+        icon: "i-lucide-book-open-text",
+        onSelect() {
           router.push("/student/class-registration")
-        } else {
-          router.push("/teacher/class-registration")
         }
-      }
-    },
+      }]
+      : []),
     {
       label: "View All Courses",
       icon: "i-lucide-school",
