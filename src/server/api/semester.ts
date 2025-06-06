@@ -1,25 +1,20 @@
-import { readFileSync, writeFileSync } from "fs"
-import { join } from "path"
-
-const configPath = join(process.cwd(), "configs", "currentSemester.json")
+import { sql } from "drizzle-orm"
+import { db_user as db } from "../../drizzle/db"
 
 export default defineEventHandler(async (event) => {
   const method = event.method
 
   if (method === "GET") {
-    const file = readFileSync(configPath, "utf-8")
-    const json = JSON.parse(file)
-    return json
+    const [row] = await db.execute(sql.raw("SELECT current_semester FROM semester_status LIMIT 1"))
+    return { currentSemester: row?.current_semester || null }
   }
 
   if (method === "PUT") {
     const body = await readBody(event)
-
     if (!body.currentSemester || typeof body.currentSemester !== "string") {
       throw createError({ statusCode: 400, statusMessage: "Invalid currentSemester" })
     }
-
-    writeFileSync(configPath, JSON.stringify({ currentSemester: body.currentSemester }, null, 2))
+    await db.execute(sql.raw(`UPDATE semester_status SET current_semester = '${body.currentSemester}'`))
     return { success: true }
   }
 

@@ -1,25 +1,20 @@
-import { readFileSync, writeFileSync } from "fs"
-import { join } from "path"
-
-const configPath = join(process.cwd(), "configs", "classRegStatus.json")
+import { sql } from "drizzle-orm"
+import { db_user as db } from "../../drizzle/db"
 
 export default defineEventHandler(async (event) => {
   const method = event.method
 
   if (method === "GET") {
-    const file = readFileSync(configPath, "utf-8")
-    const json = JSON.parse(file)
-    return json
+    const [row] = await db.execute(sql.raw("SELECT class_reg_status FROM semester_status LIMIT 1"))
+    return { classRegStatus: typeof row?.class_reg_status === "boolean" ? row.class_reg_status : null }
   }
 
   if (method === "PUT") {
     const body = await readBody(event)
-
     if (typeof body.classRegStatus !== "boolean") {
       throw createError({ statusCode: 400, statusMessage: "Invalid classRegStatus" })
     }
-
-    writeFileSync(configPath, JSON.stringify({ classRegStatus: body.classRegStatus }, null, 2))
+    await db.execute(sql.raw(`UPDATE semester_status SET class_reg_status = ${body.classRegStatus}`))
     return { success: true }
   }
 
