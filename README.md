@@ -29,7 +29,7 @@ Tùng: Manager/code review/backend/frontend + exercise 3 + 10 + 11
 
 Vũ: 
 
-- Design Relational Schema
+- Design Relational Schema + ER Diagram
 - Exercise 2 ✔
 - Exercise 5 + 9 ✔ (Late submission)
 
