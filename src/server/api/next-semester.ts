@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   const method = event.method
 
   if (method === "GET") {
-    const [row] = await db.execute(sql.raw("SELECT next_semester FROM semester_status LIMIT 1"))
+    const [row] = await db.execute(sql.raw("SELECT next_semester FROM configs LIMIT 1"))
     return { nextSemester: row?.next_semester || null }
   }
 
@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
     if (!body.nextSemester || typeof body.nextSemester !== "string") {
       throw createError({ statusCode: 400, statusMessage: "Invalid nextSemester" })
     }
-    await db.execute(sql.raw(`UPDATE semester_status SET next_semester = '${body.nextSemester}'`))
+    await db.execute(sql.raw(`UPDATE configs SET next_semester = '${body.nextSemester}'`))
     return { success: true }
   }
 

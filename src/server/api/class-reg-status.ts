@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   const method = event.method
 
   if (method === "GET") {
-    const [row] = await db.execute(sql.raw("SELECT class_reg_status FROM semester_status LIMIT 1"))
+    const [row] = await db.execute(sql.raw("SELECT class_reg_status FROM configs LIMIT 1"))
     return { classRegStatus: typeof row?.class_reg_status === "boolean" ? row.class_reg_status : null }
   }
 
@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
     if (typeof body.classRegStatus !== "boolean") {
       throw createError({ statusCode: 400, statusMessage: "Invalid classRegStatus" })
     }
-    await db.execute(sql.raw(`UPDATE semester_status SET class_reg_status = ${body.classRegStatus}`))
+    await db.execute(sql.raw(`UPDATE configs SET class_reg_status = ${body.classRegStatus}`))
     return { success: true }
   }
 
