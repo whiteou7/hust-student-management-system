@@ -1,32 +1,30 @@
+-- Indexes for common query patterns in your APIs
 
-CREATE OR REPLACE FUNCTION trg_update_cpa_accumulated_credit()
-RETURNS TRIGGER AS $$
-DECLARE
-  total_weighted_score NUMERIC := 0;
-  total_credits INTEGER := 0;
-BEGIN
-  -- Recalculate accumulated_credit and cpa for the student
+-- 1. For filtering/joining on teacher_id, course_id, semester in classes_view/classes
+CREATE INDEX idx_classes_teacher_id ON classes(teacher_id);
+CREATE INDEX idx_classes_course_id ON classes(course_id);
+CREATE INDEX idx_classes_semester ON classes(semester);
 
-  SELECT 
-    COALESCE(SUM(c.credit), 0),
-    COALESCE(SUM(c.credit * ((e.mid_term + e.final_term)/2.0)), 0)
-  INTO total_credits, total_weighted_score
-  FROM enrollments e
-  JOIN classes cl ON e.class_id = cl.class_id
-  JOIN courses c ON cl.course_id = c.course_id
-  WHERE e.student_id = NEW.student_id AND e.pass = TRUE;
+-- 2. For filtering/joining on course_id, school_id in courses
+CREATE INDEX idx_courses_school_id ON courses(school_id);
 
-  -- Update accumulated_credit and cpa in students
-  UPDATE students
-  SET 
-    accumulated_credit = total_credits,
-    cpa = CASE WHEN total_credits = 0 THEN NULL ELSE total_weighted_score / total_credits END
-  WHERE student_id = NEW.student_id;
+-- 3. For filtering/joining on student_id, class_id in enrollments
+CREATE INDEX idx_enrollments_student_id ON enrollments(student_id);
+CREATE INDEX idx_enrollments_class_id ON enrollments(class_id);
 
-  RETURN NULL;
-END;
-$$ LANGUAGE plpgsql;
+-- 4. For filtering/joining on program_id in students and program_requirements
+CREATE INDEX idx_students_program_id ON students(program_id);
+CREATE INDEX idx_program_requirements_program_id ON program_requirements(program_id);
+CREATE INDEX idx_program_requirements_course_id ON program_requirements(course_id);
 
-CREATE TRIGGER trg_update_cpa
-AFTER INSERT OR UPDATE OF mid_term, final_term, pass ON enrollments
-FOR EACH ROW EXECUTE FUNCTION trg_update_cpa_accumulated_credit();
+-- 5. For filtering/joining on school_id in teachers
+CREATE INDEX idx_teachers_school_id ON teachers(school_id);
+
+-- 6. For filtering/joining on user_id and role in users
+CREATE INDEX idx_users_role ON users(role);
+
+-- 7. For filtering on graduated in students (if you often filter by graduation status)
+CREATE INDEX idx_students_graduated ON students(graduated);
+
+-- 8. For filtering on email in users (for login)
+CREATE INDEX idx_users_email ON users(email);
