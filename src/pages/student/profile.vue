@@ -119,9 +119,40 @@
       <!-- Academic Information -->
       <UCard>
         <template #header>
-          <div class="flex items-center gap-2">
-            <UIcon name="i-heroicons-academic-cap" />
-            <h2>Academic Information</h2>
+          <div class="flex items-center gap-2 w-full justify-between">
+            <div class="flex items-center gap-2">
+              <UIcon name="i-heroicons-academic-cap" />
+              <h2>Academic Information</h2>
+            </div>
+            <UModal v-model="showCriteriaModal">
+              <UButton
+                variant="subtle"
+                icon="i-heroicons-information-circle"
+                label="View Graduation Criterias"
+                @click="onViewCriterias"
+              />
+              <template #content>
+                <UCard>
+                  <template #header>
+                    <div class="flex items-center gap-2">
+                      <UIcon name="i-heroicons-information-circle" />
+                      <h2>Graduation Criterias</h2>
+                    </div>
+                  </template>
+                  <div v-if="criteriaLoading" class="py-4 text-center text-gray-500">Loading...</div>
+                  <div v-else>
+                    <div v-if="criteriaCourses.length === 0" class="py-4 text-center text-gray-500">
+                      No graduation criterias found.
+                    </div>
+                    <ul v-else class="space-y-2">
+                      <li v-for="c in criteriaCourses" :key="c.course_id" class="border-b pb-2">
+                        {{ c.course_id }}
+                      </li>
+                    </ul>
+                  </div>
+                </UCard>
+              </template>
+            </UModal>
           </div>
         </template>
 
@@ -199,7 +230,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref, computed, h } from "vue"
 import CourseInfoModal from "~/components/CourseInfoModal.vue"
 import { useRouter } from "vue-router"
 
@@ -479,6 +510,31 @@ async function submitEdit() {
   }
 }
 
+const showCriteriaModal = ref(false)
+const criteriaCourses = ref([])
+const criteriaLoading = ref(false)
+
+async function onViewCriterias() {
+  showCriteriaModal.value = true
+  criteriaLoading.value = true
+  criteriaCourses.value = []
+  const { data } = await useFetch("/api/program-requirements", {
+    method: "GET",
+    query: {
+      studentId: parseInt(studentId ?? "0")
+    }
+  })
+  criteriaLoading.value = false
+  if (!data.value || !data.value.success) {
+    toast.add({
+      title: "Error",
+      description: data.value?.err || "Failed to fetch graduation criterias.",
+      color: "error"
+    })
+    return
+  }
+  criteriaCourses.value = data.value.courses || []
+}
 </script>
 
 <style scoped>
