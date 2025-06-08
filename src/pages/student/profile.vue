@@ -124,35 +124,43 @@
               <UIcon name="i-heroicons-academic-cap" />
               <h2>Academic Information</h2>
             </div>
-            <UModal v-model="showCriteriaModal">
+            <div class="flex items-center gap-2">
+              <UModal v-model="showCriteriaModal">
+                <UButton
+                  variant="subtle"
+                  icon="i-heroicons-information-circle"
+                  label="View Graduation Criterias"
+                  @click="onViewCriterias"
+                />
+                <template #content>
+                  <UCard>
+                    <template #header>
+                      <div class="flex items-center gap-2">
+                        <UIcon name="i-heroicons-information-circle" />
+                        <h2>Graduation Criterias</h2>
+                      </div>
+                    </template>
+                    <div v-if="criteriaLoading" class="py-4 text-center text-gray-500">Loading...</div>
+                    <div v-else>
+                      <div v-if="criteriaCourses.length === 0" class="py-4 text-center text-gray-500">
+                        No graduation criterias found.
+                      </div>
+                      <ul v-else class="space-y-2">
+                        <li v-for="c in criteriaCourses" :key="c.course_id" class="border-b pb-2">
+                          {{ c.course_id }}
+                        </li>
+                      </ul>
+                    </div>
+                  </UCard>
+                </template>
+              </UModal>
               <UButton
                 variant="subtle"
-                icon="i-heroicons-information-circle"
-                label="View Graduation Criterias"
-                @click="onViewCriterias"
+                icon="i-heroicons-check-badge"
+                label="Check for graduation status"
+                @click="onCheckGraduationStatus"
               />
-              <template #content>
-                <UCard>
-                  <template #header>
-                    <div class="flex items-center gap-2">
-                      <UIcon name="i-heroicons-information-circle" />
-                      <h2>Graduation Criterias</h2>
-                    </div>
-                  </template>
-                  <div v-if="criteriaLoading" class="py-4 text-center text-gray-500">Loading...</div>
-                  <div v-else>
-                    <div v-if="criteriaCourses.length === 0" class="py-4 text-center text-gray-500">
-                      No graduation criterias found.
-                    </div>
-                    <ul v-else class="space-y-2">
-                      <li v-for="c in criteriaCourses" :key="c.course_id" class="border-b pb-2">
-                        {{ c.course_id }}
-                      </li>
-                    </ul>
-                  </div>
-                </UCard>
-              </template>
-            </UModal>
+            </div>
           </div>
         </template>
 
@@ -534,6 +542,29 @@ async function onViewCriterias() {
     return
   }
   criteriaCourses.value = data.value.courses || []
+}
+
+async function onCheckGraduationStatus() {
+  const { data } = await useFetch("/api/check-graduation-status", {
+    method: "GET",
+    query: {
+      studentId: parseInt(studentId ?? "0")
+    }
+  })
+
+  if (data.value) {
+    toast.add({
+      title: "Graduation Status",
+      description: "You are eligible for graduation!",
+      color: "success"
+    })
+  } else {
+    toast.add({
+      title: "Graduation Status",
+      description: "You are not eligible for graduation",
+      color: "warning"
+    })
+  }
 }
 </script>
 

@@ -1,0 +1,13 @@
+Tiếp theo, để thiết kế cơ sở dữ liệu, ta cần xác định các thực thể và quan hệ. Hệ thống có 7 thực thể như sau
+- Người dùng, bao gồm học sinh và giáo viên
+- Chương trình học
+- Môn học
+- Lớp học
+- Trường học
+
+và các mối quan hệ được thể hiện trong sơ đồ thực thể liên kết như trên bảng.
+
+Để đi từ sơ đồ thực thể liên kết sang lược đồ quan hệ, ta cần
+
+- thứ nhất, tạo bảng cho mỗi thực thể
+- Tiếp theo, xử lí các mối quan hệ bằng cách sử dụng khoá ngoài cho các quan hệ 1-1, 1-n và sử dụng bảng riêng cho các quan hệ m-n. Từ đó ta có 9 bảng bao gồm 7 bảng cho 7 thực thể và 2 bảng thể hiện quan hệ m-n.
