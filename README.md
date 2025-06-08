@@ -1,33 +1,11 @@
 # HUST Student Management System
 
-A full-stack student management system for Hanoi University of Science and Technology (HUST), built with Nuxt 3, Vue, and PostgreSQL.
+Final term project for IT3290 Database Lab (HUST)
 
-## Features
+## Prerequisites
 
-- **Student Management:** Add, update, delete, and view student information.
-- **Teacher Management:** Manage teacher records and assignments.
-- **Course & Class Management:** Create, edit, and remove courses and classes.
-- **Enrollment:** Register students for classes, manage enrollments, and track grades.
-- **Authentication:** Admin and user login.
-- **Program Requirements:** Track required courses for student programs.
-- **Semester Management:** Configure current and next semesters.
-- **API:** RESTful endpoints for all major resources.
-
-## Tech Stack
-
-- **Frontend:** Nuxt 3 (Vue 3), Tailwind CSS, UI components
-- **Backend:** Nuxt 3 server API routes
-- **Database:** PostgreSQL (via drizzle-orm)
-- **ORM:** drizzle-orm
-- **Other:** TypeScript, Node.js
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js (v18+ recommended)
+- Node.js 
 - PostgreSQL database
-- [pnpm](https://pnpm.io/) or npm/yarn
 
 ### Setup
 
@@ -41,8 +19,7 @@ A full-stack student management system for Hanoi University of Science and Techn
 2. **Install dependencies:**
 
    ```bash
-   pnpm install
-   # or
+   cd src
    npm install
    ```
 
@@ -58,19 +35,16 @@ A full-stack student management system for Hanoi University of Science and Techn
 
 4. **Set up the database:**
 
-   - Ensure your PostgreSQL server is running.
-   - Create the necessary tables and views as expected by the queries in `src/server/api/`.
-   - (Optional) Use drizzle-kit or your preferred migration tool.
+   ```bash
+   psql -U user -f db.sql
+   ```
 
 5. **Run the development server:**
 
    ```bash
-   pnpm dev
-   # or
    npm run dev
    ```
 
    The app will be available at [http://localhost:3000](http://localhost:3000).
 
-## Project Structure
 
