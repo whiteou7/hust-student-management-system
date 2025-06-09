@@ -20,7 +20,9 @@ export default defineEventHandler (async (event) => {
       JOIN 
         students_view s on s.program_id = pr.program_id
       WHERE 
-        s.student_id = ${query.studentId}    
+        s.student_id = ${query.studentId} 
+      ORDER BY 
+        pr.course_id   
     `)
   )
 

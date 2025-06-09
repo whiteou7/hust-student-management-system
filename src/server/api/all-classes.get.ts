@@ -27,6 +27,8 @@ export default defineEventHandler(async () => {
           teachers t ON c.teacher_id = t.teacher_id
         JOIN 
           users u ON t.teacher_id = u.user_id
+        ORDER BY
+          c.class_id
       `)
     )
 

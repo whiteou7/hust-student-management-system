@@ -15,7 +15,9 @@ export default defineEventHandler(async () => {
         FROM 
           courses co
         JOIN 
-          schools s on s.school_id = co.school_id;
+          schools s on s.school_id = co.school_id
+        ORDER BY
+          co.course_id;
       `)
     )
 

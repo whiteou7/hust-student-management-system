@@ -28,7 +28,9 @@ export default defineEventHandler (async (event) => {
         courses co ON c.course_id = co.course_id
       WHERE 
         c.teacher_id = ${query.userId}  
-        AND c.semester = '${query.semester}';  
+        AND c.semester = '${query.semester}'
+      ORDER BY
+        c.class_id;  
     `)
   )
 
