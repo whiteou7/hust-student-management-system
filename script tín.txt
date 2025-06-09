@@ -1,7 +1,0 @@
-Mình xin trình bày về bài toán của hệ thống
-
-Hệ thống HUST Student Management System cho phép sinh viên đăng ký tài khoản, đăng ký/hủy lớp học, xem điểm, tra cứu thông tin học tập và tình trạng tốt nghiệp, cũng như thanh toán học phí một cách trực tuyến. Giảng viên có thể xem danh sách sinh viên, chấm điểm và cập nhật thông tin chuyên môn, trong khi quản trị viên (manager) có quyền tạo/sửa/xóa khóa học, lớp học, tài khoản người dùng, đồng thời mở hoặc đóng các đợt đăng ký theo học kỳ.
-
-Từ đó, chúng ta có sơ đồ use case như sau:
-
-Hệ thống giúp tự động hóa và số hóa toàn bộ quy trình quản lý sinh viên, phân quyền rõ ràng theo vai trò (sinh viên, giảng viên, quản lý), đồng thời cung cấp các chức năng tìm kiếm linh hoạt theo mã sinh viên, trường hoặc ngày học. Nhờ vậy, hệ thống không chỉ nâng cao hiệu quả vận hành mà còn giảm thiểu sai sót và tăng tính minh bạch.

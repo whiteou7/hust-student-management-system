@@ -103,12 +103,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             />
           </UFormField>
 
-          <div class="flex items-center justify-between">
-            <div class="flex items-center">
-              <UCheckbox name="remember-me" label="Remember me" class="dark:text-gray-300" />
-            </div>
-          </div>
-
           <div v-if="errorMsg" class="text-red-500 text-center">
             {{ errorMsg }}
           </div>

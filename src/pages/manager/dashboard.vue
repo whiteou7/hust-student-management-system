@@ -266,6 +266,7 @@ watch(selectedCourse, (newValue) => {
 watch(selectedClass, (newValue) => {
   if (newValue) {
     editClassForm.value = {
+      classId: newValue.class_id,
       teacherId: teachers.value.find(t => t.full_name === newValue.full_name)?.teacher_id || "",
       courseId: newValue.course_id,
       capacity: newValue.capacity,
